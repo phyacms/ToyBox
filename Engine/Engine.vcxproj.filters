@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{d40e27a2-5f4e-44ac-90e2-a8582bd16cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Platform">
+      <UniqueIdentifier>{fb3a5a69-19cf-4ba8-9d20-6eda7a1db7b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Platform\Windows">
+      <UniqueIdentifier>{f85a0d42-7b63-4c90-82cc-7c53295cb4a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Application">
+      <UniqueIdentifier>{aa0985c9-7fce-4375-80b7-a83e60a451c4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
+      <Filter>Source\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\WindowsPlatformEntry.h">
+      <Filter>Source\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Source\Application\IApplication.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\IPlatform.h">
+      <Filter>Source\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Platform.h">
+      <Filter>Source\Platform</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
+      <Filter>Source\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\Windows\WindowsPlatform.cpp">
+      <Filter>Source\Platform\Windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
