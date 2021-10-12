@@ -1,0 +1,18 @@
+# .editorconfig
+# https://editorconfig.org/
+
+# Top_most EditorConfig file
+root = true
+
+# General style and character set
+[*]
+charset = utf_8
+indent_style = tab
+tab_width = 4
+end_of_line = crlf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# C++ files
+[*.{h,hpp,cpp}]
+charset = utf_8_bom
