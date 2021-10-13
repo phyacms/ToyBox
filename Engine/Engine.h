@@ -5,3 +5,5 @@
 // C++ Standard Headers
 #include <cstdlib>
 #include <cstdint>
+#include <string>
+#include <vector>

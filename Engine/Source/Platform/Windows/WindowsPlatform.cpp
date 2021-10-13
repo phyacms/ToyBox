@@ -5,7 +5,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
-IPlatform& FWindowsPlatform::GetInstance() noexcept
+FWindowsPlatform& FWindowsPlatform::GetInstance() noexcept
 {
 	static FWindowsPlatform Instance{};
 	return Instance;

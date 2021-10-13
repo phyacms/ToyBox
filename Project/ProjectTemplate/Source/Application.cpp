@@ -12,7 +12,7 @@ FApplication::~FApplication() noexcept
 {
 }
 
-bool FApplication::Initialize() noexcept
+bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 {
 	FPlatform::GetInstance().RequestAppExit(EXIT_SUCCESS);
 

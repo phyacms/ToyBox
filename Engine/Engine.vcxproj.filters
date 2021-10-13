@@ -13,6 +13,15 @@
     <Filter Include="Source\Application">
       <UniqueIdentifier>{aa0985c9-7fce-4375-80b7-a83e60a451c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System">
+      <UniqueIdentifier>{fac7558e-ba6a-4fde-96cc-a43d29521b73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Type">
+      <UniqueIdentifier>{2a924669-47ef-4bf0-abf9-3e8b72f1d653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Type\String">
+      <UniqueIdentifier>{2b7854f8-ee92-47cb-9da3-5257725d4618}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -30,6 +39,12 @@
     </ClInclude>
     <ClInclude Include="Source\Platform\Platform.h">
       <Filter>Source\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\CommandLineArgs.h">
+      <Filter>Source\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\String\String.h">
+      <Filter>Source\Type\String</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

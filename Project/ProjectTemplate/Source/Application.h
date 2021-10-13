@@ -12,6 +12,6 @@ public:
 	virtual ~FApplication() noexcept;
 
 private:
-	virtual bool Initialize() noexcept override final;
+	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept override final;
 	virtual void Terminate() noexcept override final;
 };

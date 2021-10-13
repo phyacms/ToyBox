@@ -22,6 +22,7 @@
 
 #include <Windows.h>
 #include <objbase.h>
+#include <shellapi.h>
 #ifndef NDEBUG
 #include <crtdbg.h>
 #endif
@@ -36,9 +37,7 @@ class FWindowsPlatform final
 	: public IPlatform
 {
 public:
-	static IPlatform& GetInstance() noexcept;
-	template<typename T>
-	inline static T& GetInstanceAs() noexcept { return dynamic_cast<T>(GetInstance()); }
+	static FWindowsPlatform& GetInstance() noexcept;
 
 private:
 	FWindowsPlatform() = default;

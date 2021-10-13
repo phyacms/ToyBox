@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "System/CommandLineArgs.h"
 
 class IApplication
 {
@@ -16,6 +17,6 @@ public:
 	IApplication& operator=(IApplication&&) noexcept = delete;
 
 public:
-	virtual bool Initialize() noexcept = 0;
+	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept = 0;
 	virtual void Terminate() noexcept = 0;
 };

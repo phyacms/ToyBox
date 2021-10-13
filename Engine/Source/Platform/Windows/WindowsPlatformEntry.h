@@ -5,6 +5,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include "WindowsPlatform.h"
+#include "System/CommandLineArgs.h"
 
 class IApplication;
 
@@ -18,8 +19,12 @@ public:
 	std::int32_t Launch(IApplication& Application) noexcept;
 
 private:
+	static FCommandLineArgs ParseCommandLine() noexcept;
+
+private:
 	HINSTANCE hInstance;
 	bool bCoInit;
+	FCommandLineArgs CmdLine;
 };
 
 #endif
