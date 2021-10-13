@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "Application.h"
-#include <Platform/Platform.h>
+#include <System/System.h>
 
 FApplication::FApplication()
 {
@@ -12,14 +12,13 @@ FApplication::~FApplication() noexcept
 {
 }
 
-bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
+bool FApplication::Initialize(FSystem& System, const FCommandLineArgs& CmdLine) noexcept
 {
-	IPlatform& Platform{ FPlatform::GetInstance() };
-	Platform.ShowPopupMessage(USTR("ProjectTemplate"), USTR("Hello, World!"));
-	Platform.RequestAppExit(EXIT_SUCCESS);
+	System.ShowPopupMessage(USTR("ProjectTemplate"), USTR("Hello, World!"));
+	System.RequestAppExit(EXIT_SUCCESS);
 	return true;
 }
 
-void FApplication::Terminate() noexcept
+void FApplication::Terminate(FSystem& System) noexcept
 {
 }

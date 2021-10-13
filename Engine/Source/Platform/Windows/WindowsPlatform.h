@@ -37,15 +37,16 @@ class FWindowsPlatform final
 	: public IPlatform
 {
 public:
-	static FWindowsPlatform& GetInstance() noexcept;
+	static IPlatform& GetInterface() noexcept;
+	static FWindowsPlatform& GetSpecific() noexcept;
 
 private:
 	FWindowsPlatform() = default;
 	virtual ~FWindowsPlatform() noexcept = default;
 
-public:
-	inline virtual void RequestAppExit(std::int32_t ExitCode) noexcept override final { ::PostQuitMessage(static_cast<int>(ExitCode)); }
-	inline virtual void ShowPopupMessage(FStringView Title, FStringView Content) noexcept override final {
+private:
+	inline virtual void RequestAppExit(std::int32_t ExitCode) const noexcept override final { ::PostQuitMessage(static_cast<int>(ExitCode)); }
+	inline virtual void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept override final {
 		::MessageBoxW(
 			nullptr,
 			reinterpret_cast<LPCWSTR>(Content.data()),

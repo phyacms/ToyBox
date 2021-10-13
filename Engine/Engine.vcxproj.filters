@@ -46,6 +46,9 @@
     <ClInclude Include="Source\Type\String\String.h">
       <Filter>Source\Type\String</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\System.h">
+      <Filter>Source\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatform.cpp">
       <Filter>Source\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\System.cpp">
+      <Filter>Source\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

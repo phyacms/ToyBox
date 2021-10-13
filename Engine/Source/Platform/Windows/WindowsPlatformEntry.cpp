@@ -6,6 +6,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include "Application/IApplication.h"
+#include "System/System.h"
 
 FWindowsPlatformEntry::FWindowsPlatformEntry(HINSTANCE hInstance)
 	: hInstance(hInstance)
@@ -37,14 +38,16 @@ std::int32_t FWindowsPlatformEntry::Launch(IApplication& Application) noexcept
 
 	struct FApplicationGuard final
 	{
+		FSystem System;
 		IApplication* Application;
 		bool bInit;
 		FApplicationGuard(
 			IApplication& Application,
 			const FCommandLineArgs& CmdLine)
-			: Application(&Application)
-			, bInit(Application.Initialize(CmdLine)) {}
-		~FApplicationGuard() noexcept { Application->Terminate(); }
+			: System{}
+			, Application{ &Application }
+			, bInit{ Application.Initialize(System, CmdLine) } {}
+		~FApplicationGuard() noexcept { Application->Terminate(System); }
 	}
 	AppGuard{ Application, CmdLine };
 

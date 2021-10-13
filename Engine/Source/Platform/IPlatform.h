@@ -16,7 +16,8 @@ public:
 	IPlatform(IPlatform&&) noexcept = delete;
 	IPlatform& operator=(IPlatform&&) noexcept = delete;
 
-public:
-	virtual void RequestAppExit(std::int32_t ExitCode) noexcept = 0;
-	virtual void ShowPopupMessage(FStringView Title, FStringView Content) noexcept = 0;
+private:
+	friend class FSystem;
+	virtual void RequestAppExit(std::int32_t ExitCode) const noexcept = 0;
+	virtual void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept = 0;
 };

@@ -5,6 +5,8 @@
 #include "Engine.h"
 #include "System/CommandLineArgs.h"
 
+class FSystem;
+
 class IApplication
 {
 public:
@@ -17,6 +19,6 @@ public:
 	IApplication& operator=(IApplication&&) noexcept = delete;
 
 public:
-	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept = 0;
-	virtual void Terminate() noexcept = 0;
+	virtual bool Initialize(FSystem& System, const FCommandLineArgs& CmdLine) noexcept = 0;
+	virtual void Terminate(FSystem& System) noexcept = 0;
 };
