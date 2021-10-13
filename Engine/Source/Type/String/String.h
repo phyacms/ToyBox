@@ -5,3 +5,4 @@
 #include "Engine.h"
 
 using FString = std::u16string; // Stores UTF16-LE code units.
+using FStringView = std::u16string_view;

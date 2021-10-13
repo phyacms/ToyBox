@@ -45,6 +45,12 @@ private:
 
 public:
 	inline virtual void RequestAppExit(std::int32_t ExitCode) noexcept override final { ::PostQuitMessage(static_cast<int>(ExitCode)); }
+	inline virtual void ShowPopupMessage(FStringView Title, FStringView Content) noexcept override final {
+		::MessageBoxW(
+			nullptr,
+			reinterpret_cast<LPCWSTR>(Content.data()),
+			reinterpret_cast<LPCWSTR>(Title.data()),
+			MB_OK); }
 
 public:
 	inline HINSTANCE GetApplicationHandle() const noexcept { return ::GetModuleHandleW(nullptr); }

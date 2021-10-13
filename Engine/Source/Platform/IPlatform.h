@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Type/String/String.h"
 
 class IPlatform
 {
@@ -17,4 +18,5 @@ public:
 
 public:
 	virtual void RequestAppExit(std::int32_t ExitCode) noexcept = 0;
+	virtual void ShowPopupMessage(FStringView Title, FStringView Content) noexcept = 0;
 };

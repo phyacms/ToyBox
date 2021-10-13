@@ -14,8 +14,9 @@ FApplication::~FApplication() noexcept
 
 bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 {
-	FPlatform::GetInstance().RequestAppExit(EXIT_SUCCESS);
-
+	IPlatform& Platform{ FPlatform::GetInstance() };
+	Platform.ShowPopupMessage(USTR("ProjectTemplate"), USTR("Hello, World!"));
+	Platform.RequestAppExit(EXIT_SUCCESS);
 	return true;
 }
 

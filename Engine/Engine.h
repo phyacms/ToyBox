@@ -7,3 +7,6 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+
+// Macros
+#define USTR(x) u##x
