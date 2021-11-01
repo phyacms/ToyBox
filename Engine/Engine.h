@@ -5,11 +5,16 @@
 // C++ Standard Headers
 #include <cstdlib>
 #include <cstdint>
+#include <limits>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <optional>
 #include <functional>
+#include <utility>
 #include <memory>
+#include <atomic>
+#include <mutex>
 #include <type_traits>
 #include <stdexcept>
 

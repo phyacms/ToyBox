@@ -64,6 +64,9 @@
     <ClInclude Include="Source\Type\Object.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\UniqueId.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -83,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp">
       <Filter>Source\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\UniqueId.cpp">
+      <Filter>Source\Type</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -108,6 +108,7 @@
     <ClInclude Include="Source\Type\Delegate.h" />
     <ClInclude Include="Source\Type\Object.h" />
     <ClInclude Include="Source\Type\String.h" />
+    <ClInclude Include="Source\Type\UniqueId.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatform.cpp" />
@@ -116,6 +117,7 @@
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />
+    <ClCompile Include="Source\Type\UniqueId.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
