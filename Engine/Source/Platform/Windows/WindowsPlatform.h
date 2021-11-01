@@ -27,8 +27,17 @@
 #include <crtdbg.h>
 #endif
 
-#ifdef TEXT
-#undef TEXT
+#ifdef DefWindowProc
+#undef DefWindowProc
+#endif
+#ifdef RegisterClass
+#undef RegisterClass
+#endif
+#ifdef UnregisterClass
+#undef UnregisterClass
+#endif
+#ifdef CreateWindow
+#undef CreateWindow
 #endif
 
 #include "Platform/IPlatform.h"
@@ -53,8 +62,19 @@ private:
 			reinterpret_cast<LPCWSTR>(Title.data()),
 			MB_OK); }
 
+	virtual [[nodiscard]] std::unique_ptr<ISystemWindowProcedure> CreateWindowProcedure() const noexcept override final;
+
 public:
 	inline HINSTANCE GetApplicationHandle() const noexcept { return ::GetModuleHandleW(nullptr); }
 };
+
+namespace WindowsPlatform
+{
+	class IWindowInterface
+	{
+	public:
+		virtual HWND GetHandle() const noexcept = 0;
+	};
+}
 
 #endif

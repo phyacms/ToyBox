@@ -2,7 +2,9 @@
 
 #pragma once
 
-#include <Type/String/String.h>
+#include "Type/String.h"
+
+class FSystemWindow;
 
 class FSystem final
 {
@@ -18,4 +20,6 @@ public:
 public:
 	void RequestAppExit(std::int32_t ExitCode) const noexcept;
 	void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept;
+
+	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FStringView Title) const noexcept;
 };

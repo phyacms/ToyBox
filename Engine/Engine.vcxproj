@@ -98,14 +98,20 @@
     <ClInclude Include="Source\Platform\Platform.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformEntry.h" />
+    <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
     <ClInclude Include="Source\System\System.h" />
-    <ClInclude Include="Source\Type\String\String.h" />
+    <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
+    <ClInclude Include="Source\System\Window\SystemWindow.h" />
+    <ClInclude Include="Source\Type\String.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatform.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp" />
+    <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
+    <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
+    <ClCompile Include="Source\System\Window\SystemWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

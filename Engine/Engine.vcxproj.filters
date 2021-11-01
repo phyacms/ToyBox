@@ -19,8 +19,8 @@
     <Filter Include="Source\Type">
       <UniqueIdentifier>{2a924669-47ef-4bf0-abf9-3e8b72f1d653}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Type\String">
-      <UniqueIdentifier>{2b7854f8-ee92-47cb-9da3-5257725d4618}</UniqueIdentifier>
+    <Filter Include="Source\System\Window">
+      <UniqueIdentifier>{697f1aa3-44fa-437e-a110-82f0f9dff6cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,11 +43,20 @@
     <ClInclude Include="Source\System\CommandLineArgs.h">
       <Filter>Source\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\String\String.h">
-      <Filter>Source\Type\String</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\System.h">
       <Filter>Source\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Window\SystemWindow.h">
+      <Filter>Source\System\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\String.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h">
+      <Filter>Source\System\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h">
+      <Filter>Source\Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +68,15 @@
     </ClCompile>
     <ClCompile Include="Source\System\System.cpp">
       <Filter>Source\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Window\SystemWindow.cpp">
+      <Filter>Source\System\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp">
+      <Filter>Source\System\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp">
+      <Filter>Source\Platform\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

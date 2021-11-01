@@ -7,6 +7,9 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <optional>
+#include <memory>
+#include <stdexcept>
 
 // Macros
-#define USTR(x) u##x
+#define USTR(x) u#x

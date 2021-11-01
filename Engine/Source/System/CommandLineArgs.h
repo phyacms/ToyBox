@@ -3,6 +3,6 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/String/String.h"
+#include "Type/String.h"
 
 using FCommandLineArgs = std::vector<FString>;

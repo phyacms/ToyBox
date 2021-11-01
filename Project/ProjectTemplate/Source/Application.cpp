@@ -14,7 +14,7 @@ FApplication::~FApplication() noexcept
 
 bool FApplication::Initialize(FSystem& System, const FCommandLineArgs& CmdLine) noexcept
 {
-	System.ShowPopupMessage(USTR("ProjectTemplate"), USTR("Hello, World!"));
+	System.ShowPopupMessage(USTR(PROJECT_NAME), USTR(PROJECT_COPYRIGHT));
 	System.RequestAppExit(EXIT_SUCCESS);
 	return true;
 }
