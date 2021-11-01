@@ -58,6 +58,9 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h">
       <Filter>Source\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\Delegate.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">

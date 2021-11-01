@@ -103,6 +103,7 @@
     <ClInclude Include="Source\System\System.h" />
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
+    <ClInclude Include="Source\Type\Delegate.h" />
     <ClInclude Include="Source\Type\String.h" />
   </ItemGroup>
   <ItemGroup>
