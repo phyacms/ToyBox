@@ -7,9 +7,9 @@
 
 #include "System/Window/SystemWindow.h"
 
-std::size_t WindowsPlatform::Detail::FWndProc::RegisterCounter{};
+std::size_t WindowsPlatform::FWndProc::RegisterCounter{};
 
-WindowsPlatform::Detail::FWndProc::FWndProc()
+WindowsPlatform::FWndProc::FWndProc()
 	: ISystemWindowProcedure{}
 	, WindowsPlatform::IWindowInterface{}
 	, bRegistered{ false }
@@ -17,27 +17,27 @@ WindowsPlatform::Detail::FWndProc::FWndProc()
 {
 }
 
-WindowsPlatform::Detail::FWndProc::~FWndProc() noexcept
+WindowsPlatform::FWndProc::~FWndProc() noexcept
 {
 	DestroyWindow();
 	UnregisterClass();
 }
 
-bool WindowsPlatform::Detail::FWndProc::IsValidImpl() const noexcept
+bool WindowsPlatform::FWndProc::IsValidImpl() const noexcept
 {
 	return bRegistered && hWnd != nullptr;
 }
 
-bool WindowsPlatform::Detail::FWndProc::InitializeImpl(FSystemWindow& OwnerWindow) noexcept
+bool WindowsPlatform::FWndProc::InitializeImpl(FSystemWindow& OwnerWindow) noexcept
 {
 	return RegisterClass() && CreateWindow();
 }
 
-void WindowsPlatform::Detail::FWndProc::TerminateImpl(FSystemWindow& OwnerWindow) noexcept
+void WindowsPlatform::FWndProc::TerminateImpl(FSystemWindow& OwnerWindow) noexcept
 {
 }
 
-void WindowsPlatform::Detail::FWndProc::Show() noexcept
+void WindowsPlatform::FWndProc::Show() noexcept
 {
 	if (IsValid())
 	{
@@ -45,7 +45,7 @@ void WindowsPlatform::Detail::FWndProc::Show() noexcept
 	}
 }
 
-bool WindowsPlatform::Detail::FWndProc::RegisterClass() noexcept
+bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 {
 	bRegistered = true;
 	if (RegisterCounter == std::size_t{})
@@ -78,7 +78,7 @@ bool WindowsPlatform::Detail::FWndProc::RegisterClass() noexcept
 	return bRegistered;
 }
 
-bool WindowsPlatform::Detail::FWndProc::CreateWindow() noexcept
+bool WindowsPlatform::FWndProc::CreateWindow() noexcept
 {
 	return bRegistered
 		? ::CreateWindowExW(
@@ -97,7 +97,7 @@ bool WindowsPlatform::Detail::FWndProc::CreateWindow() noexcept
 		: false;
 }
 
-void WindowsPlatform::Detail::FWndProc::UnregisterClass() noexcept
+void WindowsPlatform::FWndProc::UnregisterClass() noexcept
 {
 	if (bRegistered)
 	{
@@ -111,7 +111,7 @@ void WindowsPlatform::Detail::FWndProc::UnregisterClass() noexcept
 	}
 }
 
-void WindowsPlatform::Detail::FWndProc::DestroyWindow() noexcept
+void WindowsPlatform::FWndProc::DestroyWindow() noexcept
 {
 	if (hWnd != nullptr)
 	{
@@ -120,7 +120,7 @@ void WindowsPlatform::Detail::FWndProc::DestroyWindow() noexcept
 	}
 }
 
-LRESULT WindowsPlatform::Detail::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT WindowsPlatform::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
 	FWndProc* WndProc{ nullptr };
 
@@ -153,7 +153,7 @@ LRESULT WindowsPlatform::Detail::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, W
 	return ::DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 
-LRESULT WindowsPlatform::Detail::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
 	switch (uMsg)
 	{

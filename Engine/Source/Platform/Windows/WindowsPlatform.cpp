@@ -20,7 +20,7 @@ FWindowsPlatform& FWindowsPlatform::GetSpecific() noexcept
 
 std::unique_ptr<ISystemWindowProcedure> FWindowsPlatform::CreateWindowProcedure() const noexcept
 {
-	return std::make_unique<WindowsPlatform::Detail::FWndProc>();
+	return std::make_unique<WindowsPlatform::FWndProc>();
 }
 
 #endif

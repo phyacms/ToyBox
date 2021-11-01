@@ -10,6 +10,7 @@
 #include <optional>
 #include <functional>
 #include <memory>
+#include <type_traits>
 #include <stdexcept>
 
 // Common Setups
@@ -25,7 +26,8 @@ namespace stdhelp
 }
 
 // Macros
-#define USTR(x) u#x
+#define __USTR(X) u##X
+#define USTR(x) __USTR(x)
 
 // Tweaks
 // @NOTE: https://devblogs.microsoft.com/cppblog/msvc-cpp20-and-the-std-cpp20-switch/

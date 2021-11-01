@@ -7,7 +7,7 @@
 #include "WindowsPlatform.h"
 #include "System/Window/ISystemWindowProcedure.h"
 
-namespace WindowsPlatform::Detail
+namespace WindowsPlatform
 {
 	class FWndProc final
 		: public ISystemWindowProcedure
