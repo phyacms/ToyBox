@@ -28,12 +28,12 @@ public:
 	template<
 		typename T,
 		typename = std::enable_if_t<!std::is_same_v<T, std::nullptr_t>>>
-	inline void Bind(T&& Callable) noexcept { Stub = std::forward<T>(Callable); }
+	inline void Bind(T&& Callable) { Stub = std::forward<T>(Callable); }
 	template<
 		typename T,
 		typename MemFnType,
 		typename = std::enable_if_t<!std::is_reference_v<T>>>
-	inline void Bind(T& ObjRef, MemFnType MemFn) noexcept { Stub = std::bind(MemFn, ObjRef); }
+	inline void Bind(T& ObjRef, MemFnType MemFn) { Stub = std::bind(MemFn, ObjRef); }
 	inline void Unbind() noexcept { Stub = nullptr; }
 
 	inline bool IsBound() const noexcept { return static_cast<bool>(Stub); }

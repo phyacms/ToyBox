@@ -8,10 +8,12 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <list>
 #include <unordered_set>
 #include <optional>
 #include <functional>
 #include <utility>
+#include <execution>
 #include <memory>
 #include <atomic>
 #include <mutex>
