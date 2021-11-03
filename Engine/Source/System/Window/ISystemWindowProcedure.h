@@ -22,7 +22,7 @@ public:
 	bool Initialize(FSystemWindow& OwnerWindow) noexcept;
 	void Terminate(FSystemWindow& OwnerWindow) noexcept;
 
-	virtual void Show() noexcept = 0;
+	virtual void Present() noexcept = 0;
 
 	FSystemWindow& GetWindow() noexcept { return *Window; }
 

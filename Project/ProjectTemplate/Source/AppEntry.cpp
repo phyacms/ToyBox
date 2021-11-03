@@ -14,8 +14,7 @@ int WINAPI wWinMain(
 	[[maybe_unused]] _In_ int nCmdShow)
 {
 	FWindowsPlatformEntry Entry{ hInstance };
-	FApplication Application{};
-	return static_cast<int>(Entry.Launch(Application));
+	return static_cast<int>(Entry.Launch<FApplication>());
 }
 
 #endif

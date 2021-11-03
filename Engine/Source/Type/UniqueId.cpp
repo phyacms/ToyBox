@@ -24,8 +24,8 @@ FUniqueId& FUniqueId::operator=(FUniqueId&& Other) noexcept
 }
 
 AUniqueId::AUniqueId(AUniqueId&& Other) noexcept
-	: Issuer(std::move(Other.Issuer))
-	, Id(std::move(Other.Id))
+	: Issuer{ std::move(Other.Issuer) }
+	, Id{ std::move(Other.Id) }
 {
 	Other.Release();
 }

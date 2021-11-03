@@ -5,6 +5,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include "WindowsPlatform.h"
+#include "System/System.h"
 #include "System/CommandLineArgs.h"
 
 class IApplication;
@@ -21,13 +22,23 @@ public:
 	FWindowsPlatformEntry& operator=(FWindowsPlatformEntry&&) noexcept = delete;
 
 public:
-	std::int32_t Launch(IApplication& Application) noexcept;
+	template<
+		typename T,
+		typename... Ts,
+		typename = std::enable_if_t<std::is_base_of_v<IApplication, T>>>
+	inline std::int32_t Launch(Ts&&... Params)
+	{
+		FSystem System{};
+		auto Application{ std::make_unique<T>(System, std::forward<Ts>(Params)...) };
+		return Launch(System, *Application);
+	}
 
 private:
 	static FCommandLineArgs ParseCommandLine() noexcept;
 
+	std::int32_t Launch(FSystem& System, IApplication& Application);
+
 private:
-	HINSTANCE hInstance;
 	bool bCoInit;
 	FCommandLineArgs CmdLine;
 };

@@ -2,11 +2,13 @@
 
 #pragma once
 
+#include "Type/Object.h"
 #include "Type/String.h"
 
 class ISystemWindowProcedure;
 
 class FSystemWindow final
+	: public TObject<FSystemWindow>
 {
 public:
 	FSystemWindow(
@@ -21,16 +23,12 @@ public:
 
 public:
 	bool IsValid() const noexcept;
-
-	void Show() noexcept;
-
 	inline const FString& GetTitle() const noexcept { return Title; }
 
+	void Present() noexcept;
+
 	template<typename T>
-	inline T& InterfaceAs()
-	{
-		return dynamic_cast<T&>(*WndProc);
-	}
+	inline T& InterfaceAs() { return dynamic_cast<T&>(*WndProc); }
 
 private:
 	std::unique_ptr<ISystemWindowProcedure> WndProc;

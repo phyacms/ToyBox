@@ -8,10 +8,10 @@ class FApplication final
 	: public IApplication
 {
 public:
-	FApplication();
+	explicit FApplication(FSystem& System);
 	virtual ~FApplication() noexcept;
 
 private:
-	virtual bool Initialize(FSystem& System, const FCommandLineArgs& CmdLine) noexcept override final;
-	virtual void Terminate(FSystem& System) noexcept override final;
+	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept override final;
+	virtual void Terminate() noexcept override final;
 };

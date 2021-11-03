@@ -66,6 +66,8 @@ private:
 	std::size_t Index;
 };
 
+using FDelegateHandles = std::vector<ADelegateHandle>;
+
 template<typename T>
 using TDelegateExecutor = std::pair<std::size_t, TDelegate<T>>;
 
@@ -105,7 +107,8 @@ public:
 
 public:
 	explicit TMulticastDelegate(BroadcastPolicyType&& Broadcaster = BroadcastPolicyType{})
-		: Executors{}
+		: IMulticastDelegate()
+		, Executors{}
 		, Broadcaster{ std::move(Broadcaster) } {}
 	virtual ~TMulticastDelegate() = default;
 

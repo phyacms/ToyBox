@@ -5,7 +5,8 @@
 #include "ISystemWindowProcedure.h"
 
 FSystemWindow::FSystemWindow(std::unique_ptr<ISystemWindowProcedure> WndProc, FStringView Title)
-	: WndProc{ std::move(WndProc) }
+	: TObject<FSystemWindow>(*this)
+	, WndProc{ std::move(WndProc) }
 	, Title{ Title }
 {
 	if (this->WndProc != nullptr)
@@ -26,10 +27,10 @@ bool FSystemWindow::IsValid() const noexcept
 		&& &WndProc->GetWindow() == this;
 }
 
-void FSystemWindow::Show() noexcept
+void FSystemWindow::Present() noexcept
 {
 	if (IsValid())
 	{
-		WndProc->Show();
+		WndProc->Present();
 	}
 }

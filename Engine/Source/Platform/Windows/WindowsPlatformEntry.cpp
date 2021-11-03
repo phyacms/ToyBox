@@ -8,17 +8,34 @@
 #include "Application/IApplication.h"
 #include "System/System.h"
 
-FWindowsPlatformEntry::FWindowsPlatformEntry(HINSTANCE hInstance)
-	: hInstance(hInstance)
-	, bCoInit(SUCCEEDED(::CoInitializeEx(nullptr, COINIT::COINIT_APARTMENTTHREADED)))
-	, CmdLine(ParseCommandLine())
+namespace
 {
+	HINSTANCE g_hInstance{};
+	DWORD g_MessageThreadId{};
+}
+
+HINSTANCE FWindowsPlatform::GetApplicationHandle() const noexcept { return ::g_hInstance; }
+DWORD FWindowsPlatform::GetMessageThreadId() const noexcept { return ::g_MessageThreadId; }
+
+FWindowsPlatformEntry::FWindowsPlatformEntry(HINSTANCE hInstance)
+	: bCoInit{}
+	, CmdLine{}
+{
+	if (::g_hInstance == nullptr)
+	{
+		::g_hInstance = hInstance;
+
+		bCoInit = SUCCEEDED(::CoInitializeEx(nullptr, COINIT::COINIT_APARTMENTTHREADED));
+		CmdLine = ParseCommandLine();
+
 #ifndef NDEBUG
-	// Enables run-time memory check in debug build.
-	::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	::_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+		// Enables run-time memory check in debug build.
+		::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		::_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 #endif
-	::SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+		::SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+	}
 }
 
 FWindowsPlatformEntry::~FWindowsPlatformEntry() noexcept
@@ -27,41 +44,6 @@ FWindowsPlatformEntry::~FWindowsPlatformEntry() noexcept
 	{
 		::CoUninitialize();
 	}
-}
-
-std::int32_t FWindowsPlatformEntry::Launch(IApplication& Application) noexcept
-{
-	if (!bCoInit || CmdLine.empty())
-	{
-		return EXIT_FAILURE;
-	}
-
-	struct FApplicationGuard final
-	{
-		FSystem System;
-		IApplication* Application;
-		bool bInit;
-		FApplicationGuard(
-			IApplication& Application,
-			const FCommandLineArgs& CmdLine)
-			: System{}
-			, Application{ &Application }
-			, bInit{ Application.Initialize(System, CmdLine) } {}
-		~FApplicationGuard() noexcept { Application->Terminate(System); }
-	}
-	AppGuard{ Application, CmdLine };
-
-	MSG Msg{};
-	while (::GetMessageW(&Msg, nullptr, UINT{}, UINT{}) != FALSE)
-	{
-		if (Msg.message == WM_QUIT)
-		{
-			break;
-		}
-		::TranslateMessage(&Msg);
-		::DispatchMessageW(&Msg);
-	}
-	return static_cast<std::int32_t>(Msg.wParam);
 }
 
 FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() noexcept
@@ -101,6 +83,53 @@ FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() noexcept
 	}
 	Parser{ CmdLine };
 	return CmdLine;
+}
+
+std::int32_t FWindowsPlatformEntry::Launch(FSystem& System, IApplication& Application)
+{
+	if (::g_MessageThreadId != DWORD{} || !bCoInit || CmdLine.empty())
+	{
+		return EXIT_FAILURE;
+	}
+
+	::g_MessageThreadId = ::GetCurrentThreadId();
+
+	struct FApplicationGuard final
+	{
+		IApplication* Application;
+		bool bInit;
+		FApplicationGuard(
+			IApplication& Application,
+			const FCommandLineArgs& CmdLine)
+			: Application{ &Application }
+			, bInit{ Application.Initialize(CmdLine) } {}
+		~FApplicationGuard() noexcept
+		{
+			Application->Terminate();
+			::g_MessageThreadId = DWORD{};
+		}
+	}
+	AppGuard{ Application, CmdLine };
+
+	if (!AppGuard.bInit)
+	{
+		return EXIT_FAILURE;
+	}
+
+	Application.PostInitialize();
+
+	MSG Msg{};
+	while (::GetMessageW(&Msg, nullptr, UINT{}, UINT{}) != FALSE)
+	{
+		if (Msg.message == WM_QUIT)
+		{
+			break;
+		}
+		::TranslateMessage(&Msg);
+		::DispatchMessageW(&Msg);
+	}
+
+	return static_cast<std::int32_t>(Msg.wParam);
 }
 
 #endif

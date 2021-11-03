@@ -16,6 +16,7 @@
 #include <utility>
 #include <execution>
 #include <memory>
+#include <thread>
 #include <atomic>
 #include <mutex>
 #include <type_traits>

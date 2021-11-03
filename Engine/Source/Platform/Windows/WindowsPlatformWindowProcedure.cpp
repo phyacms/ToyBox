@@ -10,8 +10,8 @@
 std::size_t WindowsPlatform::FWndProc::RegisterCounter{};
 
 WindowsPlatform::FWndProc::FWndProc()
-	: ISystemWindowProcedure{}
-	, WindowsPlatform::IWindowInterface{}
+	: ISystemWindowProcedure()
+	, WindowsPlatform::IWindowInterface()
 	, bRegistered{ false }
 	, hWnd{ nullptr }
 {
@@ -37,7 +37,7 @@ void WindowsPlatform::FWndProc::TerminateImpl(FSystemWindow& OwnerWindow) noexce
 {
 }
 
-void WindowsPlatform::FWndProc::Show() noexcept
+void WindowsPlatform::FWndProc::Present() noexcept
 {
 	if (IsValid())
 	{

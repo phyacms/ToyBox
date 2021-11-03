@@ -10,7 +10,7 @@ class FSystem;
 class IApplication
 {
 public:
-	IApplication() = default;
+	explicit IApplication(FSystem& System) : System{ &System } {}
 	virtual ~IApplication() noexcept = default;
 
 	IApplication(const IApplication&) = delete;
@@ -19,6 +19,14 @@ public:
 	IApplication& operator=(IApplication&&) noexcept = delete;
 
 public:
-	virtual bool Initialize(FSystem& System, const FCommandLineArgs& CmdLine) noexcept = 0;
-	virtual void Terminate(FSystem& System) noexcept = 0;
+	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept = 0;
+	virtual void Terminate() noexcept = 0;
+
+	virtual void PostInitialize() {}
+
+protected:
+	inline FSystem& GetSystem() const noexcept { return *System; }
+
+private:
+	FSystem* System;
 };
