@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Type/TimePoint.h"
 #include "Type/String.h"
 
 class FSystemWindow;
@@ -18,6 +19,8 @@ public:
 	FSystem& operator=(FSystem&&) noexcept = delete;
 
 public:
+	inline FTimePoint PreciseNow() const noexcept { return FTimeClock::now(); }
+
 	void RequestAppExit(std::int32_t ExitCode) const noexcept;
 	void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept;
 

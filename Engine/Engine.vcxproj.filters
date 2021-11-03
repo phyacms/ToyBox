@@ -70,6 +70,9 @@
     <ClInclude Include="Source\Type\MulticastDelegate.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\TimePoint.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">

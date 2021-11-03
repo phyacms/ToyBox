@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <limits>
+#include <chrono>
 #include <string>
 #include <vector>
 #include <list>
@@ -25,7 +26,7 @@ namespace stdhelp
 {
 	template<typename... Ts>
 	class overloaded final
-		: private Ts...
+		: public Ts...
 	{
 	public:
 		using Ts::operator()...;
