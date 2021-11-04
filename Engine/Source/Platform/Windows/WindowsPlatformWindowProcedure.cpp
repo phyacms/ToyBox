@@ -155,11 +155,13 @@ LRESULT WindowsPlatform::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wP
 
 LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	FSystemWindow& Window{ GetWindow() };
+
 	switch (uMsg)
 	{
 		case WM_CLOSE:
 		{
-			// @TODO: Notify remove system window instance.
+			Window.Events.Enqueue(SystemWindowEvents::FOnClosed{});
 		}
 		return 0;
 	}

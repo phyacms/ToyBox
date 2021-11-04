@@ -18,13 +18,13 @@ public:
 	ISystemWindowProcedure& operator=(ISystemWindowProcedure&&) noexcept = delete;
 
 public:
-	inline bool IsValid() const noexcept { return Window != nullptr && IsValidImpl(); }
+	inline bool IsValid() const noexcept { return OwnerWindow != nullptr && IsValidImpl(); }
 	bool Initialize(FSystemWindow& OwnerWindow) noexcept;
 	void Terminate(FSystemWindow& OwnerWindow) noexcept;
 
 	virtual void Present() noexcept = 0;
 
-	FSystemWindow& GetWindow() noexcept { return *Window; }
+	FSystemWindow& GetWindow() noexcept { return *OwnerWindow; }
 
 private:
 	virtual bool IsValidImpl() const noexcept = 0;
@@ -32,5 +32,5 @@ private:
 	virtual void TerminateImpl(FSystemWindow& OwnerWindow) noexcept = 0;
 
 private:
-	FSystemWindow* Window;
+	FSystemWindow* OwnerWindow;
 };

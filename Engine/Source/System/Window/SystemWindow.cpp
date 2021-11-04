@@ -8,6 +8,7 @@ FSystemWindow::FSystemWindow(std::unique_ptr<ISystemWindowProcedure> WndProc, FS
 	: TObject<FSystemWindow>(*this)
 	, WndProc{ std::move(WndProc) }
 	, Title{ Title }
+	, Events{}
 {
 	if (this->WndProc != nullptr)
 	{

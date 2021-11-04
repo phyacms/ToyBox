@@ -11,7 +11,9 @@
 #include <vector>
 #include <list>
 #include <unordered_set>
+#include <queue>
 #include <optional>
+#include <variant>
 #include <functional>
 #include <utility>
 #include <execution>

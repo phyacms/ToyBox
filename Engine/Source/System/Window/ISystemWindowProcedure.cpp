@@ -4,7 +4,7 @@
 #include "ISystemWindowProcedure.h"
 
 ISystemWindowProcedure::ISystemWindowProcedure()
-	: Window{ nullptr }
+	: OwnerWindow{ nullptr }
 {
 }
 
@@ -12,7 +12,7 @@ ISystemWindowProcedure::~ISystemWindowProcedure() noexcept = default;
 
 bool ISystemWindowProcedure::Initialize(FSystemWindow& OwnerWindow) noexcept
 {
-	Window = &OwnerWindow;
+	this->OwnerWindow = &OwnerWindow;
 	return InitializeImpl(OwnerWindow);
 }
 

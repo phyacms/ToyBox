@@ -66,7 +66,25 @@ private:
 	std::size_t Index;
 };
 
-using FDelegateHandles = std::vector<ADelegateHandle>;
+class FDelegateHandles final
+{
+public:
+	FDelegateHandles() : Handles{} {}
+	~FDelegateHandles() noexcept = default;
+
+	FDelegateHandles(FDelegateHandles&&) noexcept = default;
+	FDelegateHandles& operator=(FDelegateHandles&&) noexcept = default;
+	FDelegateHandles(const FDelegateHandles&) = delete;
+	FDelegateHandles& operator=(const FDelegateHandles&) = delete;
+
+	FDelegateHandles& operator+=(ADelegateHandle&& Handle);
+
+public:
+	inline void Clear() noexcept { Handles.clear(); }
+
+private:
+	std::vector<ADelegateHandle> Handles;
+};
 
 template<typename T>
 using TDelegateExecutor = std::pair<std::size_t, TDelegate<T>>;

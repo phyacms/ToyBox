@@ -4,6 +4,7 @@
 
 #include "Type/Object.h"
 #include "Type/String.h"
+#include "SystemWindowEvents.h"
 
 class ISystemWindowProcedure;
 
@@ -33,4 +34,7 @@ public:
 private:
 	std::unique_ptr<ISystemWindowProcedure> WndProc;
 	FString Title;
+
+public:
+	FSystemWindowEvents Events;
 };

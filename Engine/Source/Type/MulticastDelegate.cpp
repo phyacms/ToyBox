@@ -73,3 +73,12 @@ void ADelegateHandle::Release() noexcept
 	Issuer.Release();
 	Index = InvalidHandle;
 }
+
+FDelegateHandles& FDelegateHandles::operator+=(ADelegateHandle&& Handle)
+{
+	if (Handle.IsValid())
+	{
+		Handles.emplace_back(std::move(Handle));
+	}
+	return *this;
+}

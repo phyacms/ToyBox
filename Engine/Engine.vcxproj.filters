@@ -76,6 +76,9 @@
     <ClInclude Include="Source\Type\EventDispatcher.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Window\SystemWindowEvents.h">
+      <Filter>Source\System\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="Source\Type\MulticastDelegate.cpp">
       <Filter>Source\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp">
+      <Filter>Source\System\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
