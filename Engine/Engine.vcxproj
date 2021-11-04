@@ -106,6 +106,7 @@
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
     <ClInclude Include="Source\Type\Delegate.h" />
+    <ClInclude Include="Source\Type\EventDispatcher.h" />
     <ClInclude Include="Source\Type\MulticastDelegate.h" />
     <ClInclude Include="Source\Type\Object.h" />
     <ClInclude Include="Source\Type\String.h" />
