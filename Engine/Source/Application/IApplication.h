@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Type/TimePoint.h"
 #include "System/CommandLineArgs.h"
 
 class FSystem;
@@ -22,7 +23,8 @@ public:
 	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept = 0;
 	virtual void Terminate() noexcept = 0;
 
-	virtual void PostInitialize() {}
+	virtual void Tick(FTimePoint TickTime, FTimeDuration DeltaTime) {}
+	virtual void Render(FTimePoint RenderTime, FTimeDuration DeltaTime) const {}
 
 protected:
 	inline FSystem& GetSystem() const noexcept { return *System; }

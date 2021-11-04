@@ -19,14 +19,12 @@ DWORD FWindowsPlatform::GetMessageThreadId() const noexcept { return ::g_Message
 
 FWindowsPlatformEntry::FWindowsPlatformEntry(HINSTANCE hInstance)
 	: bCoInit{}
-	, CmdLine{}
 {
 	if (::g_hInstance == nullptr)
 	{
 		::g_hInstance = hInstance;
 
 		bCoInit = SUCCEEDED(::CoInitializeEx(nullptr, COINIT::COINIT_APARTMENTTHREADED));
-		CmdLine = ParseCommandLine();
 
 #ifndef NDEBUG
 		// Enables run-time memory check in debug build.
@@ -46,7 +44,7 @@ FWindowsPlatformEntry::~FWindowsPlatformEntry() noexcept
 	}
 }
 
-FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() noexcept
+FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() const noexcept
 {
 	FCommandLineArgs CmdLine{};
 	struct FCommandLineParser final
@@ -85,51 +83,36 @@ FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() noexcept
 	return CmdLine;
 }
 
-std::int32_t FWindowsPlatformEntry::Launch(FSystem& System, IApplication& Application)
+std::int32_t FWindowsPlatformEntry::AppMain(IApplication& Application)
 {
-	if (::g_MessageThreadId != DWORD{} || !bCoInit || CmdLine.empty())
+	if (::g_MessageThreadId == DWORD{} && bCoInit)
 	{
-		return EXIT_FAILURE;
-	}
-
-	::g_MessageThreadId = ::GetCurrentThreadId();
-
-	struct FApplicationGuard final
-	{
-		IApplication* Application;
-		bool bInit;
-		FApplicationGuard(
-			IApplication& Application,
-			const FCommandLineArgs& CmdLine)
-			: Application{ &Application }
-			, bInit{ Application.Initialize(CmdLine) } {}
-		~FApplicationGuard() noexcept
+		::g_MessageThreadId = ::GetCurrentThreadId();
+		struct FMessageThreadIdGuard final
 		{
-			Application->Terminate();
-			::g_MessageThreadId = DWORD{};
+			~FMessageThreadIdGuard() noexcept { ::g_MessageThreadId = DWORD{}; }
+		}
+		MessageThreadIdGuard{};
+
+		auto EntryGuard{ CreateEntryGuard(Application) };
+		if (EntryGuard.IsInitialized())
+		{
+			MSG Msg{};
+			while (::GetMessageW(&Msg, nullptr, UINT{}, UINT{}) != FALSE)
+			{
+				if (Msg.message == WM_QUIT)
+				{
+					break;
+				}
+				::TranslateMessage(&Msg);
+				::DispatchMessageW(&Msg);
+			}
+
+			return static_cast<std::int32_t>(Msg.wParam);
 		}
 	}
-	AppGuard{ Application, CmdLine };
 
-	if (!AppGuard.bInit)
-	{
-		return EXIT_FAILURE;
-	}
-
-	Application.PostInitialize();
-
-	MSG Msg{};
-	while (::GetMessageW(&Msg, nullptr, UINT{}, UINT{}) != FALSE)
-	{
-		if (Msg.message == WM_QUIT)
-		{
-			break;
-		}
-		::TranslateMessage(&Msg);
-		::DispatchMessageW(&Msg);
-	}
-
-	return static_cast<std::int32_t>(Msg.wParam);
+	return EXIT_FAILURE;
 }
 
 #endif
