@@ -6,12 +6,13 @@
 #include "Type/String.h"
 
 class FSystemWindow;
+class FGraphics;
 
 class FSystem final
 {
 public:
-	FSystem() = default;
-	~FSystem() noexcept = default;
+	FSystem();
+	~FSystem() noexcept;
 
 	FSystem(const FSystem&) = delete;
 	FSystem& operator=(const FSystem&) = delete;
@@ -24,5 +25,10 @@ public:
 	void RequestAppExit(std::int32_t ExitCode) const noexcept;
 	void PrintDebugOutput(FStringView Message) const noexcept;
 	void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept;
+
 	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FStringView Title) const noexcept;
+	FGraphics& GetGraphics() const noexcept;
+
+private:
+	mutable std::unique_ptr<FGraphics> Graphics;
 };

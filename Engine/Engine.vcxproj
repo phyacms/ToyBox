@@ -103,6 +103,12 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformEntry.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.h" />
+    <ClInclude Include="Source\System\Graphics\Graphics.h" />
+    <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
+    <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
     <ClInclude Include="Source\System\System.h" />
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
@@ -120,6 +126,10 @@
     <ClCompile Include="Source\Platform\Windows\WindowsPlatform.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp" />
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.cpp" />
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp" />
+    <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
+    <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />

@@ -22,6 +22,12 @@
     <Filter Include="Source\System\Window">
       <UniqueIdentifier>{697f1aa3-44fa-437e-a110-82f0f9dff6cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System\Graphics">
+      <UniqueIdentifier>{b435cc4e-5c5a-4428-b4c5-3b967ae2230e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Graphics\Direct3D11">
+      <UniqueIdentifier>{964678ff-fc07-4858-bd6f-c622c720867e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -82,6 +88,24 @@
     <ClInclude Include="Source\Application\IApplicationEntry.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Graphics.h">
+      <Filter>Source\System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\IGraphicsContext.h">
+      <Filter>Source\System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h">
+      <Filter>Source\System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.h">
+      <Filter>Source\System\Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11.h">
+      <Filter>Source\System\Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.h">
+      <Filter>Source\System\Graphics\Direct3D11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -113,6 +137,18 @@
     </ClCompile>
     <ClCompile Include="Source\Application\IApplicationEntry.cpp">
       <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Graphics.cpp">
+      <Filter>Source\System\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.cpp">
+      <Filter>Source\System\Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp">
+      <Filter>Source\System\Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp">
+      <Filter>Source\System\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
