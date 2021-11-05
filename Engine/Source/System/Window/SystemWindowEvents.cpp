@@ -5,11 +5,16 @@
 
 void FSystemWindowEvents::Enqueue(SystemWindowEvents::FEvent&& Event)
 {
+	std::lock_guard<std::mutex> Lock{ Mutex };
+	std::visit(stdhelp::overloaded{
+		[this](const auto&)->void {}, },
+		Event);
 	Queue.emplace(std::move(Event));
 }
 
 void FSystemWindowEvents::Process()
 {
+	std::lock_guard<std::mutex> Lock{ Mutex };
 	while (!Queue.empty())
 	{
 		std::visit(stdhelp::overloaded{

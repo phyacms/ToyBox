@@ -13,7 +13,7 @@ namespace SystemWindowEvents
 class FSystemWindowEvents final
 {
 public:
-	FSystemWindowEvents() : Queue{} {}
+	FSystemWindowEvents() : Queue{}, Mutex{} {}
 	~FSystemWindowEvents() noexcept = default;
 
 	FSystemWindowEvents(const FSystemWindowEvents&) = delete;
@@ -30,4 +30,5 @@ public:
 
 private:
 	std::queue<SystemWindowEvents::FEvent> Queue;
+	std::mutex Mutex;
 };
