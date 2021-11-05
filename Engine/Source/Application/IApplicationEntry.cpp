@@ -51,15 +51,17 @@ void IApplicationEntry::BeginThreads()
 			{
 				const auto Now{ System.PreciseNow() };
 				const auto DeltaTime{ Now - TickTime };
-				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / FrameRate })
+				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / TickRate })
 				{
-					std::unique_lock<std::mutex> Lock{ Mutex, std::defer_lock };
+					std::unique_lock<std::mutex> Lock(Mutex, std::defer_lock);
 					if (Lock.try_lock())
 					{
-						Application->Tick(Now, DeltaTime);
+						Application->Tick(DeltaTime);
 						Lock.unlock();
+
+						TickTime = Now;
 					}
-					TickTime = System.PreciseNow();
+					std::this_thread::sleep_for(std::chrono::nanoseconds{ 10 });
 				}
 			}
 		});
@@ -67,20 +69,21 @@ void IApplicationEntry::BeginThreads()
 	RenderThread = std::thread(
 		[this]()->void
 		{
-			auto RenderTime{ System.PreciseNow() };
+			auto FrameTime{ System.PreciseNow() };
 			while (!bAbortThreads)
 			{
 				const auto Now{ System.PreciseNow() };
-				const auto DeltaTime{ Now - RenderTime };
+				const auto DeltaTime{ Now - FrameTime };
 				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / FrameRate })
 				{
-					std::unique_lock<std::mutex> Lock{ Mutex };
+					std::unique_lock<std::mutex> Lock(Mutex);
 					if (!bAbortThreads)
 					{
-						Application->Render(Now, DeltaTime);
+						Application->Render(DeltaTime);
 						Lock.unlock();
 					}
-					RenderTime = System.PreciseNow();
+					FrameTime = Now;
+					std::this_thread::sleep_for(std::chrono::nanoseconds{ 10 });
 				}
 			}
 		});

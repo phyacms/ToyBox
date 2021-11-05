@@ -23,8 +23,8 @@ public:
 	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept = 0;
 	virtual void Terminate() noexcept = 0;
 
-	virtual void Tick(FTimePoint TickTime, FTimeDuration DeltaTime) {}
-	virtual void Render(FTimePoint RenderTime, FTimeDuration DeltaTime) const {}
+	virtual void Tick(FTimeDuration DeltaTime) {}
+	virtual void Render(FTimeDuration DeltaTime) const {}
 
 protected:
 	inline FSystem& GetSystem() const noexcept { return *System; }

@@ -18,8 +18,8 @@ private:
 	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept override final;
 	virtual void Terminate() noexcept override final;
 
-	void Tick(FTimePoint TickTime, FTimeDuration DeltaTime);
-	void Render(FTimePoint RenderTime, FTimeDuration DeltaTime) const;
+	void Tick(FTimeDuration DeltaTime) override final;
+	void Render(FTimeDuration DeltaTime) const override final;
 
 private:
 	std::unique_ptr<FSystemWindow> Window;

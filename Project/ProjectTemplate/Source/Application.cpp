@@ -37,11 +37,11 @@ void FApplication::Terminate() noexcept
 	Window.reset();
 }
 
-void FApplication::Tick(FTimePoint TickTime, FTimeDuration DeltaTime)
+void FApplication::Tick(FTimeDuration DeltaTime)
 {
 	Window->Events.Process();
 }
 
-void FApplication::Render(FTimePoint RenderTime, FTimeDuration DeltaTime) const
+void FApplication::Render(FTimeDuration DeltaTime) const
 {
 }
