@@ -4,10 +4,14 @@
 #include "Application.h"
 #include <System/System.h>
 #include <System/Window/SystemWindow.h>
+#include <System/Graphics/Graphics.h>
+#include <System/Graphics/IGraphicsRenderer.h>
 
 FApplication::FApplication(FSystem& System)
 	: IApplication(System)
 	, Window{}
+	, DH_OnClosed{}
+	, GraphicsContext{}
 {
 }
 
@@ -17,14 +21,28 @@ FApplication::~FApplication() noexcept
 
 bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 {
-	Window = GetSystem().CreateWindow(USTR(PROJECT_NAME));
+	FSystem& System{ GetSystem() };
+
+	Window = System.CreateWindow(USTR(PROJECT_NAME));
 	if (Window == nullptr || !Window->IsValid())
 	{
 		return false;
 	}
 
-	WindowEvents += Window->Events.OnClosed.AddDynamic(
+	DH_OnClosed = Window->Events.OnClosed.AddDynamic(
 		[this]()->bool { GetSystem().RequestAppExit(EXIT_SUCCESS); return true; });
+
+	auto& Graphics = System.GetGraphics();
+	if (!Graphics.SetRendererType(EGraphicsRendererType::Direct3D11))
+	{
+		return false;
+	}
+
+	GraphicsContext = Graphics.CreateContext(*Window);
+	if (GraphicsContext == nullptr)
+	{
+		return false;
+	}
 
 	Window->Present();
 
@@ -33,7 +51,8 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 
 void FApplication::Terminate() noexcept
 {
-	WindowEvents.Clear();
+	GraphicsContext.reset();
+	DH_OnClosed.Release();
 	Window.reset();
 }
 
@@ -44,4 +63,5 @@ void FApplication::Tick(FTimeDuration DeltaTime)
 
 void FApplication::Render(FTimeDuration DeltaTime) const
 {
+	GraphicsContext->Render(DeltaTime);
 }

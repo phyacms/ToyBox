@@ -2,15 +2,20 @@
 
 #pragma once
 
+#include "Engine.h"
 #include "Type/Object.h"
 #include "Type/TimePoint.h"
-
-class FSystemWindow;
+#include "System/Window/SystemWindow.h"
+#include "IGraphicsRenderer.h"
 
 class IGraphicsContext
 {
 public:
-	explicit IGraphicsContext(FSystemWindow& OutputWindow);
+	IGraphicsContext(
+		AObject<IGraphicsRenderer>&& Renderer,
+		AObject<FSystemWindow>&& OutputWindow)
+		: Renderer{ std::move(Renderer) }
+		, OutputWindow{ std::move(OutputWindow) } {}
 	virtual ~IGraphicsContext() noexcept = default;
 
 	IGraphicsContext(const IGraphicsContext&) = delete;
@@ -23,11 +28,15 @@ public:
 	virtual void Render(FTimeDuration DeltaTime) const = 0;
 
 protected:
-	FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }
+	inline IGraphicsRenderer& GetRenderer() const noexcept { return *Renderer.GetAddress(); }
+	template<typename T, typename = std::enable_if_t<std::is_base_of_v<IGraphicsRenderer, T>>>
+	inline T& GetRendererAs() const noexcept { return dynamic_cast<T&>(GetRenderer()); }
+	inline FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }
 
 private:
 	virtual bool IsValidImpl() const noexcept = 0;
 
 private:
+	AObject<IGraphicsRenderer> Renderer;
 	AObject<FSystemWindow> OutputWindow;
 };

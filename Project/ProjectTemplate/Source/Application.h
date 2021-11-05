@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include <Application/IApplication.h>
 #include <Type/MulticastDelegate.h>
+#include <Application/IApplication.h>
+#include <System/Graphics/IGraphicsContext.h>
 
 class FSystemWindow;
 
@@ -23,5 +24,7 @@ private:
 
 private:
 	std::unique_ptr<FSystemWindow> Window;
-	FDelegateHandles WindowEvents;
+	ADelegateHandle DH_OnClosed;
+
+	std::unique_ptr<IGraphicsContext> GraphicsContext;
 };

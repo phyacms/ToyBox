@@ -33,12 +33,27 @@ bool FGraphics::SetRendererType(EGraphicsRendererType RendererType) noexcept
 		case EGraphicsRendererType::Unknown:
 			break;
 	}
-	return Renderer != nullptr;
+
+	if (Renderer != nullptr && Renderer->IsValid())
+	{
+		return true;
+	}
+	else
+	{
+		Renderer.reset();
+		return false;
+	}
 }
 
 std::unique_ptr<IGraphicsContext> FGraphics::CreateContext(FSystemWindow& OutputWindow)
 {
-	return Renderer != nullptr
-		? Renderer->CreateContext(OutputWindow)
-		: nullptr;
+	if (Renderer != nullptr)
+	{
+		auto Context{ Renderer->CreateContext(OutputWindow) };
+		if (Context != nullptr && Context->IsValid())
+		{
+			return Context;
+		}
+	}
+	return nullptr;
 }

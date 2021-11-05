@@ -42,8 +42,8 @@ AUniqueId& AUniqueId::operator=(AUniqueId&& Other) noexcept
 	return *this;
 }
 
-AUniqueId::AUniqueId(FUniqueIdIssuer& Issuer, FUniqueId&& Issued)
-	: Issuer{ Issuer }
+AUniqueId::AUniqueId(AObject<FUniqueIdIssuer>&& Issuer, FUniqueId&& Issued)
+	: Issuer{ std::move(Issuer) }
 	, Id{ std::move(Issued) }
 {
 }

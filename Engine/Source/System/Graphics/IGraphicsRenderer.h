@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Type/Object.h"
 
 class FSystemWindow;
 class FGraphics;
@@ -15,9 +16,12 @@ enum class EGraphicsRendererType : std::size_t
 };
 
 class IGraphicsRenderer
+	: public TObject<IGraphicsRenderer>
 {
 public:
-	explicit IGraphicsRenderer(FGraphics& Graphics) : Graphics{ &Graphics } {}
+	explicit IGraphicsRenderer(FGraphics& Graphics)
+		: TObject<IGraphicsRenderer>(*this)
+		, Graphics{ &Graphics } {}
 	virtual ~IGraphicsRenderer() noexcept = default;
 
 	IGraphicsRenderer(const IGraphicsRenderer&) = delete;
@@ -26,6 +30,7 @@ public:
 	IGraphicsRenderer& operator=(IGraphicsRenderer&&) noexcept = delete;
 
 public:
+	virtual bool IsValid() const noexcept = 0;
 	virtual std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) = 0;
 
 protected:

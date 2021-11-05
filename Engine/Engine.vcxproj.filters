@@ -147,8 +147,5 @@
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp">
       <Filter>Source\System\Graphics\Direct3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp">
-      <Filter>Source\System\Graphics</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

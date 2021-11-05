@@ -26,6 +26,7 @@
 #ifndef NDEBUG
 #include <crtdbg.h>
 #endif
+#include <wrl.h>
 
 #ifdef DefWindowProc
 #undef DefWindowProc
@@ -41,6 +42,9 @@
 #endif
 
 #include "Platform/IPlatform.h"
+
+template<typename T>
+using TComPtr = Microsoft::WRL::ComPtr<T>;
 
 class FWindowsPlatform final
 	: public IPlatform

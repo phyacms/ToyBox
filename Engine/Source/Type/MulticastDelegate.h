@@ -52,7 +52,7 @@ public:
 	inline operator bool() const noexcept { return IsValid(); }
 
 private:
-	ADelegateHandle(IMulticastDelegate& Issuer, std::size_t Index) : Issuer{ Issuer }, Index{ Index } {}
+	ADelegateHandle(AObject<IMulticastDelegate>&& Issuer, std::size_t Index) : Issuer{ std::move(Issuer) }, Index{ Index } {}
 
 public:
 	inline bool IsValid() const noexcept { return Issuer.IsValid() && Index != InvalidHandle; }
