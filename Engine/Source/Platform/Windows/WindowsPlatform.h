@@ -62,6 +62,7 @@ private:
 			static_cast<WPARAM>(ExitCode),
 			LPARAM{});
 	}
+	virtual void PrintDebugOutput(FStringView Message) const noexcept override final;
 	inline virtual void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept override final
 	{
 		::MessageBoxW(
@@ -70,7 +71,6 @@ private:
 			reinterpret_cast<LPCWSTR>(Title.data()),
 			MB_OK);
 	}
-
 	virtual [[nodiscard]] std::unique_ptr<ISystemWindowProcedure> CreateWindowProcedure() const noexcept override final;
 
 public:

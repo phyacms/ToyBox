@@ -22,7 +22,7 @@ private:
 	friend class FSystem;
 
 	virtual void RequestAppExit(std::int32_t ExitCode) const noexcept = 0;
+	virtual void PrintDebugOutput(FStringView Message) const noexcept = 0;
 	virtual void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept = 0;
-
 	virtual [[nodiscard]] std::unique_ptr<ISystemWindowProcedure> CreateWindowProcedure() const noexcept = 0;
 };

@@ -7,6 +7,7 @@
 #include "Platform/Platform.h"
 
 void FSystem::RequestAppExit(std::int32_t ExitCode) const noexcept { FPlatform::GetInterface().RequestAppExit(ExitCode); }
+void FSystem::PrintDebugOutput(FStringView Message) const noexcept { FPlatform::GetInterface().PrintDebugOutput(Message); }
 void FSystem::ShowPopupMessage(FStringView Title, FStringView Content) const noexcept { FPlatform::GetInterface().ShowPopupMessage(Title, Content); }
 
 std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FStringView Title) const noexcept

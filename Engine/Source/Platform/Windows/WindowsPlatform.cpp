@@ -18,6 +18,14 @@ FWindowsPlatform& FWindowsPlatform::GetSpecific() noexcept
 	return Instance;
 }
 
+void FWindowsPlatform::PrintDebugOutput(FStringView Message) const noexcept
+{
+	static std::mutex Mutex{};
+	std::unique_lock<std::mutex> Lock{ Mutex };
+	::OutputDebugStringW(reinterpret_cast<LPCWSTR>(Message.data()));
+	::OutputDebugStringW(TEXT("\n"));
+}
+
 std::unique_ptr<ISystemWindowProcedure> FWindowsPlatform::CreateWindowProcedure() const noexcept
 {
 	return std::make_unique<WindowsPlatform::FWndProc>();
