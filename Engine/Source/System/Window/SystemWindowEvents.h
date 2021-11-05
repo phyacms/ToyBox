@@ -13,7 +13,7 @@ namespace SystemWindowEvents
 class FSystemWindowEvents final
 {
 public:
-	FSystemWindowEvents() : Queue{}, Mutex{} {}
+	FSystemWindowEvents() : Queues{}, CurrentIndex{}, Mutex{} {}
 	~FSystemWindowEvents() noexcept = default;
 
 	FSystemWindowEvents(const FSystemWindowEvents&) = delete;
@@ -26,9 +26,10 @@ public:
 	void Process();
 
 public:
-	TEventDispatcher<bool(const SystemWindowEvents::FOnClosed&)> OnClosed;
+	TEventDispatcher<bool(void)> OnClosed;
 
 private:
-	std::queue<SystemWindowEvents::FEvent> Queue;
+	std::array<std::queue<SystemWindowEvents::FEvent>, 2> Queues;
+	std::size_t CurrentIndex;
 	std::mutex Mutex;
 };

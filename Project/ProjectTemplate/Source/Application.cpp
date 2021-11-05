@@ -24,7 +24,7 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 	}
 
 	WindowEvents += Window->Events.OnClosed.AddDynamic(
-		[this](const SystemWindowEvents::FOnClosed&)->bool { GetSystem().RequestAppExit(EXIT_SUCCESS); return true; });
+		[this]()->bool { GetSystem().RequestAppExit(EXIT_SUCCESS); return true; });
 
 	Window->Present();
 
