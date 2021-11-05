@@ -5,9 +5,11 @@
 // C++ Standard Headers
 #include <cstdlib>
 #include <cstdint>
+#include <charconv>
 #include <limits>
 #include <chrono>
 #include <string>
+#include <array>
 #include <vector>
 #include <list>
 #include <unordered_set>
