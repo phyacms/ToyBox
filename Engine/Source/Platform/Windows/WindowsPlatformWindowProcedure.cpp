@@ -155,13 +155,30 @@ LRESULT WindowsPlatform::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wP
 
 LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	using namespace SystemWindowEvents;
+
 	FSystemWindow& Window{ GetWindow() };
 
 	switch (uMsg)
 	{
+		case WM_SIZE:
+		{
+			if (wParam != SIZE_MINIMIZED)
+			{
+				FOnResized OnResized{
+					static_cast<std::uint32_t>(LOWORD(lParam)),
+					static_cast<std::uint32_t>(HIWORD(lParam)) };
+				if (OnResized.Width != 0 && OnResized.Height != 0)
+				{
+					Window.Events.Enqueue(std::move(OnResized));
+				}
+			}
+		}
+		return 0;
+
 		case WM_CLOSE:
 		{
-			Window.Events.Enqueue(SystemWindowEvents::FOnClosed{});
+			Window.Events.Enqueue(FOnClosed{});
 		}
 		return 0;
 	}

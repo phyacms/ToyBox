@@ -113,6 +113,7 @@
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
     <ClInclude Include="Source\System\Window\SystemWindowEvents.h" />
+    <ClInclude Include="Source\Type\Color.h" />
     <ClInclude Include="Source\Type\Delegate.h" />
     <ClInclude Include="Source\Type\EventDispatcher.h" />
     <ClInclude Include="Source\Type\MulticastDelegate.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
+    <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />

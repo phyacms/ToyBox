@@ -7,13 +7,17 @@
 namespace SystemWindowEvents
 {
 	struct FOnClosed final {};
-	using FEvent = std::variant<FOnClosed>;
+	struct FOnResized final { std::uint32_t Width{}; std::uint32_t Height{}; };
+	using FEvent = std::variant<FOnClosed, FOnResized>;
 }
 
 class FSystemWindowEvents final
 {
+private:
+	using FEvent = SystemWindowEvents::FEvent;
+
 public:
-	FSystemWindowEvents() : Queues{}, CurrentIndex{}, Mutex{} {}
+	FSystemWindowEvents();
 	~FSystemWindowEvents() noexcept = default;
 
 	FSystemWindowEvents(const FSystemWindowEvents&) = delete;
@@ -22,14 +26,15 @@ public:
 	FSystemWindowEvents& operator=(FSystemWindowEvents&&) noexcept = delete;
 
 public:
-	void Enqueue(SystemWindowEvents::FEvent&& Event);
+	void Enqueue(FEvent&& Event);
 	void Process();
+
+private:
+	std::array<std::queue<FEvent>, 2> Queues;
+	std::size_t CurrentIndex;
+	std::mutex Mutex;
 
 public:
 	TEventDispatcher<bool(void)> OnClosed;
-
-private:
-	std::array<std::queue<SystemWindowEvents::FEvent>, 2> Queues;
-	std::size_t CurrentIndex;
-	std::mutex Mutex;
+	TEventDispatcher<bool(std::uint32_t, std::uint32_t)> OnResized;
 };

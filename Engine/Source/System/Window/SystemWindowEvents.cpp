@@ -3,19 +3,49 @@
 #include "Engine.h"
 #include "SystemWindowEvents.h"
 
-void FSystemWindowEvents::Enqueue(SystemWindowEvents::FEvent&& Event)
+using namespace SystemWindowEvents;
+
+FSystemWindowEvents::FSystemWindowEvents()
+	: Queues{}
+	, CurrentIndex{}
+	, Mutex{}
+	, OnClosed{}
+	, OnResized{}
 {
+}
+
+void FSystemWindowEvents::Enqueue(FEvent&& Event)
+{
+	std::unique_lock<std::mutex> Lock{ Mutex };
+
+	bool bEnqueue{ true };
+	auto& Queue = Queues[CurrentIndex];
+
 	std::visit(stdhelp::overloaded{
-		[this](const auto&)->void {}, },
+		[&](const auto&)->void {},
+		[&](const FOnResized& Event)->void
+		{
+			if (!Queue.empty())
+			{
+				if (auto Ptr{ std::get_if<FOnResized>(&Queue.back()) };
+					Ptr != nullptr)
+				{
+					*Ptr = Event;
+					bEnqueue = false;
+				}
+			}
+		}, },
 		Event);
 
-	std::unique_lock<std::mutex> Lock{ Mutex };
-	auto& Queue = Queues[CurrentIndex];
-	Queue.emplace(std::move(Event));
+	if (bEnqueue)
+	{
+		Queue.emplace(std::move(Event));
+	}
 }
 
 void FSystemWindowEvents::Process()
 {
+
 	auto& Queue = Queues[CurrentIndex];
 	if (!Queue.empty())
 	{
@@ -27,7 +57,8 @@ void FSystemWindowEvents::Process()
 		{
 			std::visit(stdhelp::overloaded{
 				[](const auto&)->void {},
-				[this](const SystemWindowEvents::FOnClosed&)->void { OnClosed.Broadcast(); }, },
+				[this](const FOnClosed&)->void { OnClosed.Broadcast(); },
+				[this](const FOnResized& EventArgs)->void { OnResized.Broadcast(EventArgs.Width, EventArgs.Height); }, },
 				Queue.front());
 			Queue.pop();
 		}

@@ -29,11 +29,12 @@ private:
 	bool CreateSwapChain() noexcept;
 	bool CreateResources() noexcept;
 	void DestroyResources() noexcept;
+	virtual void ResizeBuffer(std::uint32_t Width, std::uint32_t Height) override final;
 
 	virtual bool IsValidImpl() const noexcept override final;
 	virtual void Render(FTimeDuration DeltaTime) override final;
 
-	void BeginScene() const;
+	void BeginScene(const FColorRGBA& ClearColor = IGraphicsContext::DefaultClearColor) const;
 	void EndScene() const;
 
 	inline FDirect3D11Renderer& GetRenderer() const noexcept { return IGraphicsContext::GetRendererAs<FDirect3D11Renderer>(); }

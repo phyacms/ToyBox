@@ -31,6 +31,7 @@ FDirect3D11SwapChain::FDirect3D11SwapChain(
 
 FDirect3D11SwapChain::~FDirect3D11SwapChain() noexcept
 {
+	Terminate();
 }
 
 bool FDirect3D11SwapChain::Initialize() noexcept
@@ -247,23 +248,54 @@ void FDirect3D11SwapChain::DestroyResources() noexcept
 	D2DRenderTarget.Reset();
 }
 
+void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Height)
+{
+	DestroyResources();
+	if (SwapChain != nullptr)
+	{
+		DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
+		if (SUCCEEDED(SwapChain->GetDesc(&SwapChainDesc)))
+		{
+			if (SUCCEEDED(SwapChain->ResizeBuffers(
+				UINT{},
+				static_cast<UINT>(Width),
+				static_cast<UINT>(Height),
+				SwapChainDesc.BufferDesc.Format,
+				SwapChainDesc.Flags)))
+			{
+				CreateResources();
+			}
+		}
+	}
+}
+
 bool FDirect3D11SwapChain::IsValidImpl() const noexcept
 {
-	return true;
+	return !(false
+		|| !SwapChain
+		|| !BackBuffer
+		|| !RenderTargetView
+		|| !DepthStencilState
+		|| !DepthStencilView
+		|| !RasterizerState
+		|| !BlendState
+		|| !D2DRenderTarget);
 }
 
 void FDirect3D11SwapChain::Render(FTimeDuration DeltaTime)
 {
-	BeginScene();
+	if (IsValid())
 	{
-		// @TODO: Render commands.
+		BeginScene();
+		{
+			// @TODO: Render commands.
+		}
+		EndScene();
 	}
-	EndScene();
 }
 
-void FDirect3D11SwapChain::BeginScene() const
+void FDirect3D11SwapChain::BeginScene(const FColorRGBA& ClearColor) const
 {
-	static constexpr FLOAT ClearColor[4]{ 0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f };
 	static constexpr FLOAT BlendFactor[4]{};
 	static constexpr UINT SampleMask{ 0xFFFFFFFF };
 

@@ -106,6 +106,9 @@
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.h">
       <Filter>Source\System\Graphics\Direct3D11</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\Color.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp">
       <Filter>Source\System\Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp">
+      <Filter>Source\System\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
