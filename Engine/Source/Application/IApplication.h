@@ -24,7 +24,7 @@ public:
 	virtual void Terminate() noexcept = 0;
 
 	virtual void Tick(FTimeDuration DeltaTime) {}
-	virtual void Render(FTimeDuration DeltaTime) const {}
+	virtual void Render(FTimeDuration DeltaTime) {}
 
 protected:
 	inline FSystem& GetSystem() const noexcept { return *System; }

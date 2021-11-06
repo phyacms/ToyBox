@@ -252,7 +252,7 @@ bool FDirect3D11SwapChain::IsValidImpl() const noexcept
 	return true;
 }
 
-void FDirect3D11SwapChain::Render(FTimeDuration DeltaTime) const
+void FDirect3D11SwapChain::Render(FTimeDuration DeltaTime)
 {
 	BeginScene();
 	{

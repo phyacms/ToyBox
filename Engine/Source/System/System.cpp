@@ -27,7 +27,7 @@ std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FStringView Title) const no
 		Title);
 }
 
-FGraphics& FSystem::GetGraphics() const noexcept
+FGraphics& FSystem::GetGraphics() noexcept
 {
 	if (Graphics == nullptr)
 	{

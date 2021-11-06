@@ -31,7 +31,7 @@ private:
 	void DestroyResources() noexcept;
 
 	virtual bool IsValidImpl() const noexcept override final;
-	virtual void Render(FTimeDuration DeltaTime) const override final;
+	virtual void Render(FTimeDuration DeltaTime) override final;
 
 	void BeginScene() const;
 	void EndScene() const;

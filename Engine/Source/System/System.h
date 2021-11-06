@@ -27,8 +27,8 @@ public:
 	void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept;
 
 	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FStringView Title) const noexcept;
-	FGraphics& GetGraphics() const noexcept;
+	FGraphics& GetGraphics() noexcept;
 
 private:
-	mutable std::unique_ptr<FGraphics> Graphics;
+	std::unique_ptr<FGraphics> Graphics;
 };

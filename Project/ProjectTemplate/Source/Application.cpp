@@ -61,7 +61,7 @@ void FApplication::Tick(FTimeDuration DeltaTime)
 	Window->Events.Process();
 }
 
-void FApplication::Render(FTimeDuration DeltaTime) const
+void FApplication::Render(FTimeDuration DeltaTime)
 {
 	GraphicsContext->Render(DeltaTime);
 }

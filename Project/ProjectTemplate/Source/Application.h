@@ -20,7 +20,7 @@ private:
 	virtual void Terminate() noexcept override final;
 
 	void Tick(FTimeDuration DeltaTime) override final;
-	void Render(FTimeDuration DeltaTime) const override final;
+	void Render(FTimeDuration DeltaTime) override final;
 
 private:
 	std::unique_ptr<FSystemWindow> Window;

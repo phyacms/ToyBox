@@ -25,7 +25,7 @@ public:
 
 public:
 	bool IsValid() const noexcept { return OutputWindow.IsValid() && IsValidImpl(); }
-	virtual void Render(FTimeDuration DeltaTime) const = 0;
+	virtual void Render(FTimeDuration DeltaTime) = 0;
 
 protected:
 	inline IGraphicsRenderer& GetRenderer() const noexcept { return *Renderer.GetAddress(); }
