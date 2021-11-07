@@ -97,6 +97,8 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IApplicationEntry.h" />
+    <ClInclude Include="Source\Math\AxisIndex.h" />
+    <ClInclude Include="Source\Math\Vector.h" />
     <ClInclude Include="Source\Platform\IPlatform.h" />
     <ClInclude Include="Source\Platform\Platform.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h" />

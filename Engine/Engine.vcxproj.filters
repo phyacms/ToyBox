@@ -28,6 +28,9 @@
     <Filter Include="Source\System\Graphics\Direct3D11">
       <UniqueIdentifier>{964678ff-fc07-4858-bd6f-c622c720867e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Math">
+      <UniqueIdentifier>{ebb38c78-1997-46b9-a731-b89044f06769}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -108,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="Source\Type\Color.h">
       <Filter>Source\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Vector.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\AxisIndex.h">
+      <Filter>Source\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

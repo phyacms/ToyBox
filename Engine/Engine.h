@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <charconv>
+#include <cmath>
 #include <limits>
 #include <chrono>
 #include <string>
