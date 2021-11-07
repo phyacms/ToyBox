@@ -27,9 +27,9 @@ public:
 	~FUniqueId() noexcept = default;
 
 	FUniqueId(const FUniqueId&) = default;
-	FUniqueId& operator=(const FUniqueId&) = default;
+	FUniqueId& operator=(const FUniqueId&) & = default;
 	FUniqueId(FUniqueId&& Other) noexcept;
-	FUniqueId& operator=(FUniqueId&& Other) noexcept;
+	FUniqueId& operator=(FUniqueId&& Other) & noexcept;
 
 private:
 	FUniqueId(ArgumentType Arg, ValueType Value) : Arg{ Arg }, Value{ Value } {}
@@ -56,9 +56,9 @@ public:
 	~AUniqueId() noexcept { Release(); }
 
 	AUniqueId(const AUniqueId&) = delete;
-	AUniqueId& operator=(const AUniqueId&) = delete;
+	AUniqueId& operator=(const AUniqueId&) & = delete;
 	AUniqueId(AUniqueId&& Other) noexcept;
-	AUniqueId& operator=(AUniqueId&& Other) noexcept;
+	AUniqueId& operator=(AUniqueId&& Other) & noexcept;
 
 private:
 	AUniqueId(AObject<FUniqueIdIssuer>&& Issuer, FUniqueId&& Issued);
@@ -95,9 +95,9 @@ public:
 	virtual ~FUniqueIdIssuer() noexcept = default;
 
 	FUniqueIdIssuer(const FUniqueIdIssuer&) = delete;
-	FUniqueIdIssuer& operator=(const FUniqueIdIssuer&) = delete;
+	FUniqueIdIssuer& operator=(const FUniqueIdIssuer&) & = delete;
 	FUniqueIdIssuer(FUniqueIdIssuer&&) noexcept = delete;
-	FUniqueIdIssuer& operator=(FUniqueIdIssuer&&) noexcept = delete;
+	FUniqueIdIssuer& operator=(FUniqueIdIssuer&&) & noexcept = delete;
 
 public:
 	inline bool IsValid() const noexcept { return Id != FUniqueId::InvalidArg; }

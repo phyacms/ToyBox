@@ -22,9 +22,9 @@ public:
 	explicit TPoint(Parameters&&... Params) : Coord{ std::forward<Parameters>(Params)... } {}
 	explicit TPoint(const CompatibleVectorType& V) : Coord{ V } {}
 	TPoint(const TPoint&) = default;
-	TPoint& operator=(const TPoint&) = default;
+	TPoint& operator=(const TPoint&) & = default;
 	TPoint(TPoint&&) noexcept = default;
-	TPoint& operator=(TPoint&&) noexcept = default;
+	TPoint& operator=(TPoint&&) & noexcept = default;
 	~TPoint() noexcept = default;
 
 	friend inline bool operator==(const TPoint& Lhs, const TPoint& Rhs) noexcept = default;
@@ -43,12 +43,12 @@ public:
 	friend inline TPoint operator+(const CompatibleVectorType& V, const TPoint& P) { return P + V; }
 	friend inline TPoint operator*(const ValueType& Factor, const TPoint& P) { return Factor * P; }
 
-	inline TPoint& operator+=(const CompatibleVectorType& V) { Coord += V; return *this; }
-	inline TPoint& operator-=(const CompatibleVectorType& V) { Coord -= V; return *this; }
-	inline TPoint& operator*=(const ValueType& Factor) { Coord *= Factor; return *this; }
-	inline TPoint& operator*=(const CompatibleVectorType& Factors) { Coord *= Factors; return *this; }
-	inline TPoint& operator/=(const ValueType& Divisor) { Coord /= Divisor; return *this; }
-	inline TPoint& operator/=(const CompatibleVectorType& Divisors) { Coord /= Divisors; return *this; }
+	inline TPoint& operator+=(const CompatibleVectorType& V) & { Coord += V; return *this; }
+	inline TPoint& operator-=(const CompatibleVectorType& V) & { Coord -= V; return *this; }
+	inline TPoint& operator*=(const ValueType& Factor) & { Coord *= Factor; return *this; }
+	inline TPoint& operator*=(const CompatibleVectorType& Factors) & { Coord *= Factors; return *this; }
+	inline TPoint& operator/=(const ValueType& Divisor) & { Coord /= Divisor; return *this; }
+	inline TPoint& operator/=(const CompatibleVectorType& Divisors) & { Coord /= Divisors; return *this; }
 
 	inline ValueType& operator[](std::size_t Index) { return Coord.operator[](Index); }
 	inline const ValueType& operator[](std::size_t Index) const { return Coord.operator[](Index); }

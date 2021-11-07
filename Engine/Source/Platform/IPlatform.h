@@ -14,9 +14,9 @@ public:
 	virtual ~IPlatform() noexcept = default;
 
 	IPlatform(const IPlatform&) = delete;
-	IPlatform& operator=(const IPlatform&) = delete;
+	IPlatform& operator=(const IPlatform&) & = delete;
 	IPlatform(IPlatform&&) noexcept = delete;
-	IPlatform& operator=(IPlatform&&) noexcept = delete;
+	IPlatform& operator=(IPlatform&&) & noexcept = delete;
 
 private:
 	friend class FSystem;

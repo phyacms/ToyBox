@@ -19,9 +19,9 @@ public:
 	~AObject() noexcept { Release(); }
 
 	AObject(const AObject&) = default;
-	AObject& operator=(const AObject&) = default;
+	AObject& operator=(const AObject&) & = default;
 	AObject(AObject&&) noexcept = default;
-	AObject& operator=(AObject&&) noexcept = default;
+	AObject& operator=(AObject&&) & noexcept = default;
 
 	inline operator bool() const noexcept { return IsValid(); }
 	inline T* operator->() const noexcept { return GetAddress(); }
@@ -46,9 +46,9 @@ protected:
 	virtual ~TObject() noexcept = default;
 
 	TObject(const TObject&) = delete;
-	TObject& operator=(const TObject&) = delete;
+	TObject& operator=(const TObject&) & = delete;
 	TObject(TObject&&) noexcept = default;
-	TObject& operator=(TObject&&) noexcept = default;
+	TObject& operator=(TObject&&) & noexcept = default;
 
 private:
 	friend AObject<T>::AObject(TObject&);

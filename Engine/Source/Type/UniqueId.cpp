@@ -11,7 +11,7 @@ FUniqueId::FUniqueId(FUniqueId&& Other) noexcept
 	Other.Value = InvalidId;
 }
 
-FUniqueId& FUniqueId::operator=(FUniqueId&& Other) noexcept
+FUniqueId& FUniqueId::operator=(FUniqueId&& Other) & noexcept
 {
 	if (this != &Other)
 	{
@@ -30,7 +30,7 @@ AUniqueId::AUniqueId(AUniqueId&& Other) noexcept
 	Other.Release();
 }
 
-AUniqueId& AUniqueId::operator=(AUniqueId&& Other) noexcept
+AUniqueId& AUniqueId::operator=(AUniqueId&& Other) & noexcept
 {
 	if (this != &Other)
 	{

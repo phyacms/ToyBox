@@ -21,9 +21,9 @@ public:
 	~FSystemWindowEvents() noexcept = default;
 
 	FSystemWindowEvents(const FSystemWindowEvents&) = delete;
-	FSystemWindowEvents& operator=(const FSystemWindowEvents&) = delete;
+	FSystemWindowEvents& operator=(const FSystemWindowEvents&) & = delete;
 	FSystemWindowEvents(FSystemWindowEvents&&) noexcept = delete;
-	FSystemWindowEvents& operator=(FSystemWindowEvents&&) noexcept = delete;
+	FSystemWindowEvents& operator=(FSystemWindowEvents&&) & noexcept = delete;
 
 public:
 	void Enqueue(FEvent&& Event);

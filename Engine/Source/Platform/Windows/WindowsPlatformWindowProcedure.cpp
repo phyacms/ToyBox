@@ -50,26 +50,22 @@ bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 	bRegistered = true;
 	if (RegisterCounter == std::size_t{})
 	{
-		static constexpr auto InitPrototype{
-			[]()->WNDCLASSEX
-			{
-				WNDCLASSEX WndClass{};
-				WndClass.cbSize = sizeof(WNDCLASSEX);
-				WndClass.hInstance = FWindowsPlatform::GetSpecific().GetApplicationHandle();
-				WndClass.lpfnWndProc = reinterpret_cast<WNDPROC>(&DefWindowProc);
-				WndClass.lpszClassName = ClassName;
-				WndClass.lpszMenuName = nullptr;
-				WndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-				WndClass.hbrBackground = static_cast<HBRUSH>(::GetStockObject(DKGRAY_BRUSH));
-				WndClass.hCursor = ::LoadCursorW(nullptr, IDC_ARROW);
-				WndClass.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION);
-				WndClass.hIconSm = WndClass.hIcon;
-				WndClass.cbClsExtra = int{};
-				WndClass.cbWndExtra = int{};
-				return WndClass;
-			} };
-		static WNDCLASSEX Prototype{ InitPrototype() };
-		bRegistered = ::RegisterClassExW(&Prototype) != ATOM{};
+		static const WNDCLASSEX WndClass
+		{
+			.cbSize = sizeof(WNDCLASSEX),
+			.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
+			.lpfnWndProc = reinterpret_cast<WNDPROC>(&DefWindowProc),
+			.cbClsExtra = int{},
+			.cbWndExtra = int{},
+			.hInstance = FWindowsPlatform::GetSpecific().GetApplicationHandle(),
+			.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION),
+			.hCursor = ::LoadCursorW(nullptr, IDC_ARROW),
+			.hbrBackground = static_cast<HBRUSH>(::GetStockObject(DKGRAY_BRUSH)),
+			.lpszMenuName = nullptr,
+			.lpszClassName = ClassName,
+			.hIconSm = ::LoadIconW(nullptr, IDI_APPLICATION)
+		};
+		bRegistered = ::RegisterClassExW(&WndClass) != ATOM{};
 	}
 	if (bRegistered)
 	{
@@ -166,8 +162,8 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 			if (wParam != SIZE_MINIMIZED)
 			{
 				FOnResized OnResized{
-					static_cast<std::uint32_t>(LOWORD(lParam)),
-					static_cast<std::uint32_t>(HIWORD(lParam)) };
+					.Width = static_cast<std::uint32_t>(LOWORD(lParam)),
+					.Height = static_cast<std::uint32_t>(HIWORD(lParam)) };
 				if (OnResized.Width != 0 && OnResized.Height != 0)
 				{
 					Window.Events.Enqueue(std::move(OnResized));

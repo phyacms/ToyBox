@@ -15,9 +15,9 @@ public:
 	~FGraphics() noexcept;
 
 	FGraphics(const FGraphics&) = delete;
-	FGraphics& operator=(const FGraphics&) = delete;
+	FGraphics& operator=(const FGraphics&) & = delete;
 	FGraphics(FGraphics&&) noexcept = delete;
-	FGraphics& operator=(FGraphics&&) noexcept = delete;
+	FGraphics& operator=(FGraphics&&) & noexcept = delete;
 
 public:
 	bool SetRendererType(EGraphicsRendererType RendererType) noexcept;

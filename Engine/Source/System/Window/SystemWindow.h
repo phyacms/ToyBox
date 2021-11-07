@@ -18,9 +18,9 @@ public:
 	~FSystemWindow() noexcept;
 
 	FSystemWindow(const FSystemWindow&) = delete;
-	FSystemWindow& operator=(const FSystemWindow&) = delete;
+	FSystemWindow& operator=(const FSystemWindow&) & = delete;
 	FSystemWindow(FSystemWindow&&) noexcept = delete;
-	FSystemWindow& operator=(FSystemWindow&&) noexcept = delete;
+	FSystemWindow& operator=(FSystemWindow&&) & noexcept = delete;
 
 public:
 	bool IsValid() const noexcept;

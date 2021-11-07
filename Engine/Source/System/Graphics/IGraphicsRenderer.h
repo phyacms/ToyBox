@@ -25,9 +25,9 @@ public:
 	virtual ~IGraphicsRenderer() noexcept = default;
 
 	IGraphicsRenderer(const IGraphicsRenderer&) = delete;
-	IGraphicsRenderer& operator=(const IGraphicsRenderer&) = delete;
+	IGraphicsRenderer& operator=(const IGraphicsRenderer&) & = delete;
 	IGraphicsRenderer(IGraphicsRenderer&&) noexcept = delete;
-	IGraphicsRenderer& operator=(IGraphicsRenderer&&) noexcept = delete;
+	IGraphicsRenderer& operator=(IGraphicsRenderer&&) & noexcept = delete;
 
 public:
 	virtual bool IsValid() const noexcept = 0;

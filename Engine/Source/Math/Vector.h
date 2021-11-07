@@ -20,9 +20,9 @@ public:
 		typename = std::enable_if_t<sizeof...(Parameters) == Dimension>>
 	explicit TVector(Parameters&&... Params) : Components{ static_cast<ValueType>(Params)... } {}
 	TVector(const TVector&) = default;
-	TVector& operator=(const TVector&) = default;
+	TVector& operator=(const TVector&) & = default;
 	TVector(TVector&&) noexcept = default;
-	TVector& operator=(TVector&&) noexcept = default;
+	TVector& operator=(TVector&&) & noexcept = default;
 	~TVector() noexcept = default;
 
 	friend inline bool operator==(const TVector& Lhs, const TVector& Rhs) noexcept = default;
@@ -49,7 +49,7 @@ public:
 	inline TVector operator/(const TVector& Divisors) const { TVector U{ *this }; U /= Divisors; return U; }
 	friend inline TVector operator*(const ValueType& Factor, const TVector& V) { return V * Factor; }
 
-	inline TVector& operator+=(const TVector& V)
+	inline TVector& operator+=(const TVector& V) &
 	{
 		std::transform(
 			std::execution::par_unseq,
@@ -60,14 +60,14 @@ public:
 			std::plus<ValueType>{});
 		return *this;
 	}
-	inline TVector& operator-=(const TVector& V) { return operator+=(-V); }
-	inline TVector& operator*=(const ValueType& Factor)
+	inline TVector& operator-=(const TVector& V) & { return operator+=(-V); }
+	inline TVector& operator*=(const ValueType& Factor) &
 	{
 		TVector U{};
 		std::fill(std::execution::par_unseq, std::begin(U.Components), std::end(U.Components), Factor);
 		return operator*=(std::move(U));
 	}
-	inline TVector& operator*=(const TVector& Factors)
+	inline TVector& operator*=(const TVector& Factors) &
 	{
 		std::transform(
 			std::execution::par_unseq,
@@ -78,8 +78,8 @@ public:
 			std::multiplies<ValueType>{});
 		return *this;
 	}
-	inline TVector& operator/=(const ValueType& Divisor) { return operator*=(std::divides<ValueType>{}(ValueType{ 1 }, Divisor)); }
-	inline TVector& operator/=(TVector Divisors)
+	inline TVector& operator/=(const ValueType& Divisor) & { return operator*=(std::divides<ValueType>{}(ValueType{ 1 }, Divisor)); }
+	inline TVector& operator/=(TVector Divisors) &
 	{
 		std::transform(
 			std::execution::par_unseq,
@@ -141,7 +141,7 @@ public:
 			std::multiplies<ValueType>{});
 	}
 
-	inline TVector& Normalize() noexcept { return operator/=(Length()); }
+	inline TVector& Normalize() & noexcept { return operator/=(Length()); }
 
 private:
 	std::array<T, N> Components;

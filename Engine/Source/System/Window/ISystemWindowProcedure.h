@@ -13,9 +13,9 @@ public:
 	virtual ~ISystemWindowProcedure() noexcept;
 
 	ISystemWindowProcedure(const ISystemWindowProcedure&) = delete;
-	ISystemWindowProcedure& operator=(const ISystemWindowProcedure&) = delete;
+	ISystemWindowProcedure& operator=(const ISystemWindowProcedure&) & = delete;
 	ISystemWindowProcedure(ISystemWindowProcedure&&) noexcept = delete;
-	ISystemWindowProcedure& operator=(ISystemWindowProcedure&&) noexcept = delete;
+	ISystemWindowProcedure& operator=(ISystemWindowProcedure&&) & noexcept = delete;
 
 public:
 	inline bool IsValid() const noexcept { return OwnerWindow != nullptr && IsValidImpl(); }

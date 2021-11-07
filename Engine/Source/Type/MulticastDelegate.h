@@ -16,9 +16,9 @@ public:
 	virtual ~IMulticastDelegate() noexcept = default;
 
 	IMulticastDelegate(const IMulticastDelegate&) = delete;
-	IMulticastDelegate& operator=(const IMulticastDelegate&) = delete;
+	IMulticastDelegate& operator=(const IMulticastDelegate&) & = delete;
 	IMulticastDelegate(IMulticastDelegate&&) noexcept = delete;
-	IMulticastDelegate& operator=(IMulticastDelegate&&) noexcept = delete;
+	IMulticastDelegate& operator=(IMulticastDelegate&&) & noexcept = delete;
 
 public:
 	virtual void RemoveDynamic(ADelegateHandle& Handle) noexcept = 0;
@@ -45,9 +45,9 @@ public:
 	~ADelegateHandle() noexcept { Release(); }
 
 	ADelegateHandle(const ADelegateHandle&) = delete;
-	ADelegateHandle& operator=(const ADelegateHandle&) = delete;
+	ADelegateHandle& operator=(const ADelegateHandle&) & = delete;
 	ADelegateHandle(ADelegateHandle&& Other) noexcept;
-	ADelegateHandle& operator=(ADelegateHandle&& Other) noexcept;
+	ADelegateHandle& operator=(ADelegateHandle&& Other) & noexcept;
 
 	inline operator bool() const noexcept { return IsValid(); }
 
@@ -73,11 +73,11 @@ public:
 	~FDelegateHandles() noexcept = default;
 
 	FDelegateHandles(FDelegateHandles&&) noexcept = default;
-	FDelegateHandles& operator=(FDelegateHandles&&) noexcept = default;
+	FDelegateHandles& operator=(FDelegateHandles&&) & noexcept = default;
 	FDelegateHandles(const FDelegateHandles&) = delete;
-	FDelegateHandles& operator=(const FDelegateHandles&) = delete;
+	FDelegateHandles& operator=(const FDelegateHandles&) & = delete;
 
-	FDelegateHandles& operator+=(ADelegateHandle&& Handle);
+	FDelegateHandles& operator+=(ADelegateHandle&& Handle) &;
 
 public:
 	inline void Clear() noexcept { Handles.clear(); }

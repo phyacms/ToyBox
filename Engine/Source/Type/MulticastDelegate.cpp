@@ -53,7 +53,7 @@ ADelegateHandle::ADelegateHandle(ADelegateHandle&& Other) noexcept
 {
 	Other.Release();
 }
-ADelegateHandle& ADelegateHandle::operator=(ADelegateHandle&& Other) noexcept
+ADelegateHandle& ADelegateHandle::operator=(ADelegateHandle&& Other) & noexcept
 {
 	if (this != &Other)
 	{
@@ -74,7 +74,7 @@ void ADelegateHandle::Release() noexcept
 	Index = InvalidHandle;
 }
 
-FDelegateHandles& FDelegateHandles::operator+=(ADelegateHandle&& Handle)
+FDelegateHandles& FDelegateHandles::operator+=(ADelegateHandle&& Handle) &
 {
 	if (Handle.IsValid())
 	{

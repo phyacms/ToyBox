@@ -17,9 +17,9 @@ public:
 	~TDelegate() noexcept { Unbind(); }
 
 	TDelegate(const TDelegate&) = default;
-	TDelegate& operator=(const TDelegate&) = default;
+	TDelegate& operator=(const TDelegate&) & = default;
 	TDelegate(TDelegate&&) noexcept = default;
-	TDelegate& operator=(TDelegate&&) noexcept = default;
+	TDelegate& operator=(TDelegate&&) & noexcept = default;
 
 	inline operator bool() const noexcept { return IsBound(); }
 	inline R operator()(Ts... Params) const { return Execute(std::forward<Ts>(Params...)); }

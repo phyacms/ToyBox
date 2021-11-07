@@ -16,9 +16,9 @@ public:
 	virtual ~IApplicationEntry() noexcept = default;
 
 	IApplicationEntry(const IApplicationEntry&) = delete;
-	IApplicationEntry& operator=(const IApplicationEntry&) = delete;
+	IApplicationEntry& operator=(const IApplicationEntry&) & = delete;
 	IApplicationEntry(IApplicationEntry&&) noexcept = delete;
-	IApplicationEntry& operator=(IApplicationEntry&&) noexcept = delete;
+	IApplicationEntry& operator=(IApplicationEntry&&) & noexcept = delete;
 
 public:
 	template<

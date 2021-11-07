@@ -21,9 +21,9 @@ public:
 	virtual ~IGraphicsContext() noexcept;
 
 	IGraphicsContext(const IGraphicsContext&) = delete;
-	IGraphicsContext& operator=(const IGraphicsContext&) = delete;
+	IGraphicsContext& operator=(const IGraphicsContext&) & = delete;
 	IGraphicsContext(IGraphicsContext&&) noexcept = default;
-	IGraphicsContext& operator=(IGraphicsContext&&) noexcept = default;
+	IGraphicsContext& operator=(IGraphicsContext&&) & noexcept = default;
 
 public:
 	bool IsValid() const noexcept { return OutputWindow.IsValid() && IsValidImpl(); }

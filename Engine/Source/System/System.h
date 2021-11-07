@@ -15,9 +15,9 @@ public:
 	~FSystem() noexcept;
 
 	FSystem(const FSystem&) = delete;
-	FSystem& operator=(const FSystem&) = delete;
+	FSystem& operator=(const FSystem&) & = delete;
 	FSystem(FSystem&&) noexcept = delete;
-	FSystem& operator=(FSystem&&) noexcept = delete;
+	FSystem& operator=(FSystem&&) & noexcept = delete;
 
 public:
 	inline FTimePoint PreciseNow() const noexcept { return FTimeClock::now(); }
