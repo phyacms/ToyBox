@@ -12,9 +12,6 @@
 class IGraphicsContext
 {
 public:
-	static constexpr FColorRGBA DefaultClearColor{ 0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f };
-
-public:
 	IGraphicsContext(
 		AObject<IGraphicsRenderer>&& Renderer,
 		AObject<FSystemWindow>&& OutputWindow);
@@ -28,7 +25,7 @@ public:
 public:
 	bool IsValid() const noexcept { return OutputWindow.IsValid() && IsValidImpl(); }
 
-	virtual void BeginScene(const FColorRGBA& ClearColor = DefaultClearColor) const = 0;
+	virtual void BeginScene(const FColor& ClearColor = FColor{ sRGB::Color::CornflowerBlue }) const = 0;
 	virtual void EndScene() const = 0;
 
 protected:

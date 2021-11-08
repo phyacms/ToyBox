@@ -33,7 +33,7 @@ private:
 	virtual bool IsValidImpl() const noexcept override final;
 	virtual void ResizeBuffer(std::uint32_t Width, std::uint32_t Height) override final;
 
-	virtual void BeginScene(const FColorRGBA& ClearColor = DefaultClearColor) const override final;
+	virtual void BeginScene(const FColor& ClearColor = FColor{ sRGB::Color::CornflowerBlue }) const override final;
 	virtual void EndScene() const override final;
 
 public:

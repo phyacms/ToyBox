@@ -282,14 +282,16 @@ void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Heigh
 	}
 }
 
-void FDirect3D11SwapChain::BeginScene(const FColorRGBA& ClearColor) const
+void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 {
 	static constexpr FLOAT BlendFactor[4]{};
 	static constexpr UINT SampleMask{ 0xFFFFFFFF };
 
 	auto& Context = GetRenderer().GetDeviceContext();
 
-	Context.ClearRenderTargetView(RenderTargetView.Get(), ClearColor.data());
+	Context.ClearRenderTargetView(
+		RenderTargetView.Get(),
+		ClearColor.GetAs<sRGB::normal4, sRGB::Format::RGBA>().Normals.data());
 	Context.ClearDepthStencilView(
 		DepthStencilView.Get(),
 		D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL,
