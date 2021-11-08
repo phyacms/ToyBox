@@ -29,15 +29,17 @@ private:
 	bool CreateSwapChain() noexcept;
 	bool CreateResources() noexcept;
 	void DestroyResources() noexcept;
-	virtual void ResizeBuffer(std::uint32_t Width, std::uint32_t Height) override final;
 
 	virtual bool IsValidImpl() const noexcept override final;
-	virtual void Render(FTimeDuration DeltaTime) override final;
+	virtual void ResizeBuffer(std::uint32_t Width, std::uint32_t Height) override final;
 
-	void BeginScene(const FColorRGBA& ClearColor = IGraphicsContext::DefaultClearColor) const;
-	void EndScene() const;
+	virtual void BeginScene(const FColorRGBA& ClearColor = DefaultClearColor) const override final;
+	virtual void EndScene() const override final;
 
+public:
 	inline FDirect3D11Renderer& GetRenderer() const noexcept { return IGraphicsContext::GetRendererAs<FDirect3D11Renderer>(); }
+	inline IDXGISwapChain& GetSwapChain() const noexcept { return *SwapChain.Get(); }
+	inline ID2D1RenderTarget& GetD2DRenderTarget() const noexcept { return *D2DRenderTarget.Get(); }
 
 private:
 	TComPtr<IDXGISwapChain> SwapChain;

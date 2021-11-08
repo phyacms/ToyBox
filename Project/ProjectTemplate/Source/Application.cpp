@@ -39,7 +39,7 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 	}
 
 	GraphicsContext = Graphics.CreateContext(*Window);
-	if (GraphicsContext == nullptr)
+	if (GraphicsContext == nullptr || !GraphicsContext->IsValid())
 	{
 		return false;
 	}
@@ -63,5 +63,9 @@ void FApplication::Tick(FTimeDuration DeltaTime)
 
 void FApplication::Render(FTimeDuration DeltaTime)
 {
-	GraphicsContext->Render(DeltaTime);
+	GraphicsContext->BeginScene();
+	{
+		// @TODO: Render.
+	}
+	GraphicsContext->EndScene();
 }

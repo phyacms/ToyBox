@@ -27,7 +27,9 @@ public:
 
 public:
 	bool IsValid() const noexcept { return OutputWindow.IsValid() && IsValidImpl(); }
-	virtual void Render(FTimeDuration DeltaTime) = 0;
+
+	virtual void BeginScene(const FColorRGBA& ClearColor = DefaultClearColor) const = 0;
+	virtual void EndScene() const = 0;
 
 protected:
 	inline IGraphicsRenderer& GetRenderer() const noexcept { return *Renderer.GetAddress(); }

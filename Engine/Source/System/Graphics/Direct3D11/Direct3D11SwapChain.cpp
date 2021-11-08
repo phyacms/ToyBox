@@ -248,6 +248,19 @@ void FDirect3D11SwapChain::DestroyResources() noexcept
 	D2DRenderTarget.Reset();
 }
 
+bool FDirect3D11SwapChain::IsValidImpl() const noexcept
+{
+	return !(false
+		|| !SwapChain
+		|| !BackBuffer
+		|| !RenderTargetView
+		|| !DepthStencilState
+		|| !DepthStencilView
+		|| !RasterizerState
+		|| !BlendState
+		|| !D2DRenderTarget);
+}
+
 void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Height)
 {
 	DestroyResources();
@@ -269,31 +282,6 @@ void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Heigh
 	}
 }
 
-bool FDirect3D11SwapChain::IsValidImpl() const noexcept
-{
-	return !(false
-		|| !SwapChain
-		|| !BackBuffer
-		|| !RenderTargetView
-		|| !DepthStencilState
-		|| !DepthStencilView
-		|| !RasterizerState
-		|| !BlendState
-		|| !D2DRenderTarget);
-}
-
-void FDirect3D11SwapChain::Render(FTimeDuration DeltaTime)
-{
-	if (IsValid())
-	{
-		BeginScene();
-		{
-			// @TODO: Render commands.
-		}
-		EndScene();
-	}
-}
-
 void FDirect3D11SwapChain::BeginScene(const FColorRGBA& ClearColor) const
 {
 	static constexpr FLOAT BlendFactor[4]{};
@@ -301,7 +289,7 @@ void FDirect3D11SwapChain::BeginScene(const FColorRGBA& ClearColor) const
 
 	auto& Context = GetRenderer().GetDeviceContext();
 
-	Context.ClearRenderTargetView(RenderTargetView.Get(), ClearColor);
+	Context.ClearRenderTargetView(RenderTargetView.Get(), ClearColor.data());
 	Context.ClearDepthStencilView(
 		DepthStencilView.Get(),
 		D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL,
