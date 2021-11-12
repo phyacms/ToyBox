@@ -111,8 +111,8 @@ public:
 	template<typename RetType = std::enable_if_t<Dimension == 3, TVector>>
 	inline TVector CrossProduct(const TVector& V) const
 	{
-		static constexpr auto NextIndexOf{ [](std::size_t Index)->std::size_t { return (Index + std::size_t{ 1 }) % Dimension; } };
-		static constexpr auto PrevIndexOf{ [](std::size_t Index)->std::size_t { return (Index + (Dimension - std::size_t{ 1 })) % Dimension; } };
+		static constexpr auto NextIndexOf{ [](std::size_t Index)->std::size_t { return (Index + 1) % Dimension; } };
+		static constexpr auto PrevIndexOf{ [](std::size_t Index)->std::size_t { return (Index + (Dimension - 1)) % Dimension; } };
 
 		TVector U{};
 		for (std::size_t Index{}; Index != Dimension; ++Index)

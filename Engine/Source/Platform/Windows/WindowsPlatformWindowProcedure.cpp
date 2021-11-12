@@ -7,7 +7,7 @@
 
 #include "System/Window/SystemWindow.h"
 
-std::size_t WindowsPlatform::FWndProc::RegisterCounter{};
+std::size_t WindowsPlatform::FWndProc::RegisterCount{};
 
 WindowsPlatform::FWndProc::FWndProc()
 	: ISystemWindowProcedure()
@@ -48,15 +48,15 @@ void WindowsPlatform::FWndProc::Present() noexcept
 bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 {
 	bRegistered = true;
-	if (RegisterCounter == std::size_t{})
+	if (RegisterCount == 0)
 	{
 		static const WNDCLASSEX WndClass
 		{
 			.cbSize = sizeof(WNDCLASSEX),
 			.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
 			.lpfnWndProc = reinterpret_cast<WNDPROC>(&DefWindowProc),
-			.cbClsExtra = int{},
-			.cbWndExtra = int{},
+			.cbClsExtra = 0,
+			.cbWndExtra = 0,
 			.hInstance = FWindowsPlatform::GetSpecific().GetApplicationHandle(),
 			.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION),
 			.hCursor = ::LoadCursorW(nullptr, IDC_ARROW),
@@ -69,7 +69,7 @@ bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 	}
 	if (bRegistered)
 	{
-		++RegisterCounter;
+		++RegisterCount;
 	}
 	return bRegistered;
 }
@@ -97,7 +97,7 @@ void WindowsPlatform::FWndProc::UnregisterClass() noexcept
 {
 	if (bRegistered)
 	{
-		if (--RegisterCounter == std::size_t{})
+		if (--RegisterCount == 0)
 		{
 			::UnregisterClassW(
 				ClassName,
@@ -157,6 +157,9 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 
 	switch (uMsg)
 	{
+		case WM_MENUCHAR:
+			return MAKELRESULT(0, MNC_CLOSE);
+
 		case WM_SIZE:
 		{
 			if (wParam != SIZE_MINIMIZED)

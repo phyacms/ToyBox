@@ -16,9 +16,6 @@
     <Filter Include="Source\System">
       <UniqueIdentifier>{fac7558e-ba6a-4fde-96cc-a43d29521b73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Type">
-      <UniqueIdentifier>{2a924669-47ef-4bf0-abf9-3e8b72f1d653}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\System\Window">
       <UniqueIdentifier>{697f1aa3-44fa-437e-a110-82f0f9dff6cf}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,9 @@
     </Filter>
     <Filter Include="Source\System\Graphics\Direct3D11">
       <UniqueIdentifier>{964678ff-fc07-4858-bd6f-c622c720867e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Type">
+      <UniqueIdentifier>{2a924669-47ef-4bf0-abf9-3e8b72f1d653}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Math">
       <UniqueIdentifier>{ebb38c78-1997-46b9-a731-b89044f06769}</UniqueIdentifier>

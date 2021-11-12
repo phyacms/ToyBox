@@ -15,7 +15,7 @@ namespace WindowsPlatform
 	{
 	private:
 		static constexpr LPCWSTR ClassName{ TEXT("WndClassEx_ToyBox_SystemWindow") };
-		static std::size_t RegisterCounter;
+		static std::size_t RegisterCount;
 
 	public:
 		FWndProc();

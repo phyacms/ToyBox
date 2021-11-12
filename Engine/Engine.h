@@ -25,6 +25,7 @@
 #include <atomic>
 #include <mutex>
 #include <type_traits>
+#include <filesystem>
 #include <stdexcept>
 
 // Common Setups

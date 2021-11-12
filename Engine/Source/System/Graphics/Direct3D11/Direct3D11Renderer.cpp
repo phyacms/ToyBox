@@ -88,14 +88,14 @@ bool FDirect3D11Renderer::CreateFactoryAndAdapter() noexcept
 	{
 		DXGI_ADAPTER_DESC1 AdapterDesc{};
 		if (SUCCEEDED(Adapter1->GetDesc1(&AdapterDesc))
-			&& (AdapterDesc.Flags & DXGI_ADAPTER_FLAG::DXGI_ADAPTER_FLAG_SOFTWARE) == UINT{}
+			&& !(AdapterDesc.Flags & DXGI_ADAPTER_FLAG::DXGI_ADAPTER_FLAG_SOFTWARE)
 			&& SUCCEEDED(::D3D11CreateDevice(
 				Adapter1.Get(),
 				D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN,
 				nullptr,
 				CreateDeviceFlags,
 				&MinimumFeatureLevel,
-				UINT{ 1 },
+				1,
 				D3D11_SDK_VERSION,
 				nullptr,
 				nullptr,
@@ -124,7 +124,7 @@ bool FDirect3D11Renderer::CreateDeviceAndContext() noexcept
 		nullptr,
 		CreateDeviceFlags,
 		&MinimumFeatureLevel,
-		UINT{ 1 },
+		1,
 		D3D11_SDK_VERSION,
 		&Device,
 		&FeatureLevel,

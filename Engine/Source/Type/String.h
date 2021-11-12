@@ -26,7 +26,7 @@ FString ToString(
 	String::Conversion::IntegerBase Base = String::Conversion::IntegerBase::Decimal)
 {
 	std::array<char, 128> Buffer{};
-	auto [End, Ec]
+	auto [EndPtr, Ec]
 		= std::to_chars(
 			Buffer.data(),
 			Buffer.data() + Buffer.size(),
@@ -52,7 +52,7 @@ FString ToString(
 
 		std::transform(
 			Buffer.data(),
-			End,
+			EndPtr,
 			std::back_inserter(Converted),
 			[](char Code)->char16_t { return static_cast<char16_t>(Code); });
 

@@ -98,7 +98,7 @@ std::int32_t FWindowsPlatformEntry::AppMain(IApplication& Application)
 		if (EntryGuard.IsInitialized())
 		{
 			MSG Msg{};
-			while (::GetMessageW(&Msg, nullptr, UINT{}, UINT{}) != FALSE)
+			while (::GetMessageW(&Msg, nullptr, 0, 0) != FALSE)
 			{
 				if (Msg.message == WM_QUIT)
 				{

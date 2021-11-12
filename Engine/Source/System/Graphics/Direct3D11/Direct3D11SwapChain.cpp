@@ -67,27 +67,27 @@ bool FDirect3D11SwapChain::CreateSwapChain() noexcept
 	// Cache present flags.
 	PresentFlags = bAllowTearing
 		? DXGI_PRESENT_ALLOW_TEARING
-		: UINT{ 0 };
+		: 0;
 
 	// Create swap chain.
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
-	SwapChainDesc.BufferDesc.Width = UINT{};
-	SwapChainDesc.BufferDesc.Height = UINT{};
+	SwapChainDesc.BufferDesc.Width = 0;
+	SwapChainDesc.BufferDesc.Height = 0;
 	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
-	SwapChainDesc.BufferDesc.RefreshRate.Numerator = UINT{ 1 };
-	SwapChainDesc.BufferDesc.RefreshRate.Denominator = UINT{ 0 };
+	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 1;
+	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 0;
 	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
 	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	SwapChainDesc.SampleDesc.Count = UINT{ 1 };
-	SwapChainDesc.SampleDesc.Quality = UINT{ 0 };
+	SwapChainDesc.SampleDesc.Count = 1;
+	SwapChainDesc.SampleDesc.Quality = 0;
 	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	SwapChainDesc.BufferCount = UINT{ 2 };
+	SwapChainDesc.BufferCount = 2;
 	SwapChainDesc.OutputWindow = hWnd;
 	SwapChainDesc.Windowed = TRUE;
 	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	SwapChainDesc.Flags = bAllowTearing
 		? DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING
-		: UINT{ 0 };
+		: 0;
 
 	if (FAILED(Factory.CreateSwapChain(&Device, &SwapChainDesc, &SwapChain)))
 	{
@@ -103,7 +103,7 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
 	if (SwapChain == nullptr
 		|| FAILED(SwapChain->GetDesc(&SwapChainDesc))
-		|| FAILED(SwapChain->GetBuffer(UINT{}, IID_PPV_ARGS(&BackBuffer))))
+		|| FAILED(SwapChain->GetBuffer(0, IID_PPV_ARGS(&BackBuffer))))
 	{
 		return false;
 	}
@@ -134,15 +134,14 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	D3D11_TEXTURE2D_DESC DepthStencilBufferDesc{};
 	DepthStencilBufferDesc.Width = SwapChainDesc.BufferDesc.Width;
 	DepthStencilBufferDesc.Height = SwapChainDesc.BufferDesc.Height;
-	DepthStencilBufferDesc.MipLevels = UINT{ 1 };
-	DepthStencilBufferDesc.ArraySize = UINT{ 1 };
+	DepthStencilBufferDesc.MipLevels = 1;
+	DepthStencilBufferDesc.ArraySize = 1;
 	DepthStencilBufferDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
-	DepthStencilBufferDesc.SampleDesc.Count = UINT{ 1 };
-	DepthStencilBufferDesc.SampleDesc.Quality = UINT{};
+	DepthStencilBufferDesc.SampleDesc = SwapChainDesc.SampleDesc;
 	DepthStencilBufferDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 	DepthStencilBufferDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-	DepthStencilBufferDesc.CPUAccessFlags = UINT{};
-	DepthStencilBufferDesc.MiscFlags = UINT{};
+	DepthStencilBufferDesc.CPUAccessFlags = 0;
+	DepthStencilBufferDesc.MiscFlags = 0;
 	if (FAILED(Device.CreateTexture2D(&DepthStencilBufferDesc, nullptr, &DepthStencilBuffer)))
 	{
 		return false;
@@ -152,7 +151,7 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc{};
 	DepthStencilViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
 	DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
-	DepthStencilViewDesc.Texture2D.MipSlice = UINT{};
+	DepthStencilViewDesc.Texture2D.MipSlice = 0;
 	if (FAILED(Device.CreateDepthStencilView(
 		DepthStencilBuffer.Get(),
 		&DepthStencilViewDesc,
@@ -210,8 +209,8 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	ScissorRect.bottom = static_cast<LONG>(SwapChainDesc.BufferDesc.Height);
 
 	// Interoperable Direct2D render target.
-	TComPtr<IDXGISurface> Surface;
-	if (FAILED(SwapChain->GetBuffer(0u, IID_PPV_ARGS(&Surface))))
+	TComPtr<IDXGISurface> Surface{};
+	if (FAILED(SwapChain->GetBuffer(0, IID_PPV_ARGS(&Surface))))
 	{
 		return false;
 	}
@@ -270,7 +269,7 @@ void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Heigh
 		if (SUCCEEDED(SwapChain->GetDesc(&SwapChainDesc)))
 		{
 			if (SUCCEEDED(SwapChain->ResizeBuffers(
-				UINT{},
+				0,
 				static_cast<UINT>(Width),
 				static_cast<UINT>(Height),
 				SwapChainDesc.BufferDesc.Format,
@@ -295,15 +294,15 @@ void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 	Context.ClearDepthStencilView(
 		DepthStencilView.Get(),
 		D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL,
-		FLOAT{ 1.0f },
-		UINT8{ 0 });
+		1.0f,
+		0);
 
 	Context.RSSetState(RasterizerState.Get());
-	Context.RSSetViewports(1u, &Viewport);
-	Context.RSSetScissorRects(UINT{ 1 }, &ScissorRect);
-	Context.OMSetRenderTargets(UINT{ 1 }, RenderTargetView.GetAddressOf(), DepthStencilView.Get());
+	Context.RSSetViewports(1, &Viewport);
+	Context.RSSetScissorRects(1, &ScissorRect);
+	Context.OMSetRenderTargets(1, RenderTargetView.GetAddressOf(), DepthStencilView.Get());
 	Context.OMSetBlendState(BlendState.Get(), BlendFactor, SampleMask);
-	Context.OMSetDepthStencilState(DepthStencilState.Get(), UINT{ 1 });
+	Context.OMSetDepthStencilState(DepthStencilState.Get(), 1);
 
 	D2DRenderTarget->BeginDraw();
 }
@@ -311,7 +310,7 @@ void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 void FDirect3D11SwapChain::EndScene() const
 {
 	D2DRenderTarget->EndDraw();
-	SwapChain->Present(UINT{}, PresentFlags);
+	SwapChain->Present(0, PresentFlags);
 }
 
 #endif
