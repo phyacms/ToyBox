@@ -11,17 +11,16 @@ class ISerializable;
 
 namespace TypeTraits
 {
-	inline constexpr auto bIsLittleEndianness{ std::endian::native == std::endian::little };
-	inline constexpr auto bIsBigEndianness{ std::endian::native == std::endian::big };
-	inline constexpr auto bIsMixedEndianness{ !bIsLittleEndianness && !bIsBigEndianness };
+	inline constexpr auto bIsLittleEndian{ std::endian::native == std::endian::little };
+	inline constexpr auto bIsBigEndian{ std::endian::native == std::endian::big };
+	inline constexpr auto bIsMixedEndian{ !bIsLittleEndian && !bIsBigEndian };
 
 	template<typename T>
 	struct IsTriviallySerializable : public std::conditional_t<
-		bIsAnyTypeOf<
-		T,
-		char8_t, char16_t, char32_t,
-		std::int8_t, std::int16_t, std::int32_t, std::int64_t,
-		std::uint8_t, std::uint16_t, std::uint32_t, std::uint64_t>,
+		bIsAnyTypeOf<T,
+			char8_t, char16_t, char32_t,
+			std::int8_t, std::int16_t, std::int32_t, std::int64_t,
+			std::uint8_t, std::uint16_t, std::uint32_t, std::uint64_t>,
 		std::true_type,
 		std::false_type> {};
 
@@ -38,47 +37,44 @@ namespace TypeTraits
 	inline constexpr auto bIsSerializable{ IsSerializable<T>::value };
 }
 
-namespace ByteOperation::Conversion
+template<
+	typename T,
+	std::endian Endiannessness = std::endian::little,
+	typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
+inline std::array<Byte, sizeof(T)> ToByteArray(const T& Value)
 {
-	template<
-		typename T,
-		std::endian Endiannessness = std::endian::little,
-		typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
-	inline std::array<Byte, sizeof(T)> ToBytes(const T& Value)
+	static_assert(!TypeTraits::bIsMixedEndian);
+
+	std::array<Byte, sizeof(T)> Bytes{};
+	std::memcpy(Bytes.data(), &Value, sizeof(T));
+	if constexpr (sizeof(T) != 1 && Endiannessness != std::endian::native)
 	{
-		static_assert(!TypeTraits::bIsMixedEndianness);
-
-		std::array<Byte, sizeof(T)> Bytes{};
-		std::memcpy(Bytes.data(), &Value, sizeof(T));
-		if constexpr (sizeof(T) != 1 && Endiannessness != std::endian::native)
-		{
-			std::reverse(
-				std::execution::par_unseq,
-				std::begin(Bytes),
-				std::end(Bytes));
-		}
-		return Bytes;
+		std::reverse(
+			std::execution::par_unseq,
+			std::begin(Bytes),
+			std::end(Bytes));
 	}
+	return Bytes;
+}
 
-	template<
-		typename T,
-		std::endian Endiannessness = std::endian::little,
-		typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
-		inline T FromBytes(const Byte* Bytes)
+template<
+	typename T,
+	std::endian Endiannessness = std::endian::little,
+	typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
+	inline T FromByteArray(const Byte* Bytes)
+{
+	static_assert(!TypeTraits::bIsMixedEndian);
+
+	T Value{};
+	std::memcpy(&Value, Bytes, sizeof(T));
+	if constexpr (sizeof(T) != 1 && Endiannessness != std::endian::native)
 	{
-		static_assert(!TypeTraits::bIsMixedEndianness);
-
-		T Value{};
-		std::memcpy(&Value, Bytes, sizeof(T));
-		if constexpr (sizeof(T) != 1 && Endiannessness != std::endian::native)
-		{
-			std::reverse(
-				std::execution::par_unseq,
-				reinterpret_cast<Byte*>(&Value),
-				reinterpret_cast<Byte*>(&Value) + sizeof(T));
-		}
-		return Value;
+		std::reverse(
+			std::execution::par_unseq,
+			reinterpret_cast<Byte*>(&Value),
+			reinterpret_cast<Byte*>(&Value) + sizeof(T));
 	}
+	return Value;
 }
 
 class FByteBuffer final
@@ -117,6 +113,6 @@ private:
 class ISerializable
 {
 public:
-	virtual ISerializable& Deserialize(const FByteBuffer& ByteBuffer) = 0;
+	virtual bool Deserialize(const FByteBuffer& ByteBuffer) = 0;
 	virtual FByteBuffer Serialize() const = 0;
 };

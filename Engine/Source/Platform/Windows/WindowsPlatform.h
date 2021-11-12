@@ -71,8 +71,8 @@ private:
 	{
 		::MessageBoxW(
 			nullptr,
-			reinterpret_cast<LPCWSTR>(Content.data()),
-			reinterpret_cast<LPCWSTR>(Title.data()),
+			reinterpret_cast<LPCWSTR>(Content.GetStr()),
+			reinterpret_cast<LPCWSTR>(Title.GetStr()),
 			MB_OK);
 	}
 	virtual [[nodiscard]] std::unique_ptr<ISystemWindowProcedure> CreateWindowProcedure() const noexcept override final;

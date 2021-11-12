@@ -80,7 +80,7 @@ bool WindowsPlatform::FWndProc::CreateWindow() noexcept
 		? ::CreateWindowExW(
 			WS_EX_APPWINDOW,
 			ClassName,
-			reinterpret_cast<LPCWSTR>(GetWindow().GetTitle().c_str()),
+			reinterpret_cast<LPCWSTR>(GetWindow().GetTitle().GetStr()),
 			WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,

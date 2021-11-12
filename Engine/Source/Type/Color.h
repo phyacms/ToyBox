@@ -99,10 +99,10 @@ namespace sRGB
 				return Denormalized;
 			} };
 
-		static constexpr auto UintToBytes{ &ByteOperation::Conversion::ToBytes<uint32, std::endian::big> };
+		static constexpr auto UintToBytes{ &ToByteArray<uint32, std::endian::big> };
 		static constexpr auto BytesToUint{
 			[](const byte4& Bytes)->uint32 {
-				return ByteOperation::Conversion::FromBytes<uint32, std::endian::big>(Bytes.data()); } };
+				return FromByteArray<uint32, std::endian::big>(Bytes.data()); } };
 
 		if constexpr (false) {}
 		else if constexpr (IsFromTo(uint32, byte4)) { return UintToBytes(Value); }
