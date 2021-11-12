@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Object.h"
 #include "TypeTraits.h"
 
 using Byte = std::uint8_t;
@@ -78,11 +79,12 @@ template<
 }
 
 class FByteBuffer final
+	: public TObject<FByteBuffer>
 {
 public:
-	FByteBuffer() : Buffer{}, CurrentSize{} {}
-	FByteBuffer(const FByteBuffer&) = default;
-	FByteBuffer& operator=(const FByteBuffer&) & = default;
+	explicit FByteBuffer(std::size_t ByteSize = 0);
+	FByteBuffer(const FByteBuffer& Other);
+	FByteBuffer& operator=(const FByteBuffer& Other) &;
 	FByteBuffer(FByteBuffer&& Other) noexcept;
 	FByteBuffer& operator=(FByteBuffer&& Other) & noexcept;
 	~FByteBuffer() noexcept = default;
@@ -100,12 +102,10 @@ public:
 	inline void Clear() noexcept { CurrentSize = 0; }
 	void Reserve(std::size_t Reserve);
 	void Reallocate(std::size_t ByteSize);
-	void ShrinkToFit();
 
-	inline Byte* GetPtr() noexcept { return Buffer.data(); }
 	inline const Byte* GetPtr() const noexcept { return Buffer.data(); }
 
-private:
+public:
 	std::vector<Byte> Buffer;
 	std::size_t CurrentSize;
 };

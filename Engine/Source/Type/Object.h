@@ -40,15 +40,16 @@ template<typename T>
 class TObject
 {
 protected:
-	explicit TObject(T& Object)
-		: Redirector{ std::make_shared<TObjectPtr<T>>(
-			TObjectPtr<T>{ .Ptr = &Object }) } {}
+	explicit TObject(T& Object) : Redirector{ std::make_shared<TObjectPtr<T>>(&Object) } {}
 	virtual ~TObject() noexcept = default;
 
 	TObject(const TObject&) = delete;
-	TObject& operator=(const TObject&) & = delete;
+	TObject& operator=(const TObject&) & {}
 	TObject(TObject&&) noexcept = default;
 	TObject& operator=(TObject&&) & noexcept = default;
+
+protected:
+	inline void RedirectObjectPtr(T& Object) { Redirector->Ptr = &Object; }
 
 private:
 	friend AObject<T>::AObject(TObject&);
