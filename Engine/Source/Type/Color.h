@@ -10,9 +10,8 @@ namespace sRGB
 {
 	using uint32 = std::uint32_t;
 	using byte4 = std::array<Byte, 4>;
-	struct float4 final { std::array<float, 4> Elems; };
 	struct normal4 final { std::array<float, 4> Normals; };
-	using ColorValue = std::variant<uint32, byte4, float4, normal4>;
+	using ColorValue = std::variant<uint32, byte4, normal4>;
 	enum class Format : std::size_t { ARGB, RGBA, BGRA, };
 
 	struct ARGB final { ColorValue Value; };
@@ -41,7 +40,7 @@ namespace TypeTraits
 {
 	template<typename T>
 	struct IsColorValue : public std::conditional_t<
-		TypeTraits::bIsAnyTypeOf<T, sRGB::uint32, sRGB::byte4, sRGB::float4, sRGB::normal4>,
+		TypeTraits::bIsAnyTypeOf<T, sRGB::uint32, sRGB::byte4, sRGB::normal4>,
 		std::true_type,
 		std::false_type> {};
 	template<typename T>
@@ -75,52 +74,28 @@ namespace sRGB
 			return Value;
 		}
 
-		static constexpr auto BytesToFloats{
-			[](const byte4& Bytes)->float4
-			{
-				float4 Floats{};
-				std::transform(
-					std::execution::par_unseq,
-					std::cbegin(Bytes),
-					std::cend(Bytes),
-					std::begin(Floats.Elems),
-					[](Byte Value)->float { return static_cast<float>(Value); });
-				return Floats;
-			} };
 		static constexpr auto Normalize{
-			[](float4 Floats)->normal4
+			[](byte4 Bytes)->normal4
 			{
 				normal4 Normalized{};
 				std::transform(
 					std::execution::par_unseq,
-					std::cbegin(Floats.Elems),
-					std::cend(Floats.Elems),
+					std::cbegin(Bytes),
+					std::cend(Bytes),
 					std::begin(Normalized.Normals),
-					[](float Float)->float { return Float / 255.0f; });
+					[](Byte Value)->float { return static_cast<float>(Value) / 255.0f; });
 				return Normalized;
 			} };
-		static constexpr auto FloatsToBytes{
-			[](const float4& Floats)->byte4
-			{
-				byte4 Bytes{};
-				std::transform(
-					std::execution::par_unseq,
-					std::cbegin(Floats.Elems),
-					std::cend(Floats.Elems),
-					std::begin(Bytes),
-					[](float Float)->Byte { return static_cast<Byte>(std::round(Float)); });
-				return Bytes;
-			} };
 		static constexpr auto Denormalize{
-			[](const normal4& Normalized)->float4
+			[](const normal4& Normalized)->byte4
 			{
-				float4 Denormalized{};
+				byte4 Denormalized{};
 				std::transform(
 					std::execution::par_unseq,
 					std::cbegin(Normalized.Normals),
 					std::cend(Normalized.Normals),
-					std::begin(Denormalized.Elems),
-					[](float Normalized)->float { return Normalized * 255.0f; });
+					std::begin(Denormalized),
+					[](float Normal)->Byte { return static_cast<Byte>(std::round(Normal * 255.0f)); });
 				return Denormalized;
 			} };
 
@@ -131,17 +106,11 @@ namespace sRGB
 
 		if constexpr (false) {}
 		else if constexpr (IsFromTo(uint32, byte4)) { return UintToBytes(Value); }
-		else if constexpr (IsFromTo(uint32, float4)) { return BytesToFloats(UintToBytes(Value)); }
-		else if constexpr (IsFromTo(uint32, normal4)) { return Normalize(BytesToFloats(UintToBytes(Value))); }
+		else if constexpr (IsFromTo(uint32, normal4)) { return Normalize(UintToBytes(Value)); }
 		else if constexpr (IsFromTo(byte4, uint32)) { return BytesToUint(Value); }
-		else if constexpr (IsFromTo(byte4, float4)) { return BytesToFloats(Value); }
-		else if constexpr (IsFromTo(byte4, normal4)) { return Normalize(BytesToFloats(Value)); }
-		else if constexpr (IsFromTo(float4, uint32)) { return BytesToUint(FloatsToBytes()); }
-		else if constexpr (IsFromTo(float4, byte4)) { return FloatsToBytes(Value); }
-		else if constexpr (IsFromTo(float4, normal4)) { return Normalize(Value); }
-		else if constexpr (IsFromTo(normal4, uint32)) { return BytesToUint(FloatsToBytes(Denormalize(Value))); }
-		else if constexpr (IsFromTo(normal4, byte4)) { return FloatsToBytes(Denormalize(Value)); }
-		else if constexpr (IsFromTo(normal4, float4)) { return Denormalize(Value); }
+		else if constexpr (IsFromTo(byte4, normal4)) { return Normalize(Value); }
+		else if constexpr (IsFromTo(normal4, uint32)) { return BytesToUint(Denormalize(Value)); }
+		else if constexpr (IsFromTo(normal4, byte4)) { return Denormalize(Value); }
 		else { static_assert(false); }
 	}
 
@@ -182,7 +151,6 @@ namespace sRGB
 						std::invoke(Callable, Bytes);
 					},
 					[&Callable](byte4& Bytes)->void { std::invoke(Callable, Bytes); },
-					[&Callable](float4& Floats)->void { std::invoke(Callable, Floats.Elems); },
 					[&Callable](normal4& Normalized)->void { std::invoke(Callable, Normalized.Normals); } },
 					Value);
 				return Value;
