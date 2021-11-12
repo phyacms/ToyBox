@@ -26,6 +26,7 @@
 #include <mutex>
 #include <type_traits>
 #include <filesystem>
+#include <exception>
 #include <stdexcept>
 
 // Common Setups
@@ -43,10 +44,6 @@ namespace stdhelp
 // Macros
 #define __USTR(X) u##X
 #define USTR(x) __USTR(x)
-
-#define BeginConstexprIf() if constexpr (false) {}
-#define ConstexprIfCase(Condition) else if constexpr ((Condition))
-#define EndConstexprIf() else { static_assert(false); }
 
 // Tweaks
 // @NOTE: https://devblogs.microsoft.com/cppblog/msvc-cpp20-and-the-std-cpp20-switch/

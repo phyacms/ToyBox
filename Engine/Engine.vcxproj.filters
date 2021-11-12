@@ -124,6 +124,9 @@
     <ClInclude Include="Source\Type\TypeTraits.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\Byte.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp">
       <Filter>Source\System\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\Byte.cpp">
+      <Filter>Source\Type</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

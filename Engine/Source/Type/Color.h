@@ -3,10 +3,8 @@
 #pragma once
 
 #include "Engine.h"
+#include "Byte.h"
 #include "TypeTraits.h"
-
-// @TODO: Byte
-using Byte = std::uint8_t;
 
 namespace sRGB
 {
@@ -77,28 +75,6 @@ namespace sRGB
 			return Value;
 		}
 
-		static constexpr auto UintToBytes{
-			[](uint32 ColorCode)->byte4
-			{
-				byte4 Bytes{};
-				BeginConstexprIf()
-				ConstexprIfCase(std::endian::native == std::endian::little)
-				{
-					Bytes[3] = (ColorCode & 0x000000FF) >> 0;
-					Bytes[2] = (ColorCode & 0x0000FF00) >> 8;
-					Bytes[1] = (ColorCode & 0x00FF0000) >> 16;
-					Bytes[0] = (ColorCode & 0xFF000000) >> 24;
-				}
-				ConstexprIfCase(std::endian::native == std::endian::big)
-				{
-					std::memcpy(
-						Bytes.data(),
-						reinterpret_cast<const Byte*>(&ColorCode),
-						Bytes.size());
-				}
-				EndConstexprIf()
-				return Bytes;
-			}};
 		static constexpr auto BytesToFloats{
 			[](const byte4& Bytes)->float4
 			{
@@ -122,28 +98,6 @@ namespace sRGB
 					std::begin(Normalized.Normals),
 					[](float Float)->float { return Float / 255.0f; });
 				return Normalized;
-			} };
-		static constexpr auto BytesToUint{
-			[](const byte4& Bytes)->uint32
-			{
-				uint32 Uint{};
-				BeginConstexprIf()
-				ConstexprIfCase(std::endian::native == std::endian::little)
-				{
-					Uint |= Bytes[3] << 0;
-					Uint |= Bytes[2] << 8;
-					Uint |= Bytes[1] << 16;
-					Uint |= Bytes[0] << 24;
-				}
-				ConstexprIfCase(std::endian::native == std::endian::big)
-				{
-					std::memcpy(
-						reinterpret_cast<Byte*>(&Uint),
-						Bytes.data(),
-						Bytes.size());
-				}
-				EndConstexprIf()
-				return Uint;
 			} };
 		static constexpr auto FloatsToBytes{
 			[](const float4& Floats)->byte4
@@ -170,20 +124,25 @@ namespace sRGB
 				return Denormalized;
 			} };
 
-		BeginConstexprIf()
-		ConstexprIfCase(IsFromTo(uint32, byte4)) { return UintToBytes(Value); }
-		ConstexprIfCase(IsFromTo(uint32, float4)) { return BytesToFloats(UintToBytes(Value)); }
-		ConstexprIfCase(IsFromTo(uint32, normal4)) { return Normalize(BytesToFloats(UintToBytes(Value))); }
-		ConstexprIfCase(IsFromTo(byte4, uint32)) { return BytesToUint(Value); }
-		ConstexprIfCase(IsFromTo(byte4, float4)) { return BytesToFloats(Value); }
-		ConstexprIfCase(IsFromTo(byte4, normal4)) { return Normalize(BytesToFloats(Value)); }
-		ConstexprIfCase(IsFromTo(float4, uint32)) { return BytesToUint(FloatsToBytes()); }
-		ConstexprIfCase(IsFromTo(float4, byte4)) { return FloatsToBytes(Value); }
-		ConstexprIfCase(IsFromTo(float4, normal4)) { return Normalize(Value); }
-		ConstexprIfCase(IsFromTo(normal4, uint32)) { return BytesToUint(FloatsToBytes(Denormalize(Value))); }
-		ConstexprIfCase(IsFromTo(normal4, byte4)) { return FloatsToBytes(Denormalize(Value)); }
-		ConstexprIfCase(IsFromTo(normal4, float4)) { return Denormalize(Value); }
-		EndConstexprIf()
+		static constexpr auto UintToBytes{ &ByteOperation::Conversion::ToBytes<uint32, std::endian::big> };
+		static constexpr auto BytesToUint{
+			[](const byte4& Bytes)->uint32 {
+				return ByteOperation::Conversion::FromBytes<uint32, std::endian::big>(Bytes.data()); } };
+
+		if constexpr (false) {}
+		else if constexpr (IsFromTo(uint32, byte4)) { return UintToBytes(Value); }
+		else if constexpr (IsFromTo(uint32, float4)) { return BytesToFloats(UintToBytes(Value)); }
+		else if constexpr (IsFromTo(uint32, normal4)) { return Normalize(BytesToFloats(UintToBytes(Value))); }
+		else if constexpr (IsFromTo(byte4, uint32)) { return BytesToUint(Value); }
+		else if constexpr (IsFromTo(byte4, float4)) { return BytesToFloats(Value); }
+		else if constexpr (IsFromTo(byte4, normal4)) { return Normalize(BytesToFloats(Value)); }
+		else if constexpr (IsFromTo(float4, uint32)) { return BytesToUint(FloatsToBytes()); }
+		else if constexpr (IsFromTo(float4, byte4)) { return FloatsToBytes(Value); }
+		else if constexpr (IsFromTo(float4, normal4)) { return Normalize(Value); }
+		else if constexpr (IsFromTo(normal4, uint32)) { return BytesToUint(FloatsToBytes(Denormalize(Value))); }
+		else if constexpr (IsFromTo(normal4, byte4)) { return FloatsToBytes(Denormalize(Value)); }
+		else if constexpr (IsFromTo(normal4, float4)) { return Denormalize(Value); }
+		else { static_assert(false); }
 	}
 
 	template<
@@ -229,13 +188,13 @@ namespace sRGB
 				return Value;
 			} };
 
-		BeginConstexprIf()
-		ConstexprIfCase(IsFromTo(ARGB, BGRA) || IsFromTo(BGRA, ARGB)) { return DestType{ .Value = Manipulate(Var.Value, Reverse) }; }
-		ConstexprIfCase(IsFromTo(ARGB, RGBA)) { return DestType{ .Value = Manipulate(Var.Value, RotateLeft) }; }
-		ConstexprIfCase(IsFromTo(RGBA, ARGB)) { return DestType{ .Value = Manipulate(Var.Value, RotateRight) }; }
-		ConstexprIfCase(IsFromTo(RGBA, BGRA)) { return DestType{ .Value = Manipulate(Manipulate(Var.Value, RotateRight), Reverse) }; }
-		ConstexprIfCase(IsFromTo(BGRA, RGBA)) { return DestType{ .Value = Manipulate(Manipulate(Var.Value, Reverse), RotateLeft) }; }
-		EndConstexprIf()
+		if constexpr (false) {}
+		else if constexpr (IsFromTo(ARGB, BGRA) || IsFromTo(BGRA, ARGB)) { return DestType{ .Value = Manipulate(Var.Value, Reverse) }; }
+		else if constexpr (IsFromTo(ARGB, RGBA)) { return DestType{ .Value = Manipulate(Var.Value, RotateLeft) }; }
+		else if constexpr (IsFromTo(RGBA, ARGB)) { return DestType{ .Value = Manipulate(Var.Value, RotateRight) }; }
+		else if constexpr (IsFromTo(RGBA, BGRA)) { return DestType{ .Value = Manipulate(Manipulate(Var.Value, RotateRight), Reverse) }; }
+		else if constexpr (IsFromTo(BGRA, RGBA)) { return DestType{ .Value = Manipulate(Manipulate(Var.Value, Reverse), RotateLeft) }; }
+		else { static_assert(false); }
 	}
 
 #undef IsFromTo

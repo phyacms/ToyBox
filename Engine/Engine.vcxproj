@@ -116,6 +116,7 @@
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
     <ClInclude Include="Source\System\Window\SystemWindowEvents.h" />
+    <ClInclude Include="Source\Type\Byte.h" />
     <ClInclude Include="Source\Type\Color.h" />
     <ClInclude Include="Source\Type\Delegate.h" />
     <ClInclude Include="Source\Type\EventDispatcher.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp" />
+    <ClCompile Include="Source\Type\Byte.cpp" />
     <ClCompile Include="Source\Type\MulticastDelegate.cpp" />
     <ClCompile Include="Source\Type\UniqueId.cpp" />
   </ItemGroup>
