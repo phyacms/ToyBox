@@ -14,8 +14,8 @@ namespace
 	DWORD g_MessageThreadId{};
 }
 
-HINSTANCE FWindowsPlatform::GetApplicationHandle() const noexcept { return ::g_hInstance; }
-DWORD FWindowsPlatform::GetMessageThreadId() const noexcept { return ::g_MessageThreadId; }
+HINSTANCE WindowsPlatform::GetApplicationHandle() noexcept { return ::g_hInstance; }
+DWORD WindowsPlatform::GetMessageThreadId() noexcept { return ::g_MessageThreadId; }
 
 FWindowsPlatformEntry::FWindowsPlatformEntry(HINSTANCE hInstance)
 	: bCoInit{}

@@ -43,9 +43,6 @@
     <ClInclude Include="Source\Application\IApplication.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Platform\IPlatform.h">
-      <Filter>Source\Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Platform\Platform.h">
       <Filter>Source\Platform</Filter>
     </ClInclude>

@@ -5,20 +5,19 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "Platform/Platform.h"
 #include "WindowsPlatformWindowProcedure.h"
 
-IPlatform& FWindowsPlatform::GetInterface() noexcept
+void PlatformFunctions::RequestAppExit(std::int32_t ExitCode) noexcept
 {
-	return GetSpecific();
+	::PostThreadMessageW(
+		WindowsPlatform::GetMessageThreadId(),
+		WM_QUIT,
+		static_cast<WPARAM>(ExitCode),
+		LPARAM{});
 }
 
-FWindowsPlatform& FWindowsPlatform::GetSpecific() noexcept
-{
-	static FWindowsPlatform Instance{};
-	return Instance;
-}
-
-void FWindowsPlatform::PrintDebugOutput(FStringView Message) const noexcept
+void PlatformFunctions::PrintDebugOutput(FStringView Message) noexcept
 {
 	static std::mutex Mutex{};
 	std::unique_lock<std::mutex> Lock{ Mutex };
@@ -26,12 +25,21 @@ void FWindowsPlatform::PrintDebugOutput(FStringView Message) const noexcept
 	::OutputDebugStringW(TEXT("\n"));
 }
 
-std::unique_ptr<ISystemWindowProcedure> FWindowsPlatform::CreateWindowProcedure() const noexcept
+void PlatformFunctions::ShowPopupMessage(FStringView Title, FStringView Content) noexcept
+{
+	::MessageBoxW(
+		nullptr,
+		reinterpret_cast<LPCWSTR>(Content.GetStr()),
+		reinterpret_cast<LPCWSTR>(Title.GetStr()),
+		MB_OK);
+}
+
+std::unique_ptr<ISystemWindowProcedure> PlatformFunctions::CreateWindowProcedure()
 {
 	return std::make_unique<WindowsPlatform::FWndProc>();
 }
 
-std::optional<std::vector<char8_t>> FWindowsPlatform::StringToUTF8(const FString& Str) const
+std::optional<std::vector<char8_t>> PlatformFunctions::StringToUTF8(const FString& Str)
 {
 	auto RequiredBufferSize{ ::WideCharToMultiByte(
 		CP_UTF8,
@@ -66,7 +74,7 @@ std::optional<std::vector<char8_t>> FWindowsPlatform::StringToUTF8(const FString
 			u8'\0') };
 }
 
-std::optional<FString> FWindowsPlatform::UTF8ToString(const std::vector<char8_t>& u8Chars) const
+std::optional<FString> PlatformFunctions::UTF8ToString(const std::vector<char8_t>& u8Chars)
 {
 	auto RequiredCharacterSize{ ::MultiByteToWideChar(
 		CP_UTF8,

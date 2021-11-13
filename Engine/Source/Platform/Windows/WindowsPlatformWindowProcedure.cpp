@@ -57,7 +57,7 @@ bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 			.lpfnWndProc = reinterpret_cast<WNDPROC>(&DefWindowProc),
 			.cbClsExtra = 0,
 			.cbWndExtra = 0,
-			.hInstance = FWindowsPlatform::GetSpecific().GetApplicationHandle(),
+			.hInstance = WindowsPlatform::GetApplicationHandle(),
 			.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION),
 			.hCursor = ::LoadCursorW(nullptr, IDC_ARROW),
 			.hbrBackground = static_cast<HBRUSH>(::GetStockObject(DKGRAY_BRUSH)),
@@ -88,7 +88,7 @@ bool WindowsPlatform::FWndProc::CreateWindow() noexcept
 			CW_USEDEFAULT,
 			nullptr,
 			nullptr,
-			FWindowsPlatform::GetSpecific().GetApplicationHandle(),
+			WindowsPlatform::GetApplicationHandle(),
 			this) != nullptr
 		: false;
 }
@@ -101,7 +101,7 @@ void WindowsPlatform::FWndProc::UnregisterClass() noexcept
 		{
 			::UnregisterClassW(
 				ClassName,
-				FWindowsPlatform::GetSpecific().GetApplicationHandle());
+				WindowsPlatform::GetApplicationHandle());
 		}
 		bRegistered = false;
 	}
