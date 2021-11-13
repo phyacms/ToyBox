@@ -37,6 +37,32 @@ private:
 };
 
 template<typename T>
+class AConstObject final
+{
+public:
+	AConstObject() : Object{} {}
+	AConstObject(const T& Buffer) : Object{ const_cast<T&>(Buffer) } {}
+	~AConstObject() noexcept = default;
+
+	AConstObject(const AConstObject&) = default;
+	AConstObject& operator=(const AConstObject&) & = default;
+	AConstObject(AConstObject&&) noexcept = default;
+	AConstObject& operator=(AConstObject&&) &noexcept = default;
+
+	inline operator bool() const noexcept { return IsValid(); }
+	inline const T* operator->() const noexcept { return GetAddress(); }
+
+public:
+	inline bool IsValid() const noexcept { return Object.IsValid(); }
+	inline const T* GetAddress() const noexcept { return Object.GetAddress(); }
+
+	inline void Release() noexcept { Object.Release(); }
+
+private:
+	AObject<T> Object;
+};
+
+template<typename T>
 class TObject
 {
 protected:

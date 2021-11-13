@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "Byte.h"
+#include "TypeTraits.h"
 
 namespace Unicode::Encoding::UTF16
 {
