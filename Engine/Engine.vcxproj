@@ -145,6 +145,7 @@
     <ClCompile Include="Source\Type\ByteBuffer.cpp" />
     <ClCompile Include="Source\Type\ByteStream.cpp" />
     <ClCompile Include="Source\Type\MulticastDelegate.cpp" />
+    <ClCompile Include="Source\Type\String.cpp" />
     <ClCompile Include="Source\Type\UniqueId.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

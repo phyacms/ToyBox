@@ -183,5 +183,8 @@
     <ClCompile Include="Source\Type\ByteStream.cpp">
       <Filter>Source\Type</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Type\String.cpp">
+      <Filter>Source\Type</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

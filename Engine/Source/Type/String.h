@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Engine.h"
-#include "Byte.h"
+#include "ByteBuffer.h"
 #include "TypeTraits.h"
+
+enum class EStringLength : std::size_t { CodePoint, CodeUnit };
 
 namespace Unicode::Encoding::UTF16
 {
@@ -30,11 +31,11 @@ namespace Unicode::Encoding::UTF16
 
 // Stores UTF16-LE code units.
 class FString final
+	: public ISerializable
 {
 public:
 	using CodeUnit = Unicode::Encoding::UTF16::CodeUnit;
 	static constexpr auto InvalidPos{ std::u16string::npos };
-	enum class ELengthType { CodePoint, CodeUnit };
 
 public:
 	FString() : Data{} {}
@@ -63,11 +64,11 @@ public:
 	inline bool IsEmpty() const noexcept { return Data.empty(); }
 	inline void Clear() noexcept { Data.clear(); }
 
-	template<ELengthType LengthType>
+	template<EStringLength StrLenType>
 	inline std::size_t Length() const noexcept
 	{
 		auto Length{ Data.size() };
-		if constexpr (LengthType == ELengthType::CodePoint) { Length -= Unicode::Encoding::UTF16::CountSurrogates(Data); }
+		if constexpr (StrLenType == EStringLength::CodePoint) { Length -= Unicode::Encoding::UTF16::CountSurrogates(Data); }
 		return Length;
 	}
 
@@ -81,6 +82,10 @@ public:
 	inline std::size_t FindLastUnitNotOf(CodeUnit Unit, std::size_t UnitPos = 0) const noexcept { return Data.find_last_not_of(Unit, UnitPos); }
 
 	inline const CodeUnit* GetStr() const noexcept { return Data.c_str(); }
+
+	// @NOTE: Serialization/Deserialization is performed via UTF-8 encoding/decoding.
+	virtual bool Deserialize(const FByteBuffer& Bytes) override final;
+	virtual FByteBuffer Serialize() const override final;
 
 private:
 	std::u16string Data;

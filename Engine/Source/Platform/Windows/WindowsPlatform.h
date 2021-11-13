@@ -77,6 +77,9 @@ private:
 	}
 	virtual [[nodiscard]] std::unique_ptr<ISystemWindowProcedure> CreateWindowProcedure() const noexcept override final;
 
+	virtual std::optional<std::vector<char8_t>> StringToUTF8(const FString& Str) const override final;
+	virtual std::optional<FString> UTF8ToString(const std::vector<char8_t>& u8Chars) const override final;
+
 public:
 	HINSTANCE GetApplicationHandle() const noexcept;
 	DWORD GetMessageThreadId() const noexcept;
