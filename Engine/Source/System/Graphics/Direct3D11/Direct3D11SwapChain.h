@@ -37,11 +37,13 @@ private:
 	virtual void EndScene() const override final;
 
 public:
-	inline FDirect3D11Renderer& GetRenderer() const noexcept { return IGraphicsContext::GetRendererAs<FDirect3D11Renderer>(); }
+	inline FDirect3D11Renderer& GetRenderer() const noexcept { return *Renderer; }
 	inline IDXGISwapChain& GetSwapChain() const noexcept { return *SwapChain.Get(); }
 	inline ID2D1RenderTarget& GetD2DRenderTarget() const noexcept { return *D2DRenderTarget.Get(); }
 
 private:
+	FDirect3D11Renderer* Renderer;
+
 	TComPtr<IDXGISwapChain> SwapChain;
 	UINT PresentFlags;
 

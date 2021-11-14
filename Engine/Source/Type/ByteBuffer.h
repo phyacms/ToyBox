@@ -29,6 +29,9 @@ public:
 	FByteBuffer& operator=(FByteBuffer&& Other) & noexcept;
 	~FByteBuffer() noexcept = default;
 
+	template<typename T>
+	inline FByteBuffer& operator+=(T&& Param) { return Append(std::forward<T>(Param)); }
+
 	inline Byte& operator[](std::size_t BytePos) { return Buffer[BytePos]; }
 	inline const Byte& operator[](std::size_t BytePos) const { return Buffer[BytePos]; }
 
@@ -48,6 +51,7 @@ public:
 		std::endian Endianness = std::endian::little,
 		typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
 	inline FByteBuffer& Insert(std::size_t BytePos, const T& Value) { return Insert(BytePos, ::ToByteArray<T, Endianness>(Value).data(), sizeof(T)); }
+	inline FByteBuffer& Insert(std::size_t BytePos, const FByteBuffer& Other) { return Insert(BytePos, Other.GetPtr(), Other.GetByteSize()); }
 	FByteBuffer& Insert(std::size_t BytePos, const void* SrcData, std::size_t ByteSize);
 
 	template<
@@ -55,6 +59,7 @@ public:
 		std::endian Endianness = std::endian::little,
 		typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
 	inline FByteBuffer& Append(const T& Value) { return Append(::ToByteArray<T, Endianness>(Value).data(), sizeof(T)); }
+	inline FByteBuffer& Append(const FByteBuffer& Other) { return Append(Other.GetPtr(), Other.GetByteSize()); }
 	FByteBuffer& Append(const void* SrcData, std::size_t ByteSize);
 
 	template<

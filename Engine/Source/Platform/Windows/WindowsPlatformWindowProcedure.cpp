@@ -52,18 +52,18 @@ bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 	{
 		static const WNDCLASSEX WndClass
 		{
-			.cbSize = sizeof(WNDCLASSEX),
-			.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
-			.lpfnWndProc = reinterpret_cast<WNDPROC>(&DefWindowProc),
-			.cbClsExtra = 0,
-			.cbWndExtra = 0,
-			.hInstance = WindowsPlatform::GetApplicationHandle(),
-			.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION),
-			.hCursor = ::LoadCursorW(nullptr, IDC_ARROW),
-			.hbrBackground = static_cast<HBRUSH>(::GetStockObject(DKGRAY_BRUSH)),
-			.lpszMenuName = nullptr,
-			.lpszClassName = ClassName,
-			.hIconSm = ::LoadIconW(nullptr, IDI_APPLICATION)
+			.cbSize{ sizeof(WNDCLASSEX) },
+			.style{ CS_HREDRAW | CS_VREDRAW | CS_OWNDC },
+			.lpfnWndProc{ reinterpret_cast<WNDPROC>(&DefWindowProc) },
+			.cbClsExtra{},
+			.cbWndExtra{},
+			.hInstance{ WindowsPlatform::GetApplicationHandle() },
+			.hIcon{ ::LoadIconW(nullptr, IDI_APPLICATION) },
+			.hCursor{ ::LoadCursorW(nullptr, IDC_ARROW) },
+			.hbrBackground{ static_cast<HBRUSH>(::GetStockObject(DKGRAY_BRUSH)) },
+			.lpszMenuName{ nullptr },
+			.lpszClassName{ ClassName },
+			.hIconSm{ ::LoadIconW(nullptr, IDI_APPLICATION) }
 		};
 		bRegistered = ::RegisterClassExW(&WndClass) != ATOM{};
 	}

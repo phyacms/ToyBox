@@ -11,6 +11,7 @@ FDirect3D11SwapChain::FDirect3D11SwapChain(
 	FDirect3D11Renderer& Renderer,
 	AObject<FSystemWindow>&& OutputWindow)
 	: IGraphicsContext(Renderer, std::move(OutputWindow))
+	, Renderer{ &Renderer }
 	, SwapChain{}
 	, PresentFlags{}
 	, BackBuffer{}

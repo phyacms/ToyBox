@@ -23,15 +23,12 @@ public:
 	IGraphicsContext& operator=(IGraphicsContext&&) & noexcept = default;
 
 public:
-	bool IsValid() const noexcept { return OutputWindow.IsValid() && IsValidImpl(); }
+	bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
 
 	virtual void BeginScene(const FColor& ClearColor = FColor{ sRGB::Color::CornflowerBlue }) const = 0;
 	virtual void EndScene() const = 0;
 
 protected:
-	inline IGraphicsRenderer& GetRenderer() const noexcept { return *Renderer.GetAddress(); }
-	template<typename T, typename = std::enable_if_t<std::is_base_of_v<IGraphicsRenderer, T>>>
-	inline T& GetRendererAs() const noexcept { return dynamic_cast<T&>(GetRenderer()); }
 	inline FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }
 
 private:
