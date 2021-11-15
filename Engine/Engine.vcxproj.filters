@@ -136,6 +136,15 @@
     <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11Buffer.h">
       <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\Direct3D11PixelShaderConstantBuffer.h">
+      <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\Direct3D11VertexShaderConstantBuffer.h">
+      <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.h">
+      <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -190,6 +199,9 @@
       <Filter>Source\Type</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11Buffer.cpp">
+      <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp">
       <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
     </ClCompile>
   </ItemGroup>

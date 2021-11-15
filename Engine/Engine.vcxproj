@@ -105,7 +105,10 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformEntry.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\Direct3D11PixelShaderConstantBuffer.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\Direct3D11VertexShaderConstantBuffer.h" />
     <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11Buffer.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.h" />
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11.h" />
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.h" />
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.h" />
@@ -135,6 +138,7 @@
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11Buffer.cpp" />
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp" />
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
