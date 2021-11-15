@@ -21,13 +21,46 @@ public:
 	IDirect3D11Shader& operator=(IDirect3D11Shader&&) & noexcept = delete;
 
 protected:
-	bool Initialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
+	template<typename ConstBufT>
+	inline bool Initialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
+	{
+		return CreateReflection(Device, ByteCode)
+			&& InitializeImpl(Device, ByteCode)
+			&& CreateConstantBuffers<ConstBufT>(Device);
+	}
 	void Terminate() noexcept;
 
 	inline bool IsReflected() const noexcept { return Reflector != nullptr; }
 
 private:
 	bool CreateReflection(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
+	template<
+		typename T,
+		typename = std::enable_if_t<std::is_base_of_v<IDirect3D11ShaderConstantBuffer, T>>>
+	inline bool CreateConstantBuffers(ID3D11Device& Device) noexcept
+	{
+		if (!ReflectConstantBuffer())
+		{
+			return false;
+		}
+
+		for (std::size_t BufIndex{}; BufIndex != ConstantBuffer.BufDescs.size(); ++BufIndex)
+		{
+			if (!AddConstantBuffer(std::make_unique<T>(
+				Device,
+				ConstantBuffer.InputBindDescs[BufIndex].BindPoint,
+				ConstantBuffer.BufDescs[BufIndex].Size,
+				nullptr)))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool ReflectConstantBuffer() noexcept;
+	bool AddConstantBuffer(std::unique_ptr<IDirect3D11ShaderConstantBuffer>&& Created) noexcept;
 
 public:
 	inline bool IsValid() const noexcept { return IsReflected() && IsValidImpl(); }
@@ -46,6 +79,13 @@ private:
 private:
 	TComPtr<ID3D11ShaderReflection> Reflector;
 	D3D11_SHADER_DESC ShaderDesc;
+	struct
+	{
+		std::vector<D3D11_SHADER_BUFFER_DESC> BufDescs{};
+		std::vector<D3D11_SHADER_INPUT_BIND_DESC> InputBindDescs{};
+		std::unordered_map<std::size_t, std::unique_ptr<IDirect3D11ShaderConstantBuffer>> Objects{};
+	}
+	ConstantBuffer;
 };
 
 #endif

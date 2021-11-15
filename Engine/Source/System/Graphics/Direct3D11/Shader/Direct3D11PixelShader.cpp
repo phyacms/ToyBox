@@ -5,11 +5,13 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "System/Graphics/Direct3D11/Buffer/Direct3D11PixelShaderConstantBuffer.h"
+
 FDirect3D11PixelShader::FDirect3D11PixelShader(ID3D11Device& Device, ID3DBlob& CompiledPixelShaderObject)
 	: IDirect3D11Shader()
 	, PixelShader{}
 {
-	if (!Initialize(Device, CompiledPixelShaderObject))
+	if (!Initialize<FDirect3D11PixelShaderConstantBuffer>(Device, CompiledPixelShaderObject))
 	{
 		Terminate();
 	}

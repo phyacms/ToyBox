@@ -5,6 +5,8 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "System/Graphics/Direct3D11/Buffer/Direct3D11VertexShaderConstantBuffer.h"
+
 FDirect3D11VertexShader::FDirect3D11VertexShader(ID3D11Device& Device, ID3DBlob& CompiledVertexShaderObject)
 	: IDirect3D11Shader()
 	, VertexShader{}
@@ -12,18 +14,16 @@ FDirect3D11VertexShader::FDirect3D11VertexShader(ID3D11Device& Device, ID3DBlob&
 	, ElementDescs{}
 	, VertexStride{}
 {
-	if (!Initialize(Device, CompiledVertexShaderObject))
+	if (!Initialize<FDirect3D11VertexShaderConstantBuffer>(Device, CompiledVertexShaderObject))
 	{
 		Terminate();
 	}
 }
 
-bool FDirect3D11VertexShader::InitializeImpl(ID3D11Device& Device, ID3DBlob& ByteCode)
+bool FDirect3D11VertexShader::InitializeImpl(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
 {
 	return CreateVertexShader(Device, ByteCode)
 		&& CreateInputLayout(Device, ByteCode);
-
-	return false;
 }
 
 void FDirect3D11VertexShader::TerminateImpl() noexcept
@@ -81,7 +81,7 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 		}
 	}
 
-	static constexpr auto ParseInputElementSize{ [](BYTE Mask)->std::size_t
+	static constexpr auto ParseInputElementSize{ [](BYTE Mask)->UINT
 	{
 		if (false) {}
 		else if (Mask & 0b1000) { return 4; }
@@ -123,7 +123,7 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 			};
 
 			const auto SizeIndex{ Size - 1 };
-			const auto TypeIndex{ TypeCount - 1 };
+			const auto TypeIndex{ static_cast<std::size_t>(ComponentType) - 1 };
 			return Formats[SizeIndex][TypeIndex];
 		} };
 
@@ -151,9 +151,9 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 		std::execution::par_unseq,
 		std::cbegin(ParamDescs),
 		std::cend(ParamDescs),
-		std::size_t{},
+		UINT{},
 		std::plus(),
-		[](const D3D11_SIGNATURE_PARAMETER_DESC& SigParam)->std::size_t { return ParseInputElementSize(SigParam.Mask) * 4; });
+		[](const D3D11_SIGNATURE_PARAMETER_DESC& SigParam)->UINT { return ParseInputElementSize(SigParam.Mask) * 4; });
 
 	if (FAILED(Device.CreateInputLayout(
 		ElementDescs.data(),
