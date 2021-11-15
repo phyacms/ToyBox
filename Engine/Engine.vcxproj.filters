@@ -151,6 +151,12 @@
     <ClInclude Include="Source\System\Graphics\Direct3D11\Shader\IDirect3D11Shader.h">
       <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Shader\Direct3D11PixelShader.h">
+      <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Shader\Direct3D11VertexShader.h">
+      <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -211,6 +217,12 @@
       <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\IDirect3D11Shader.cpp">
+      <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\Direct3D11PixelShader.cpp">
+      <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\Direct3D11VertexShader.cpp">
       <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
     </ClCompile>
   </ItemGroup>
