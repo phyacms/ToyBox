@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "IApplicationEntry.h"
 #include "IApplication.h"
+#include "Log/Log.h"
 
 IApplicationEntry::FEntryGuard::FEntryGuard(
 	IApplicationEntry& Entry,
@@ -10,8 +11,11 @@ IApplicationEntry::FEntryGuard::FEntryGuard(
 	const FCommandLineArgs& CmdLine)
 	: Entry{ &Entry }
 	, Application{ &Application }
-	, bInit{ !CmdLine.empty() && Application.Initialize(CmdLine) }
+	, bInit{}
 {
+	FLog::GetThreadLogger().SetIdentifier(USTR("MainThread"));
+
+	bInit = !CmdLine.empty() && Application.Initialize(CmdLine);
 	if (IsInitialized())
 	{
 		Entry.BeginThreads();
@@ -46,6 +50,8 @@ void IApplicationEntry::BeginThreads()
 	GameThread = std::thread(
 		[this]()->void
 		{
+			FLog::GetThreadLogger().SetIdentifier(USTR("GameThread"));
+
 			auto TickTime{ System.PreciseNow() };
 			while (!bAbortThreads)
 			{
@@ -69,6 +75,8 @@ void IApplicationEntry::BeginThreads()
 	RenderThread = std::thread(
 		[this]()->void
 		{
+			FLog::GetThreadLogger().SetIdentifier(USTR("RenderThread"));
+
 			auto FrameTime{ System.PreciseNow() };
 			while (!bAbortThreads)
 			{

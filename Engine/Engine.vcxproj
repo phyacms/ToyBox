@@ -97,6 +97,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IApplicationEntry.h" />
+    <ClInclude Include="Source\Log\Log.h" />
     <ClInclude Include="Source\Math\AxisIndex.h" />
     <ClInclude Include="Source\Math\Point.h" />
     <ClInclude Include="Source\Math\Vector.h" />
@@ -137,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\IApplicationEntry.cpp" />
+    <ClCompile Include="Source\Log\Log.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatform.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp" />

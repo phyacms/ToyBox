@@ -37,6 +37,9 @@
     <Filter Include="Source\System\Graphics\Direct3D11\Shader">
       <UniqueIdentifier>{b64122a5-8be9-48da-9869-35f773148b88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Log">
+      <UniqueIdentifier>{8c828c01-a40b-4df7-8dcb-31c2c6b2ad16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -157,6 +160,9 @@
     <ClInclude Include="Source\System\Graphics\Direct3D11\Shader\Direct3D11VertexShader.h">
       <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Log\Log.h">
+      <Filter>Source\Log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -224,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\Direct3D11VertexShader.cpp">
       <Filter>Source\System\Graphics\Direct3D11\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Log\Log.cpp">
+      <Filter>Source\Log</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
