@@ -112,6 +112,7 @@
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11.h" />
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.h" />
     <ClInclude Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.h" />
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Shader\IDirect3D11Shader.h" />
     <ClInclude Include="Source\System\Graphics\Graphics.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp" />
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\System\Graphics\Direct3D11\Direct3D11SwapChain.cpp" />
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\IDirect3D11Shader.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
