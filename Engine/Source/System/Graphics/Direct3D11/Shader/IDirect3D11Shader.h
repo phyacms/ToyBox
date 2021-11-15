@@ -12,6 +12,9 @@ class IDirect3D11ShaderConstantBuffer;
 class IDirect3D11Shader
 {
 public:
+	inline static constexpr auto InvalidIndex{ static_cast<std::size_t>(-1) };
+
+public:
 	IDirect3D11Shader();
 	virtual ~IDirect3D11Shader() noexcept;
 
@@ -44,12 +47,12 @@ private:
 			return false;
 		}
 
-		for (std::size_t BufIndex{}; BufIndex != ConstantBuffer.BufDescs.size(); ++BufIndex)
+		for (std::size_t BufIndex{}; BufIndex != ConstBuf.BufDescs.size(); ++BufIndex)
 		{
 			if (!AddConstantBuffer(std::make_unique<T>(
 				Device,
-				ConstantBuffer.InputBindDescs[BufIndex].BindPoint,
-				ConstantBuffer.BufDescs[BufIndex].Size,
+				ConstBuf.InputBindDescs[BufIndex].BindPoint,
+				ConstBuf.BufDescs[BufIndex].Size,
 				nullptr)))
 			{
 				return false;
@@ -69,6 +72,11 @@ public:
 	inline ID3D11ShaderReflection& GetShaderReflector() const noexcept { return *Reflector.Get(); }
 	inline const D3D11_SHADER_DESC& GetShaderDescriptions() const noexcept { return ShaderDesc; }
 
+	using ConstantBufferRef = std::optional<std::reference_wrapper<IDirect3D11ShaderConstantBuffer>>;
+	ConstantBufferRef QueryConstantBuffer(std::size_t SlotIndex) const noexcept;
+	inline ConstantBufferRef QueryConstantBuffer(std::string_view Name) const noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
+	std::size_t QueryConstantBufferIndex(std::string_view Name) const noexcept;
+
 private:
 	virtual bool InitializeImpl(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept = 0;
 	virtual void TerminateImpl() noexcept = 0;
@@ -85,7 +93,7 @@ private:
 		std::vector<D3D11_SHADER_INPUT_BIND_DESC> InputBindDescs{};
 		std::unordered_map<std::size_t, std::unique_ptr<IDirect3D11ShaderConstantBuffer>> Objects{};
 	}
-	ConstantBuffer;
+	ConstBuf;
 };
 
 #endif
