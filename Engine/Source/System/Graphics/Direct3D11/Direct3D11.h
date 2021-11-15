@@ -24,7 +24,7 @@
 
 namespace Direct3D11
 {
-	inline TComPtr<ID3DBlob> LoadCompiledShaderObject(const std::filesystem::path& Path) noexcept
+	inline TComPtr<ID3DBlob> LoadCompiledShaderObject(const fs::path& Path) noexcept
 	{
 		TComPtr<ID3DBlob> Blob{};
 		return SUCCEEDED(::D3DReadFileToBlob(Path.generic_wstring().c_str(), &Blob))

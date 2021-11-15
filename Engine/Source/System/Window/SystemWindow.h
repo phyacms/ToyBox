@@ -24,7 +24,7 @@ public:
 
 public:
 	bool IsValid() const noexcept;
-	inline const FString& GetTitle() const noexcept { return Title; }
+	inline FStringView GetTitle() const noexcept { return Title; }
 
 	void Present() noexcept;
 

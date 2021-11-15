@@ -243,8 +243,8 @@ void FDirect3D11SwapChain::DestroyResources() noexcept
 	DepthStencilView.Reset();
 	RasterizerState.Reset();
 	BlendState.Reset();
-	Viewport = decltype(Viewport){};
-	ScissorRect = decltype(ScissorRect){};
+	Viewport = {};
+	ScissorRect = {};
 	D2DRenderTarget.Reset();
 }
 

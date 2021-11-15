@@ -10,6 +10,7 @@ enum class EStringLength : std::size_t { CodePoint, CodeUnit };
 namespace Unicode::Encoding::UTF16
 {
 	using CodeUnit = char16_t;
+	using StringType = std::u16string;
 
 	constexpr const std::size_t MSB{ TypeTraits::bIsLittleEndian ? 1 : (TypeTraits::bIsBigEndian ? 0 : -1) };
 	constexpr const std::size_t LSB{ TypeTraits::bIsLittleEndian ? 0 : (TypeTraits::bIsBigEndian ? 1 : -1) };
@@ -25,7 +26,7 @@ namespace Unicode::Encoding::UTF16
 	inline constexpr bool IsLowSurrogate(CodeUnit Unit) noexcept { return GetHighByte(Unit) >> 2 == LowSurrogateBits; }
 
 	inline constexpr bool IsSurrogate(CodeUnit Unit) noexcept { return IsHighSurrogate(Unit) || IsLowSurrogate(Unit); }
-	inline std::size_t CountSurrogates(const std::u16string& Str) noexcept {
+	inline std::size_t CountSurrogates(const StringType& Str) noexcept {
 		return std::count_if(std::execution::par_unseq, std::cbegin(Str), std::cend(Str), &IsSurrogate); }
 }
 
@@ -35,10 +36,11 @@ class FString final
 {
 public:
 	using CodeUnit = Unicode::Encoding::UTF16::CodeUnit;
-	static constexpr auto InvalidPos{ std::u16string::npos };
+	using StringType = Unicode::Encoding::UTF16::StringType;
+	static constexpr auto InvalidPos{ StringType::npos };
 
 public:
-	FString() : Data{} {}
+	FString() : Str{} {}
 	FString(const FString&) = default;
 	FString(FString&&) noexcept = default;
 	FString& operator=(const FString&) & = default;
@@ -47,9 +49,9 @@ public:
 	// @TODO: Define constrained constructors and assignment operators
 	//        instead of using universal-referenced ones.
 	template<typename... Ts>
-	FString(Ts&&... Params) : Data{ std::forward<Ts>(Params)... } {}
+	FString(Ts&&... Params) : Str{ std::forward<Ts>(Params)... } {}
 	template<typename... Ts>
-	FString& operator=(Ts&&... Params) { Data.operator=(std::forward<Ts>(Params)...); return *this; }
+	FString& operator=(Ts&&... Params) { Str.operator=(std::forward<Ts>(Params)...); return *this; }
 
 	virtual ~FString() noexcept = default;
 
@@ -57,38 +59,36 @@ public:
 	inline friend bool operator!=(const FString& Lhs, const FString& Rhs) noexcept = default;
 
 	template<typename T>
-	inline FString& operator+=(T&& Param) { Data += std::forward<T>(Param); return *this; }
-	inline FString& operator+=(const FString& Other) { return operator+=(Other.Data); }
+	inline FString& operator+=(T&& Param) { Str += std::forward<T>(Param); return *this; }
+	inline FString& operator+=(FString&& Other) { return operator+=(std::move(Other.Str)); }
+	inline FString& operator+=(const FString& Other) { return operator+=(Other.Str); }
 
 public:
-	inline bool IsEmpty() const noexcept { return Data.empty(); }
-	inline void Clear() noexcept { Data.clear(); }
+	inline bool IsEmpty() const noexcept { return Str.empty(); }
+	inline void Clear() noexcept { Str.clear(); }
 
 	template<EStringLength StrLenType>
 	inline std::size_t Length() const noexcept
 	{
-		auto Length{ Data.size() };
-		if constexpr (StrLenType == EStringLength::CodePoint) { Length -= Unicode::Encoding::UTF16::CountSurrogates(Data); }
+		auto Length{ Str.size() };
+		if constexpr (StrLenType == EStringLength::CodePoint)
+		{
+			Length -= Unicode::Encoding::UTF16::CountSurrogates(Str);
+		}
 		return Length;
 	}
+	inline std::size_t GetCharacterCount() const noexcept { return Length<EStringLength::CodePoint>(); }
+	inline std::size_t GetByteSize() const noexcept { return Length<EStringLength::CodeUnit>(); }
 
-	template<typename... Ts>
-	inline FString& Insert(Ts&&... Params) { Data.insert(std::forward<Ts>(Params)...); return *this; }
-	inline FString& Insert(std::size_t Index, const FString& Other) { return Insert(Index, Other.Data); }
-
-	inline std::size_t FindFirstUnitOf(CodeUnit Unit, std::size_t UnitPos = 0) const noexcept { return Data.find_first_of(Unit, UnitPos); }
-	inline std::size_t FindFirstUnitNotOf(CodeUnit Unit, std::size_t UnitPos = 0) const noexcept { return Data.find_first_not_of(Unit, UnitPos); }
-	inline std::size_t FindLastUnitOf(CodeUnit Unit, std::size_t UnitPos = 0) const noexcept { return Data.find_last_of(Unit, UnitPos); }
-	inline std::size_t FindLastUnitNotOf(CodeUnit Unit, std::size_t UnitPos = 0) const noexcept { return Data.find_last_not_of(Unit, UnitPos); }
-
-	inline const CodeUnit* GetStr() const noexcept { return Data.c_str(); }
+	inline const StringType& GetStr() const noexcept { return Str; }
+	inline const CodeUnit* GetPtr() const noexcept { return GetStr().c_str(); }
 
 	// @NOTE: Serialization/Deserialization is performed via UTF-8 encoding/decoding.
 	virtual bool Deserialize(const FByteBuffer& Bytes) override final;
 	virtual FByteBuffer Serialize() const override final;
 
 private:
-	std::u16string Data;
+	StringType Str;
 };
 
 using FStringView = const FString&;
@@ -119,32 +119,37 @@ FString ToString(
 			Value,
 			static_cast<int>(Base));
 
-	FString Converted{};
-	if (Ec == decltype(Ec){})
+	if (Ec != std::errc{})
 	{
-		FString Prefix{};
-		switch (Base)
-		{
-			using TypeConversion::IntegerBase;
-
-			default:
-			case IntegerBase::Decimal:
-				break;
-
-			case IntegerBase::Binary: Prefix += USTR("0b"); break;
-			case IntegerBase::Octal: Prefix += USTR("0"); break;
-			case IntegerBase::Hexadecimal: Prefix += USTR("0x"); break;
-		}
-
-		std::transform(
-			Buffer.data(),
-			EndPtr,
-			std::back_inserter(Converted),
-			[](char Code)->FString::CodeUnit { return static_cast<FString::CodeUnit>(Code); });
-
-		Converted.Insert(Converted.FindFirstUnitOf(u'-') + 1, Prefix);
+		return {};
 	}
-	return Converted;
+
+	const auto ByteSize{ EndPtr - Buffer.data() };
+	FString::StringType Converted(ByteSize, FString::CodeUnit{});
+	std::transform(
+		std::execution::par_unseq,
+		Buffer.data(),
+		EndPtr,
+		std::begin(Converted),
+		[](char Code)->FString::CodeUnit { return static_cast<FString::CodeUnit>(Code); });
+
+	FString::StringType Prefix{};
+	switch (Base)
+	{
+		using TypeConversion::IntegerBase;
+
+		default:
+		case IntegerBase::Decimal:
+			break;
+
+		case IntegerBase::Binary: Prefix += USTR("0b"); break;
+		case IntegerBase::Octal: Prefix += USTR("0"); break;
+		case IntegerBase::Hexadecimal: Prefix += USTR("0x"); break;
+	}
+
+	// @NOTE: Character code '-' is in universal ASCII code page.
+	Converted.insert(Converted.find_first_of(u'-') + 1, Prefix);
+	return FString{ std::move(Converted) };
 }
 
 template<typename T, typename... Ts>

@@ -24,7 +24,7 @@ private:
 	bool CreateInputLayout(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
 
 public:
-	inline std::size_t GetVertexStride() const noexcept { return VertexStride; }
+	inline UINT GetVertexStride() const noexcept { return VertexStride; }
 
 private:
 	TComPtr<ID3D11VertexShader> VertexShader;

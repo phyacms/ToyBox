@@ -41,7 +41,7 @@ void FDirect3D11Renderer::Terminate() noexcept
 {
 	Factory.Reset();
 	Adapter.Reset();
-	AdapterDesc = decltype(AdapterDesc){};
+	AdapterDesc = {};
 
 	Device.Reset();
 	Context.Reset();
@@ -49,7 +49,7 @@ void FDirect3D11Renderer::Terminate() noexcept
 	D2D1Factory.Reset();
 	DWriteFactory.Reset();
 
-	bAllowTearing = false;
+	bAllowTearing = {};
 }
 
 void FDirect3D11Renderer::QueryFeatures() noexcept

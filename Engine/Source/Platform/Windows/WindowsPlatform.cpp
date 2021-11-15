@@ -21,7 +21,7 @@ void PlatformFunctions::PrintDebugOutput(FStringView Message) noexcept
 {
 	static std::mutex Mutex{};
 	std::unique_lock<std::mutex> Lock{ Mutex };
-	::OutputDebugStringW(reinterpret_cast<LPCWSTR>(Message.GetStr()));
+	::OutputDebugStringW(reinterpret_cast<LPCWSTR>(Message.GetPtr()));
 	::OutputDebugStringW(TEXT("\n"));
 }
 
@@ -29,8 +29,8 @@ void PlatformFunctions::ShowPopupMessage(FStringView Title, FStringView Content)
 {
 	::MessageBoxW(
 		nullptr,
-		reinterpret_cast<LPCWSTR>(Content.GetStr()),
-		reinterpret_cast<LPCWSTR>(Title.GetStr()),
+		reinterpret_cast<LPCWSTR>(Content.GetPtr()),
+		reinterpret_cast<LPCWSTR>(Title.GetPtr()),
 		MB_OK);
 }
 
@@ -39,12 +39,12 @@ std::unique_ptr<ISystemWindowProcedure> PlatformFunctions::CreateWindowProcedure
 	return std::make_unique<WindowsPlatform::FWndProc>();
 }
 
-std::optional<std::vector<char8_t>> PlatformFunctions::StringToUTF8(const FString& Str)
+std::optional<std::vector<char8_t>> PlatformFunctions::StringToUTF8(FStringView Str)
 {
 	auto RequiredBufferSize{ ::WideCharToMultiByte(
 		CP_UTF8,
 		0,
-		reinterpret_cast<LPCWSTR>(Str.GetStr()),
+		reinterpret_cast<LPCWSTR>(Str.GetPtr()),
 		-1,
 		nullptr,
 		0,
@@ -55,7 +55,7 @@ std::optional<std::vector<char8_t>> PlatformFunctions::StringToUTF8(const FStrin
 	const auto BytesWritten{ ::WideCharToMultiByte(
 		CP_UTF8,
 		0,
-		reinterpret_cast<LPCWSTR>(Str.GetStr()),
+		reinterpret_cast<LPCWSTR>(Str.GetPtr()),
 		static_cast<int>(Str.Length<EStringLength::CodePoint>()),
 		reinterpret_cast<LPCH>(Multibyte.data()),
 		static_cast<int>(Multibyte.size()),

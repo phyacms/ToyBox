@@ -30,6 +30,7 @@
 #include <stdexcept>
 
 // Common Setups
+namespace fs = std::filesystem;
 namespace stdhelp
 {
 	template<typename... Ts>
