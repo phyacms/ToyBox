@@ -18,6 +18,7 @@ IApplicationEntry::FEntryGuard::FEntryGuard(
 	bInit = !CmdLine.empty() && Application.Initialize(CmdLine);
 	if (IsInitialized())
 	{
+		ReleaseLog(LogEngine) << USTR("Application initialized.") << LogEndl;
 		Entry.BeginThreads();
 	}
 }
@@ -26,6 +27,7 @@ IApplicationEntry::FEntryGuard::~FEntryGuard() noexcept
 {
 	Entry->EndThreads();
 	Application->Terminate();
+	ReleaseLog(LogEngine) << USTR("Application terminated.") << LogEndl;
 }
 
 IApplicationEntry::IApplicationEntry()

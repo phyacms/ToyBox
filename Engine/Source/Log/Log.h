@@ -67,3 +67,66 @@ public:
 private:
 	FString Identifier;
 };
+
+#define EnumerateLogLevel(Enumerate)	\
+	Enumerate(Verbose)					\
+	Enumerate(Log)						\
+	Enumerate(Warning)					\
+	Enumerate(Error)
+
+#define DeclareLogLevel(Level)					\
+struct FLogLevel_##Level final					\
+{												\
+private:										\
+	~FLogLevel_##Level() noexcept = default;	\
+												\
+public:											\
+	static constexpr							\
+	const FString::CodeUnit*					\
+	GetStr() noexcept { return USTR(#Level); }	\
+};
+
+EnumerateLogLevel(DeclareLogLevel)
+
+#undef DeclareLogLevel
+#undef EnumerateLogLevel
+
+#ifndef NDEBUG
+#define __bDebugOut true
+#else
+#define __bDebugOut false
+#endif
+
+#define __BeginLog(bOutput, Category, Level)			\
+if constexpr (bOutput) {								\
+	FLog::GetThreadLogger() << USTR("[")				\
+	<< FLog::GetThreadLogger().GetIdentifier()			\
+	<< USTR("][") << FLogCategory_##Category::GetStr()	\
+	<< USTR("][") << FLogLevel_##Level::GetStr() << USTR("] ")
+
+#define __DebugLog(Category, Level)   __BeginLog(__bDebugOut, Category, Level)
+#define __ReleaseLog(Category, Level) __BeginLog(true, Category, Level)
+
+#define DebugVerbose(Category)   __DebugLog(Category, Verbose)
+#define DebugLog(Category)       __DebugLog(Category, Log)
+#define DebugWarning(Category)   __DebugLog(Category, Warning)
+#define DebugError(Category)     __DebugLog(Category, Error)
+#define ReleaseVerbose(Category) __ReleaseLog(Category, Verbose)
+#define ReleaseLog(Category)     __ReleaseLog(Category, Log)
+#define ReleaseWarning(Category) __ReleaseLog(Category, Warning)
+#define ReleaseError(Category)   __ReleaseLog(Category, Error)
+
+#define LogEndl FLogEndl::GetInstance(); } int{} // @NOTE: Enforces semicolon at the end of statement.
+
+// Macro to declare user-defined log categories.
+#define DeclareLogCategory(Category)				\
+struct FLogCategory_##Category final				\
+{													\
+private:											\
+	~FLogCategory_##Category() noexcept = default;	\
+													\
+public:												\
+	static constexpr								\
+	const FString::CodeUnit*						\
+	GetStr() noexcept { return USTR(#Category); }	\
+};

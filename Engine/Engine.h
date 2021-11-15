@@ -29,7 +29,7 @@
 #include <exception>
 #include <stdexcept>
 
-// Common Setups
+// C++ Standard Helpers
 namespace fs = std::filesystem;
 namespace stdhelp
 {
@@ -46,8 +46,12 @@ namespace stdhelp
 #define __USTR(X) u##X
 #define USTR(x) __USTR(x)
 
-// Tweaks
+// Compiler Setting
 // @NOTE: https://devblogs.microsoft.com/cppblog/msvc-cpp20-and-the-std-cpp20-switch/
 #if _MSC_VER >= 1929 // VS2019 v16.10 and later
 #define no_unique_address msvc::no_unique_address
 #endif
+
+// Common Headers
+#include "Log/Log.h"
+DeclareLogCategory(LogEngine)
