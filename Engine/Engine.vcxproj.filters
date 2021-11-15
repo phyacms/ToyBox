@@ -31,6 +31,9 @@
     <Filter Include="Source\Math">
       <UniqueIdentifier>{ebb38c78-1997-46b9-a731-b89044f06769}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System\Graphics\Direct3D11\Buffer">
+      <UniqueIdentifier>{2a4e2b73-d8e8-4d4b-982f-cc0890c8b5d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -130,6 +133,9 @@
     <ClInclude Include="Source\Type\ByteStream.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11Buffer.h">
+      <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -182,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="Source\Type\String.cpp">
       <Filter>Source\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Direct3D11\Buffer\IDirect3D11Buffer.cpp">
+      <Filter>Source\System\Graphics\Direct3D11\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
