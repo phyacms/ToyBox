@@ -3,21 +3,6 @@
 #include "Engine.h"
 #include "InputContext.h"
 
-bool FInputContext::FPulseInput::IsValid() const noexcept
-{
-	if (!TriggeredBy.IsValid())
-	{
-		return false;
-	}
-
-	if (Event == EPulseInput::RolledDown || Event == EPulseInput::RolledUp)
-	{
-		return TriggeredBy == FInputCode{ EMouseButton::Middle };
-	}
-
-	return true;
-}
-
 FInputContext::FInputContext(
 	FInput& Input,
 	AObject<FSystemWindow>&& InputWindow)
@@ -45,7 +30,7 @@ FInputContext::FInputContext(
 						InputEvents.emplace(
 							FPulseInput{
 								.Event{ static_cast<EPulseInput>(Event) },
-								.TriggeredBy{ EventArgs.Key } });
+								.InputCode{ EventArgs.Key } });
 					}
 				}
 				return false;
@@ -63,7 +48,7 @@ FInputContext::FInputContext(
 						InputEvents.emplace(
 							FPulseInput{
 								.Event{ static_cast<EPulseInput>(Event) },
-								.TriggeredBy{ EventArgs.Button } });
+								.InputCode{ EventArgs.Button } });
 					}
 				}
 				return false;
@@ -78,14 +63,14 @@ FInputContext::FInputContext(
 					InputEvents.emplace(
 						FPulseInput{
 							.Event{ EPulseInput::RolledUp },
-							.TriggeredBy{ EMouseButton::Middle } });
+							.InputCode{ EMouseButton::Middle } });
 				}
 				while (WheelDelta++ < 0)
 				{
 					InputEvents.emplace(
 						FPulseInput{
 							.Event{ EPulseInput::RolledDown },
-							.TriggeredBy{ EMouseButton::Middle } });
+							.InputCode{ EMouseButton::Middle } });
 				}
 				return false;
 			});

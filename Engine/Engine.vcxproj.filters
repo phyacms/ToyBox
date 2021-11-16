@@ -184,7 +184,7 @@
     <ClInclude Include="Source\System\Input\InputCode.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Input\PulseInput.h">
+    <ClInclude Include="Source\System\Input\InputChord.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
   </ItemGroup>
@@ -262,6 +262,9 @@
       <Filter>Source\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Input\InputCode.cpp">
+      <Filter>Source\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\InputChord.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
   </ItemGroup>

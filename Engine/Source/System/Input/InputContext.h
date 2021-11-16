@@ -5,24 +5,13 @@
 #include "Type/Object.h"
 #include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
-#include "SwitchState.h"
-#include "KeyboardKey.h"
-#include "MouseButton.h"
-#include "InputCode.h"
-#include "PulseInput.h"
+#include "InputChord.h"
 
 class FInput;
 
 class FInputContext final
 {
 private:
-	struct FPulseInput final
-	{
-		EPulseInput Event{};
-		FInputCode TriggeredBy{};
-		inline operator bool() const noexcept { return IsValid(); }
-		bool IsValid() const noexcept;
-	};
 	struct FMouseMovement final { FScreenLocation CursorLocation{}; };
 
 	using FInputEvent = std::variant<

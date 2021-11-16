@@ -4,32 +4,32 @@
 #include "InputCode.h"
 
 FInputCode::FInputCode(EKeyboardKey Key)
-	: Index{ static_cast<std::size_t>(Key) }
+	: Value{ static_cast<std::size_t>(Key) }
 {
 }
 
 FInputCode::FInputCode(EMouseButton Button)
-	: Index{ KeyboardFunctions::KeyCount + static_cast<std::size_t>(Button) }
+	: Value{ KeyboardFunctions::KeyCount + static_cast<std::size_t>(Button) }
 {
 }
 
 FInputCode::operator EKeyboardKey() const noexcept
 {
 	return IsKeyboardKey()
-		? static_cast<EKeyboardKey>(Index)
+		? static_cast<EKeyboardKey>(Value)
 		: EKeyboardKey::Invalid;
 }
 
 FInputCode::operator EMouseButton() const noexcept
 {
 	return IsMouseButton()
-		? static_cast<EMouseButton>(Index - KeyboardFunctions::KeyCount)
+		? static_cast<EMouseButton>(Value - KeyboardFunctions::KeyCount)
 		: EMouseButton::Invalid;
 }
 
 bool FInputCode::IsValid() const noexcept
 {
-	std::size_t InputCode{ Index };
+	std::size_t InputCode{ Value };
 	if (InputCode < FInputCode::CodeLimit)
 	{
 		if (IsKeyboardKey())
@@ -46,11 +46,11 @@ bool FInputCode::IsValid() const noexcept
 
 bool FInputCode::IsKeyboardKey() const noexcept
 {
-	return Index < KeyboardFunctions::KeyCount;
+	return Value < KeyboardFunctions::KeyCount;
 }
 
 bool FInputCode::IsMouseButton() const noexcept
 {
-	return Index > KeyboardFunctions::KeyCount
-		&& (Index - KeyboardFunctions::KeyCount) < MouseFunctions::ButtonCount;
+	return Value > KeyboardFunctions::KeyCount
+		&& (Value - KeyboardFunctions::KeyCount) < MouseFunctions::ButtonCount;
 }
