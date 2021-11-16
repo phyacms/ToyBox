@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "Engine.h"
 #include "Type/Object.h"
-#include "Type/TimePoint.h"
 #include "Type/Color.h"
 #include "System/Window/SystemWindow.h"
 #include "IGraphicsRenderer.h"
@@ -23,7 +21,7 @@ public:
 	IGraphicsContext& operator=(IGraphicsContext&&) & noexcept = default;
 
 public:
-	bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
+	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
 
 	virtual void BeginScene(const FColor& ClearColor = FColor{ sRGB::Color::CornflowerBlue }) const = 0;
 	virtual void EndScene() const = 0;

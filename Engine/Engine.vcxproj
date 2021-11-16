@@ -112,6 +112,8 @@
     <ClInclude Include="Source\System\Graphics\Graphics.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
+    <ClInclude Include="Source\System\Input\Input.h" />
+    <ClInclude Include="Source\System\Input\InputContext.h" />
     <ClInclude Include="Source\System\System.h" />
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
@@ -125,6 +127,7 @@
     <ClInclude Include="Source\Type\MulticastDelegate.h" />
     <ClInclude Include="Source\Type\Object.h" />
     <ClInclude Include="Source\Type\String.h" />
+    <ClInclude Include="Source\Type\SwitchState.h" />
     <ClInclude Include="Source\Type\TimePoint.h" />
     <ClInclude Include="Source\Type\TypeTraits.h" />
     <ClInclude Include="Source\Type\UniqueId.h" />
@@ -144,6 +147,8 @@
     <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\IDirect3D11Shader.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
+    <ClCompile Include="Source\System\Input\Input.cpp" />
+    <ClCompile Include="Source\System\Input\InputContext.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />

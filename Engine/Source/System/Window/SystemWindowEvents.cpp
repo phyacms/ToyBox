@@ -45,7 +45,6 @@ void FSystemWindowEvents::Enqueue(FEvent&& Event)
 
 void FSystemWindowEvents::Process()
 {
-
 	auto& Queue = Queues[CurrentIndex];
 	if (!Queue.empty())
 	{

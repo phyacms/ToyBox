@@ -55,5 +55,6 @@ std::unique_ptr<IGraphicsContext> FGraphics::CreateContext(FSystemWindow& Output
 			return Context;
 		}
 	}
+
 	return nullptr;
 }

@@ -4,16 +4,20 @@
 #include "System.h"
 #include "Window/SystemWindow.h"
 #include "Window/ISystemWindowProcedure.h"
+#include "Input/Input.h"
 #include "Graphics/Graphics.h"
 #include "Platform/Platform.h"
 
 FSystem::FSystem()
-	: Graphics{}
+	: Input{}
+	, Graphics{}
 {
 }
 
 FSystem::~FSystem() noexcept
 {
+	Graphics.reset();
+	Input.reset();
 }
 
 void FSystem::RequestAppExit(std::int32_t ExitCode) const noexcept { PlatformFunctions::RequestAppExit(ExitCode); }
@@ -25,6 +29,15 @@ std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FStringView Title) const no
 	return std::make_unique<FSystemWindow>(
 		PlatformFunctions::CreateWindowProcedure(),
 		Title);
+}
+
+FInput& FSystem::GetInput() noexcept
+{
+	if (Input == nullptr)
+	{
+		Input = std::make_unique<FInput>(const_cast<FSystem&>(*this));
+	}
+	return *Input;
 }
 
 FGraphics& FSystem::GetGraphics() noexcept

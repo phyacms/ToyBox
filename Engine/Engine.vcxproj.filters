@@ -40,6 +40,9 @@
     <Filter Include="Source\Log">
       <UniqueIdentifier>{8c828c01-a40b-4df7-8dcb-31c2c6b2ad16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System\Input">
+      <UniqueIdentifier>{cc35a213-4f87-44eb-a429-8c512b9a667a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -163,6 +166,15 @@
     <ClInclude Include="Source\Log\Log.h">
       <Filter>Source\Log</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Input\Input.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\InputContext.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\SwitchState.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -233,6 +245,12 @@
     </ClCompile>
     <ClCompile Include="Source\Log\Log.cpp">
       <Filter>Source\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\Input.cpp">
+      <Filter>Source\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\InputContext.cpp">
+      <Filter>Source\System\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

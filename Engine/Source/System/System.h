@@ -6,11 +6,14 @@
 #include "Type/String.h"
 
 class FSystemWindow;
+class FInput;
 class FGraphics;
 
 class FSystem final
 {
-public:
+	friend class IApplicationEntry;
+
+private:
 	FSystem();
 	~FSystem() noexcept;
 
@@ -27,8 +30,10 @@ public:
 	void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept;
 
 	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FStringView Title) const noexcept;
+	FInput& GetInput() noexcept;
 	FGraphics& GetGraphics() noexcept;
 
 private:
+	std::unique_ptr<FInput> Input;
 	std::unique_ptr<FGraphics> Graphics;
 };
