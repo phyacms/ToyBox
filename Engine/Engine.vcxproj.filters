@@ -187,6 +187,12 @@
     <ClInclude Include="Source\System\Input\InputChord.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Input\InputAction.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\IInputController.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -265,6 +271,9 @@
       <Filter>Source\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Input\InputChord.cpp">
+      <Filter>Source\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\IInputController.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
   </ItemGroup>

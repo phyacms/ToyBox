@@ -2,17 +2,21 @@
 
 #include "Engine.h"
 #include "InputContext.h"
+#include "IInputController.h"
 
 FInputContext::FInputContext(
 	FInput& Input,
 	AObject<FSystemWindow>&& InputWindow)
-	: Input{ &Input }
+	: TObject<FInputContext>(*this)
+	, Input{ &Input }
 	, InputWindow{ std::move(InputWindow) }
 	, KeyboardMouseEvents{}
 	, KeyboardKeyStates{}
 	, MouseButtonStates{}
 	, MouseCursorLocation{}
 	, InputEvents{}
+	, Issuer{}
+	, Controllers{}
 {
 	if (this->InputWindow.IsValid())
 	{
@@ -120,4 +124,36 @@ ESwitchState FInputContext::GetMouseButtonState(EMouseButton Button) const noexc
 	return MouseFunctions::IsValidButton(Button)
 		? MouseButtonStates.at(static_cast<std::size_t>(Button))
 		: ESwitchState::Up;
+}
+
+AInputController FInputContext::BindInputController(AObject<IInputController>&& Controller)
+{
+	if (Controller.IsValid())
+	{
+		Controller->BindStatics();
+
+		AUniqueId Issued{ Issuer.Issue() };
+		Controllers.emplace_front(
+			std::make_pair(
+				Issued.GetHash(),
+				std::move(Controller)));
+		return Issued;
+	}
+
+	return {};
+}
+
+void FInputContext::UnbindInputController(AInputController& Handle) noexcept
+{
+	if (auto Index{ Handle.GetHash() };
+		Handle.IsValid() && Index != FUniqueId::InvalidId)
+	{
+		Controllers.erase(
+			std::find_if(
+				std::execution::par_unseq,
+				std::cbegin(Controllers),
+				std::cend(Controllers),
+				[Index](const auto& Pair)->bool { return Pair.first == Index; }));
+		Handle.Release();
+	}
 }

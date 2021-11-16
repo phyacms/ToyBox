@@ -5,11 +5,14 @@
 #include "Type/Object.h"
 #include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
-#include "InputChord.h"
+#include "IInputController.h"
 
 class FInput;
+class IInputController;
+class FInputContext;
 
 class FInputContext final
+	: public TObject<FInputContext>
 {
 private:
 	struct FMouseMovement final { FScreenLocation CursorLocation{}; };
@@ -37,6 +40,9 @@ public:
 	ESwitchState GetMouseButtonState(EMouseButton Button) const noexcept;
 	inline const FScreenLocation& GetMouseCursorLocation() const noexcept { return MouseCursorLocation; }
 
+	AInputController BindInputController(AObject<IInputController>&& Controller);
+	void UnbindInputController(AInputController& Handle) noexcept;
+
 private:
 	FInput* Input;
 	AObject<FSystemWindow> InputWindow;
@@ -46,4 +52,7 @@ private:
 	FMouseButtonStates MouseButtonStates;
 	FScreenLocation MouseCursorLocation;
 	std::queue<FInputEvent> InputEvents;
+
+	FUniqueIdIssuer Issuer;
+	std::list<std::pair<std::size_t, AObject<IInputController>>> Controllers;
 };
