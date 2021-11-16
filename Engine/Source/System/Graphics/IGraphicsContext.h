@@ -4,6 +4,7 @@
 
 #include "Type/Object.h"
 #include "Type/Color.h"
+#include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
 #include "IGraphicsRenderer.h"
 
@@ -31,7 +32,7 @@ protected:
 
 private:
 	virtual bool IsValidImpl() const noexcept = 0;
-	virtual void ResizeBuffer(std::uint32_t Width, std::uint32_t Height) = 0;
+	virtual void ResizeBuffer(const FScreenSize& ClientAreaSize) = 0;
 
 private:
 	AObject<IGraphicsRenderer> Renderer;

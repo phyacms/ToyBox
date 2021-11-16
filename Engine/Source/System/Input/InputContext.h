@@ -3,9 +3,28 @@
 #pragma once
 
 #include "Type/Object.h"
+#include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
+#include "KeyboardKey.h"
+#include "MouseButton.h"
 
 class FInput;
+
+namespace InputEventTypes
+{
+	using FKeyboardKeyEvent = std::pair<EKeyboardKey, ESwitchEvent>;
+	using FMouseButtonEvent = std::pair<EMouseButton, ESwitchEvent>;
+	struct FMouseWheelUp final {};
+	struct FMouseWheelDown final {};
+	struct FMouseMovement final { FScreenLocation PrevCursorLocation{}; FScreenLocation CurrCursorLocation{}; };
+
+	using FInputEvent = std::variant<
+		FKeyboardKeyEvent,
+		FMouseButtonEvent,
+		FMouseWheelUp,
+		FMouseWheelDown,
+		FMouseMovement>;
+}
 
 class FInputContext final
 {
@@ -22,11 +41,19 @@ public:
 
 public:
 	bool IsValid() const noexcept;
+	void ProcessInput();
 
-protected:
-	inline FSystemWindow& GetInputWindow() const noexcept { return *InputWindow.GetAddress(); }
+	ESwitchState GetKeyboardKeyState(EKeyboardKey Key) const noexcept;
+	ESwitchState GetMouseButtonState(EMouseButton Button) const noexcept;
+	inline const FScreenLocation& GetMouseCursorLocation() const noexcept { return MouseCursorLocation; }
 
 private:
 	FInput* Input;
 	AObject<FSystemWindow> InputWindow;
+	FDelegateHandles KeyboardMouseEvents;
+
+	FKeyboardKeyStates KeyboardKeyStates;
+	FMouseButtonStates MouseButtonStates;
+	FScreenLocation MouseCursorLocation;
+	std::queue<InputEventTypes::FInputEvent> InputEvents;
 };

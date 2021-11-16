@@ -261,7 +261,7 @@ bool FDirect3D11SwapChain::IsValidImpl() const noexcept
 		|| !D2DRenderTarget);
 }
 
-void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Height)
+void FDirect3D11SwapChain::ResizeBuffer(const FScreenSize& ClientAreaSize)
 {
 	DestroyResources();
 	if (SwapChain != nullptr)
@@ -271,8 +271,8 @@ void FDirect3D11SwapChain::ResizeBuffer(std::uint32_t Width, std::uint32_t Heigh
 		{
 			if (SUCCEEDED(SwapChain->ResizeBuffers(
 				0,
-				static_cast<UINT>(Width),
-				static_cast<UINT>(Height),
+				static_cast<UINT>(ClientAreaSize.Width),
+				static_cast<UINT>(ClientAreaSize.Height),
 				SwapChainDesc.BufferDesc.Format,
 				SwapChainDesc.Flags)))
 			{

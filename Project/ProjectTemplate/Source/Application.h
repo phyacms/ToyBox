@@ -4,9 +4,10 @@
 
 #include <Type/MulticastDelegate.h>
 #include <Application/IApplication.h>
-#include <System/Graphics/IGraphicsContext.h>
 
 class FSystemWindow;
+class FInputContext;
+class IGraphicsContext;
 
 class FApplication final
 	: public IApplication
@@ -26,5 +27,6 @@ private:
 	std::unique_ptr<FSystemWindow> Window;
 	ADelegateHandle DH_OnClosed;
 
-	std::unique_ptr<IGraphicsContext> GraphicsContext;
+	std::unique_ptr<FInputContext> Input;
+	std::unique_ptr<IGraphicsContext> Graphics;
 };

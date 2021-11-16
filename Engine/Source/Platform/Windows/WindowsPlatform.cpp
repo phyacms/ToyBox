@@ -7,7 +7,8 @@
 
 #include "Platform/Platform.h"
 #include "WindowsPlatformWindowProcedure.h"
-#include "System/Input/InputCode.h"
+#include "System/Input/KeyboardKey.h"
+#include "System/Input/MouseButton.h"
 
 void PlatformFunctions::RequestAppExit(std::int32_t ExitCode) noexcept
 {

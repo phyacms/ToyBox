@@ -94,9 +94,6 @@
     <ClInclude Include="Source\Type\EventDispatcher.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Window\SystemWindowEvents.h">
-      <Filter>Source\System\Window</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\IApplicationEntry.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
@@ -172,10 +169,16 @@
     <ClInclude Include="Source\System\Input\InputContext.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\SwitchState.h">
-      <Filter>Source\Type</Filter>
+    <ClInclude Include="Source\System\Window\ScreenSpace.h">
+      <Filter>Source\System\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Input\InputCode.h">
+    <ClInclude Include="Source\System\Input\MouseButton.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\KeyboardKey.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\SwitchState.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
   </ItemGroup>
@@ -203,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="Source\Type\MulticastDelegate.cpp">
       <Filter>Source\Type</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp">
-      <Filter>Source\System\Window</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IApplicationEntry.cpp">
       <Filter>Source\Application</Filter>

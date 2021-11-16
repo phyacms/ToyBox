@@ -5,9 +5,9 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Type/SwitchState.h"
+#include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
-#include "System/Input/InputCode.h"
+#include "System/Input/SwitchState.h"
 
 std::size_t WindowsPlatform::FWndProc::RegisterCount{};
 
@@ -153,7 +153,7 @@ LRESULT WindowsPlatform::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wP
 
 LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
-	using namespace SystemWindowEvents;
+	using namespace SystemWindowEventTypes;
 
 	static constexpr const FMessageHook DefaultHooks[]
 	{
@@ -170,7 +170,7 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 		}
 	}
 
-	FSystemWindow& Window{ GetWindow() };
+	auto& Window{ GetWindow() };
 	switch (uMsg)
 	{
 		case WM_SIZE:
@@ -178,9 +178,10 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 			if (wParam != SIZE_MINIMIZED)
 			{
 				FOnResized OnResized{
-					.Width = static_cast<std::uint32_t>(LOWORD(lParam)),
-					.Height = static_cast<std::uint32_t>(HIWORD(lParam)) };
-				if (OnResized.Width != 0 && OnResized.Height != 0)
+					.ClientAreaSize{
+						.Width{ static_cast<std::uint32_t>(LOWORD(lParam)) },
+						.Height{ static_cast<std::uint32_t>(HIWORD(lParam)) }} };
+				if (OnResized.ClientAreaSize.Width != 0 && OnResized.ClientAreaSize.Height != 0)
 				{
 					Window.Events.Enqueue(std::move(OnResized));
 				}
@@ -200,10 +201,10 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 
 WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
-	using namespace SystemWindowEvents;
+	using namespace SystemWindowEventTypes;
 
-	FSystemWindow& Window{ GetWindow() };
-	ESwitchState KeyState{ ESwitchState::Up };
+	auto& Window{ GetWindow() };
+	auto KeyState{ ESwitchState::Up };
 	switch (uMsg)
 	{
 		default:
@@ -221,7 +222,7 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 		case WM_SYSKEYUP:
 		{
 			if (auto Key{ WindowsPlatform::TranslateKeyboardKey(LOWORD(wParam)) };
-				InputCode::Keyboard::IsValidKey(Key))
+				KeyboardFunctions::IsValidKey(Key))
 			{
 				Window.Events.Enqueue(FOnKeyboardKey{ .Key{ Key }, .State{ KeyState } });
 			}
@@ -232,10 +233,10 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 
 WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
-	using namespace SystemWindowEvents;
+	using namespace SystemWindowEventTypes;
 
-	FSystemWindow& Window{ GetWindow() };
-	ESwitchState ButtonState{ ESwitchState::Up };
+	auto& Window{ GetWindow() };
+	auto ButtonState{ ESwitchState::Up };
 	std::stack<FEvent> Stack{};
 	switch (uMsg)
 	{
@@ -287,7 +288,7 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 					return {};
 				} };
 			if (auto Button{ WindowsPlatform::TranslateMouseButton(GetVirtualKey(uMsg, wParam)) };
-				InputCode::Mouse::IsValidButton(Button))
+				MouseFunctions::IsValidButton(Button))
 			{
 				Stack.push(FOnMouseButton{ .Button{ Button }, .State{ ButtonState } });
 			}
@@ -296,7 +297,7 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 
 		case WM_MOUSEWHEEL:
 		{
-			Stack.push(FOnMouseWheel{ .dWheel{ GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA } });
+			Stack.push(FOnMouseWheel{ .WheelDelta{ GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA } });
 		}
 		break;
 
@@ -306,7 +307,10 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 			break;
 	}
 
-	Window.Events.Enqueue(FOnMouseMove{ .X{ GET_X_LPARAM(lParam) }, .Y{ GET_Y_LPARAM(lParam) } });
+	Window.Events.Enqueue(FOnMouseMove{
+		.CursorLocation{ FScreenLocation{
+			.X{ GET_X_LPARAM(lParam) },
+			.Y{ GET_Y_LPARAM(lParam) }} } });
 	while (!Stack.empty())
 	{
 		Window.Events.Enqueue(std::move(Stack.top()));

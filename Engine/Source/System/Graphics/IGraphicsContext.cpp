@@ -8,9 +8,16 @@ IGraphicsContext::IGraphicsContext(
 	AObject<FSystemWindow>&& OutputWindow)
 	: Renderer{ std::move(Renderer) }
 	, OutputWindow{ std::move(OutputWindow) }
-	, DH_OnResized{ this->OutputWindow->Events.OnResized.AddDynamic(
-		[this](std::uint32_t Width, std::uint32_t Height)->bool { ResizeBuffer(Width, Height); return false; }) }
+	, DH_OnResized{}
 {
+	if (this->OutputWindow.IsValid())
+	{
+		using namespace SystemWindowEventTypes;
+
+		DH_OnResized = this->OutputWindow->Events.OnResized.AddDynamic(
+			[this](const FOnResized& EventArgs)->bool {
+				ResizeBuffer(EventArgs.ClientAreaSize); return false; });
+	}
 }
 
 IGraphicsContext::~IGraphicsContext() noexcept
