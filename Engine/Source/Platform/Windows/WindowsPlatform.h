@@ -21,6 +21,7 @@
 #endif
 
 #include <Windows.h>
+#include <windowsx.h>
 #include <objbase.h>
 #include <shellapi.h>
 #ifndef NDEBUG
@@ -44,6 +45,9 @@
 template<typename T>
 using TComPtr = Microsoft::WRL::ComPtr<T>;
 
+enum class EKeyboardKey : std::size_t;
+enum class EMouseButton : std::size_t;
+
 namespace WindowsPlatform
 {
 	class IWindowInterface
@@ -54,6 +58,9 @@ namespace WindowsPlatform
 
 	HINSTANCE GetApplicationHandle() noexcept;
 	DWORD GetMessageThreadId() noexcept;
+
+	EKeyboardKey TranslateKeyboardKey(int VirtualKey) noexcept;
+	EMouseButton TranslateMouseButton(int VirtualKey) noexcept;
 }
 
 #endif

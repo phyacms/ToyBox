@@ -2,13 +2,27 @@
 
 #pragma once
 
+#include "Type/SwitchState.h"
 #include "Type/EventDispatcher.h"
+#include "System/Input/InputCode.h"
 
 namespace SystemWindowEvents
 {
 	struct FOnClosed final {};
 	struct FOnResized final { std::uint32_t Width{}; std::uint32_t Height{}; };
-	using FEvent = std::variant<FOnClosed, FOnResized>;
+
+	struct FOnKeyboardKey final { EKeyboardKey Key{}; ESwitchState State{}; };
+	struct FOnMouseButton final { EMouseButton Button{}; ESwitchState State{}; };
+	struct FOnMouseWheel final { std::int32_t dWheel{}; };
+	struct FOnMouseMove final { std::int32_t X{}; std::int32_t Y{}; };
+
+	using FEvent = std::variant<
+		FOnClosed,
+		FOnResized,
+		FOnKeyboardKey,
+		FOnMouseButton,
+		FOnMouseWheel,
+		FOnMouseMove>;
 }
 
 class FSystemWindowEvents final
@@ -37,4 +51,8 @@ private:
 public:
 	TEventDispatcher<bool(void)> OnClosed;
 	TEventDispatcher<bool(std::uint32_t, std::uint32_t)> OnResized;
+	TEventDispatcher<bool(EKeyboardKey, ESwitchState)> OnKeyboardKey;
+	TEventDispatcher<bool(EMouseButton, ESwitchState)> OnMouseButton;
+	TEventDispatcher<bool(std::int32_t)> OnMouseWheel;
+	TEventDispatcher<bool(std::int32_t, std::int32_t)> OnMouseMove;
 };

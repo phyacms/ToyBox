@@ -14,6 +14,7 @@
 #include <vector>
 #include <list>
 #include <unordered_set>
+#include <stack>
 #include <queue>
 #include <optional>
 #include <variant>

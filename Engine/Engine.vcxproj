@@ -113,6 +113,7 @@
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
     <ClInclude Include="Source\System\Input\Input.h" />
+    <ClInclude Include="Source\System\Input\InputCode.h" />
     <ClInclude Include="Source\System\Input\InputContext.h" />
     <ClInclude Include="Source\System\System.h" />
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />

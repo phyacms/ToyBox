@@ -5,7 +5,9 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "Type/SwitchState.h"
 #include "System/Window/SystemWindow.h"
+#include "System/Input/InputCode.h"
 
 std::size_t WindowsPlatform::FWndProc::RegisterCount{};
 
@@ -153,13 +155,24 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 {
 	using namespace SystemWindowEvents;
 
-	FSystemWindow& Window{ GetWindow() };
+	static constexpr const FMessageHook DefaultHooks[]
+	{
+		&FWndProc::ProcKeyboardMessage,
+		&FWndProc::ProcMouseMessage
+	};
 
+	for (const auto& Hook : DefaultHooks)
+	{
+		if (auto [bHandled, Result] = (this->*Hook)(uMsg, wParam, lParam);
+			bHandled)
+		{
+			return Result;
+		}
+	}
+
+	FSystemWindow& Window{ GetWindow() };
 	switch (uMsg)
 	{
-		case WM_MENUCHAR:
-			return MAKELRESULT(0, MNC_CLOSE);
-
 		case WM_SIZE:
 		{
 			if (wParam != SIZE_MINIMIZED)
@@ -183,6 +196,124 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 	}
 
 	return ::DefWindowProcW(hWnd, uMsg, wParam, lParam);
+}
+
+WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+{
+	using namespace SystemWindowEvents;
+
+	FSystemWindow& Window{ GetWindow() };
+	ESwitchState KeyState{ ESwitchState::Up };
+	switch (uMsg)
+	{
+		default:
+			return {};
+
+		// Blocks Alt+Enter beeping.
+		case WM_MENUCHAR:
+			return { true, MAKELRESULT(0, MNC_CLOSE) };
+
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+			KeyState = ESwitchState::Down;
+			[[fallthrough]];
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+		{
+			if (auto Key{ WindowsPlatform::TranslateKeyboardKey(LOWORD(wParam)) };
+				InputCode::Keyboard::IsValidKey(Key))
+			{
+				Window.Events.Enqueue(FOnKeyboardKey{ .Key{ Key }, .State{ KeyState } });
+			}
+		}
+		return { true, 0 };
+	}
+}
+
+WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+{
+	using namespace SystemWindowEvents;
+
+	FSystemWindow& Window{ GetWindow() };
+	ESwitchState ButtonState{ ESwitchState::Up };
+	std::stack<FEvent> Stack{};
+	switch (uMsg)
+	{
+		default:
+			return {};
+
+		case WM_LBUTTONDOWN:
+		case WM_RBUTTONDOWN:
+		case WM_MBUTTONDOWN:
+		case WM_XBUTTONDOWN:
+			ButtonState = ESwitchState::Down;
+			[[fallthrough]];
+		case WM_LBUTTONUP:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONUP:
+		case WM_XBUTTONUP:
+		{
+			static constexpr auto GetVirtualKey{
+				[](UINT uMsg, WPARAM wParam)->int
+				{
+					switch (uMsg)
+					{
+						case WM_LBUTTONDOWN:
+						case WM_LBUTTONUP:
+							return VK_LBUTTON;
+
+						case WM_RBUTTONDOWN:
+						case WM_RBUTTONUP:
+							return VK_RBUTTON;
+
+						case WM_MBUTTONDOWN:
+						case WM_MBUTTONUP:
+							return VK_MBUTTON;
+
+						case WM_XBUTTONDOWN:
+						case WM_XBUTTONUP:
+							switch (GET_XBUTTON_WPARAM(wParam))
+							{
+								case XBUTTON1: return VK_XBUTTON1;
+								case XBUTTON2: return VK_XBUTTON2;
+								default:
+									break;
+							}
+							break;
+
+						default:
+							break;
+					}
+					return {};
+				} };
+			if (auto Button{ WindowsPlatform::TranslateMouseButton(GetVirtualKey(uMsg, wParam)) };
+				InputCode::Mouse::IsValidButton(Button))
+			{
+				Stack.push(FOnMouseButton{ .Button{ Button }, .State{ ButtonState } });
+			}
+		}
+		break;
+
+		case WM_MOUSEWHEEL:
+		{
+			Stack.push(FOnMouseWheel{ .dWheel{ GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA } });
+		}
+		break;
+
+		case WM_MOUSEMOVE:
+		case WM_MOUSEHOVER:
+		case WM_MOUSEHWHEEL:
+			break;
+	}
+
+	Window.Events.Enqueue(FOnMouseMove{ .X{ GET_X_LPARAM(lParam) }, .Y{ GET_Y_LPARAM(lParam) } });
+	while (!Stack.empty())
+	{
+		Window.Events.Enqueue(std::move(Stack.top()));
+		Stack.pop();
+	}
+
+	return { true, 0 };
 }
 
 #endif

@@ -175,6 +175,9 @@
     <ClInclude Include="Source\Type\SwitchState.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Input\InputCode.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">

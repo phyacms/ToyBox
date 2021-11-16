@@ -43,6 +43,11 @@ namespace WindowsPlatform
 	private:
 		LRESULT ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 
+		using FResult = std::pair<bool, LRESULT>;
+		using FMessageHook = FResult(FWndProc::*)(UINT, WPARAM, LPARAM);
+		FResult ProcKeyboardMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+		FResult ProcMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+
 	private:
 		bool bRegistered;
 		HWND hWnd;
