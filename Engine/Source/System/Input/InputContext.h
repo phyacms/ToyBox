@@ -5,29 +5,30 @@
 #include "Type/Object.h"
 #include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
+#include "SwitchState.h"
 #include "KeyboardKey.h"
 #include "MouseButton.h"
+#include "InputCode.h"
+#include "PulseInput.h"
 
 class FInput;
 
-namespace InputEventTypes
-{
-	using FKeyboardKeyEvent = std::pair<EKeyboardKey, ESwitchEvent>;
-	using FMouseButtonEvent = std::pair<EMouseButton, ESwitchEvent>;
-	struct FMouseWheelUp final {};
-	struct FMouseWheelDown final {};
-	struct FMouseMovement final { FScreenLocation PrevCursorLocation{}; FScreenLocation CurrCursorLocation{}; };
-
-	using FInputEvent = std::variant<
-		FKeyboardKeyEvent,
-		FMouseButtonEvent,
-		FMouseWheelUp,
-		FMouseWheelDown,
-		FMouseMovement>;
-}
-
 class FInputContext final
 {
+private:
+	struct FPulseInput final
+	{
+		EPulseInput Event{};
+		FInputCode TriggeredBy{};
+		inline operator bool() const noexcept { return IsValid(); }
+		bool IsValid() const noexcept;
+	};
+	struct FMouseMovement final { FScreenLocation CursorLocation{}; };
+
+	using FInputEvent = std::variant<
+		FPulseInput,
+		FMouseMovement>;
+
 public:
 	FInputContext(
 		FInput& Input,
@@ -55,5 +56,5 @@ private:
 	FKeyboardKeyStates KeyboardKeyStates;
 	FMouseButtonStates MouseButtonStates;
 	FScreenLocation MouseCursorLocation;
-	std::queue<InputEventTypes::FInputEvent> InputEvents;
+	std::queue<FInputEvent> InputEvents;
 };

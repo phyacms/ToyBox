@@ -113,9 +113,11 @@
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
     <ClInclude Include="Source\System\Input\Input.h" />
+    <ClInclude Include="Source\System\Input\InputCode.h" />
     <ClInclude Include="Source\System\Input\InputContext.h" />
     <ClInclude Include="Source\System\Input\KeyboardKey.h" />
     <ClInclude Include="Source\System\Input\MouseButton.h" />
+    <ClInclude Include="Source\System\Input\PulseInput.h" />
     <ClInclude Include="Source\System\Input\SwitchState.h" />
     <ClInclude Include="Source\System\System.h" />
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
@@ -150,6 +152,7 @@
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\Input\Input.cpp" />
+    <ClCompile Include="Source\System\Input\InputCode.cpp" />
     <ClCompile Include="Source\System\Input\InputContext.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />

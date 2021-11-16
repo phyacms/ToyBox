@@ -181,6 +181,12 @@
     <ClInclude Include="Source\System\Input\SwitchState.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Input\InputCode.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\PulseInput.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -253,6 +259,9 @@
       <Filter>Source\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Input\InputContext.cpp">
+      <Filter>Source\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\InputCode.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
   </ItemGroup>

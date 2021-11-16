@@ -3,6 +3,21 @@
 #include "Engine.h"
 #include "InputContext.h"
 
+bool FInputContext::FPulseInput::IsValid() const noexcept
+{
+	if (!TriggeredBy.IsValid())
+	{
+		return false;
+	}
+
+	if (Event == EPulseInput::RolledDown || Event == EPulseInput::RolledUp)
+	{
+		return TriggeredBy == FInputCode{ EMouseButton::Middle };
+	}
+
+	return true;
+}
+
 FInputContext::FInputContext(
 	FInput& Input,
 	AObject<FSystemWindow>&& InputWindow)
@@ -27,7 +42,10 @@ FInputContext::FInputContext(
 					const auto Event{ ::ToSwitchEvent(KeyState, EventArgs.State) };
 					if (Event != ESwitchEvent::Idle)
 					{
-						InputEvents.emplace(InputEventTypes::FKeyboardKeyEvent{ EventArgs.Key, Event });
+						InputEvents.emplace(
+							FPulseInput{
+								.Event{ static_cast<EPulseInput>(Event) },
+								.TriggeredBy{ EventArgs.Key } });
 					}
 				}
 				return false;
@@ -42,7 +60,10 @@ FInputContext::FInputContext(
 					const auto Event{ ::ToSwitchEvent(ButtonState, EventArgs.State) };
 					if (Event != ESwitchEvent::Idle)
 					{
-						InputEvents.emplace(InputEventTypes::FMouseButtonEvent{ EventArgs.Button, Event });
+						InputEvents.emplace(
+							FPulseInput{
+								.Event{ static_cast<EPulseInput>(Event) },
+								.TriggeredBy{ EventArgs.Button } });
 					}
 				}
 				return false;
@@ -52,17 +73,29 @@ FInputContext::FInputContext(
 			[this](const FOnMouseWheel& EventArgs)->bool
 			{
 				auto WheelDelta{ EventArgs.WheelDelta };
-				while (WheelDelta-- > 0) { InputEvents.emplace(InputEventTypes::FMouseWheelUp{}); }
-				while (WheelDelta++ < 0) { InputEvents.emplace(InputEventTypes::FMouseWheelDown{}); }
+				while (WheelDelta-- > 0)
+				{
+					InputEvents.emplace(
+						FPulseInput{
+							.Event{ EPulseInput::RolledUp },
+							.TriggeredBy{ EMouseButton::Middle } });
+				}
+				while (WheelDelta++ < 0)
+				{
+					InputEvents.emplace(
+						FPulseInput{
+							.Event{ EPulseInput::RolledDown },
+							.TriggeredBy{ EMouseButton::Middle } });
+				}
 				return false;
 			});
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseMove.AddDynamic(
 			[this](const FOnMouseMove& EventArgs)->bool
 			{
-				InputEvents.emplace(InputEventTypes::FMouseMovement{
-					.PrevCursorLocation = MouseCursorLocation,
-					.CurrCursorLocation = EventArgs.CursorLocation });
+				InputEvents.emplace(
+					FMouseMovement{
+						.CursorLocation = EventArgs.CursorLocation });
 				return false;
 			});
 	}
@@ -84,8 +117,6 @@ void FInputContext::ProcessInput()
 	{
 		while (!InputEvents.empty())
 		{
-			using namespace InputEventTypes;
-
 			// @WIP: std::visit(..., InputEvents.front());
 			InputEvents.pop();
 		}
