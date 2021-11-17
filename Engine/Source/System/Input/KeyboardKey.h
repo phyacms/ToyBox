@@ -26,46 +26,46 @@ enum class EKeyboardKey : std::size_t
 	ENUM_END
 };
 
-namespace KeyboardFunctions
+namespace InputFunctions
 {
-	constexpr std::size_t KeyCount{ static_cast<std::size_t>(EKeyboardKey::ENUM_END) };
+	constexpr std::size_t KeyboardKeyCount{ static_cast<std::size_t>(EKeyboardKey::ENUM_END) };
 
-	inline bool IsValidKey(EKeyboardKey KeyCode) noexcept { return KeyCode > EKeyboardKey::Invalid && KeyCode < EKeyboardKey::ENUM_END; }
-	inline std::size_t KeyCodeToIndex(EKeyboardKey KeyCode) noexcept { return IsValidKey(KeyCode) ? static_cast<std::size_t>(KeyCode) : KeyCount; }
+	inline bool IsValidKey(EKeyboardKey Key) noexcept { return Key > EKeyboardKey::Invalid && Key < EKeyboardKey::ENUM_END; }
+	inline std::size_t ToIndex(EKeyboardKey Key) noexcept { return static_cast<std::size_t>(Key); }
 
-	inline bool IsModifierKey(EKeyboardKey KeyCode) noexcept { return KeyCode >= EKeyboardKey::Ctrl && KeyCode <= EKeyboardKey::Shift; }
-	inline bool IsArrowKey(EKeyboardKey KeyCode) noexcept { return KeyCode >= EKeyboardKey::Up && KeyCode <= EKeyboardKey::Right; }
-	inline bool IsNavigationKey(EKeyboardKey KeyCode) noexcept { return KeyCode >= EKeyboardKey::Insert && KeyCode <= EKeyboardKey::PageDown; }
-	inline bool IsFunctionKey(EKeyboardKey KeyCode) noexcept { return KeyCode >= EKeyboardKey::F1 && KeyCode <= EKeyboardKey::F12; }
-	inline bool IsToggleKey(EKeyboardKey KeyCode) noexcept { return (KeyCode >= EKeyboardKey::CapsLock && KeyCode <= EKeyboardKey::NumLock) || KeyCode == EKeyboardKey::ScrollLock; }
-	inline bool IsSpecialPurposeKey(EKeyboardKey KeyCode) noexcept { return KeyCode == EKeyboardKey::SystemCommand || KeyCode == EKeyboardKey::PrintScreen; }
+	inline bool IsModifierKey(EKeyboardKey Key) noexcept { return Key >= EKeyboardKey::Ctrl && Key <= EKeyboardKey::Shift; }
+	inline bool IsArrowKey(EKeyboardKey Key) noexcept { return Key >= EKeyboardKey::Up && Key <= EKeyboardKey::Right; }
+	inline bool IsNavigationKey(EKeyboardKey Key) noexcept { return Key >= EKeyboardKey::Insert && Key <= EKeyboardKey::PageDown; }
+	inline bool IsFunctionKey(EKeyboardKey Key) noexcept { return Key >= EKeyboardKey::F1 && Key <= EKeyboardKey::F12; }
+	inline bool IsToggleKey(EKeyboardKey Key) noexcept { return (Key >= EKeyboardKey::CapsLock && Key <= EKeyboardKey::NumLock) || Key == EKeyboardKey::ScrollLock; }
+	inline bool IsSpecialPurposeKey(EKeyboardKey Key) noexcept { return Key == EKeyboardKey::SystemCommand || Key == EKeyboardKey::PrintScreen; }
 
-	inline bool IsNumPadNumberKey(EKeyboardKey KeyCode) noexcept { return KeyCode >= EKeyboardKey::NumPad0 && KeyCode <= EKeyboardKey::NumPad9; }
-	inline bool IsNumPadSymbolKey(EKeyboardKey KeyCode) noexcept { return KeyCode >= EKeyboardKey::NumPadAdd && KeyCode <= EKeyboardKey::NumPadDecimal; }
-	inline bool IsNumPadKey(EKeyboardKey KeyCode) noexcept { return IsNumPadNumberKey(KeyCode) || IsNumPadSymbolKey(KeyCode) || KeyCode == EKeyboardKey::NumLock; }
+	inline bool IsNumPadNumberKey(EKeyboardKey Key) noexcept { return Key >= EKeyboardKey::NumPad0 && Key <= EKeyboardKey::NumPad9; }
+	inline bool IsNumPadSymbolKey(EKeyboardKey Key) noexcept { return Key >= EKeyboardKey::NumPadAdd && Key <= EKeyboardKey::NumPadDecimal; }
+	inline bool IsNumPadKey(EKeyboardKey Key) noexcept { return IsNumPadNumberKey(Key) || IsNumPadSymbolKey(Key) || Key == EKeyboardKey::NumLock; }
 
-	inline bool IsNumberKey(EKeyboardKey KeyCode, bool bIncludeNumPad = false) noexcept
+	inline bool IsNumberKey(EKeyboardKey Key, bool bIncludeNumPad = false) noexcept
 	{
-		bool bNumberKey = KeyCode >= EKeyboardKey::Num0 && KeyCode <= EKeyboardKey::Num9;
+		bool bNumberKey = Key >= EKeyboardKey::Num0 && Key <= EKeyboardKey::Num9;
 		if (bIncludeNumPad)
 		{
-			bNumberKey |= IsNumPadNumberKey(KeyCode);
+			bNumberKey |= IsNumPadNumberKey(Key);
 		}
 		return bNumberKey;
 	}
-	inline bool IsSymbolKey(EKeyboardKey KeyCode, bool bIncludeNumPad = false) noexcept
+	inline bool IsSymbolKey(EKeyboardKey Key, bool bIncludeNumPad = false) noexcept
 	{
 		bool bSymbolKey
-			= (KeyCode >= EKeyboardKey::OpenBracket && KeyCode <= EKeyboardKey::Backslash)
-			|| (KeyCode >= EKeyboardKey::Minus && KeyCode <= EKeyboardKey::Tilde);
+			= (Key >= EKeyboardKey::OpenBracket && Key <= EKeyboardKey::Backslash)
+			|| (Key >= EKeyboardKey::Minus && Key <= EKeyboardKey::Tilde);
 		if (bIncludeNumPad)
 		{
-			bSymbolKey |= IsNumPadSymbolKey(KeyCode);
+			bSymbolKey |= IsNumPadSymbolKey(Key);
 		}
 		return bSymbolKey;
 	}
 
-	inline bool IsTypingKey(EKeyboardKey KeyCode, bool bIncludeNumPad = false) noexcept { return IsNumberKey(KeyCode, bIncludeNumPad) || IsSymbolKey(KeyCode, bIncludeNumPad); }
+	inline bool IsTypingKey(EKeyboardKey Key, bool bIncludeNumPad = false) noexcept { return IsNumberKey(Key, bIncludeNumPad) || IsSymbolKey(Key, bIncludeNumPad); }
 }
 
-using FKeyboardKeyStates = std::array<ESwitchState, KeyboardFunctions::KeyCount>;
+using FKeyboardKeyStates = std::array<ESwitchState, InputFunctions::KeyboardKeyCount>;

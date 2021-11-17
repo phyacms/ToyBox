@@ -14,7 +14,6 @@ FInputContext::FInputContext(
 	, KeyboardKeyStates{}
 	, MouseButtonStates{}
 	, MouseCursorLocation{}
-	, InputEvents{}
 	, Issuer{}
 	, Controllers{}
 {
@@ -25,16 +24,15 @@ FInputContext::FInputContext(
 		KeyboardMouseEvents += this->InputWindow->Events.OnKeyboardKey.AddDynamic(
 			[this](const FOnKeyboardKey& EventArgs)->bool
 			{
-				if (KeyboardFunctions::IsValidKey(EventArgs.Key))
+				if (InputFunctions::IsValidKey(EventArgs.Key))
 				{
-					auto& KeyState{ KeyboardKeyStates.at(static_cast<std::size_t>(EventArgs.Key)) };
-					const auto Event{ ::ToSwitchEvent(KeyState, EventArgs.State) };
+					const auto Index{ InputFunctions::ToIndex(EventArgs.Key) };
+					const auto Event{ ::ToSwitchEvent(GetKeyboardKeyState(EventArgs.Key), EventArgs.State) };
+					KeyboardKeyStates[Index] = EventArgs.State;
 					if (Event != ESwitchEvent::Idle)
 					{
-						InputEvents.emplace(
-							FPulseInput{
-								.Event{ static_cast<EPulseInput>(Event) },
-								.InputCode{ EventArgs.Key } });
+						KeyboardKeyStates[Index] = EventArgs.State;
+						return DispatchInputAction(FInputCodeTrigger{ .InputCode{ EventArgs.Key }, .Event{ Event } });
 					}
 				}
 				return false;
@@ -43,16 +41,16 @@ FInputContext::FInputContext(
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseButton.AddDynamic(
 			[this](const FOnMouseButton& EventArgs)->bool
 			{
-				if (MouseFunctions::IsValidButton(EventArgs.Button))
+				if (InputFunctions::IsValidButton(EventArgs.Button))
 				{
-					auto& ButtonState{ MouseButtonStates.at(static_cast<std::size_t>(EventArgs.Button)) };
-					const auto Event{ ::ToSwitchEvent(ButtonState, EventArgs.State) };
+					const auto Index{ InputFunctions::ToIndex(EventArgs.Button) };
+					const auto Event{ ::ToSwitchEvent(GetMouseButtonState(EventArgs.Button), EventArgs.State) };
+					MouseButtonStates[Index] = EventArgs.State;
 					if (Event != ESwitchEvent::Idle)
 					{
-						InputEvents.emplace(
-							FPulseInput{
-								.Event{ static_cast<EPulseInput>(Event) },
-								.InputCode{ EventArgs.Button } });
+						return DispatchInputAction(FInputCodeTrigger{
+							.InputCode{ EventArgs.Button },
+							.Event{ Event } });
 					}
 				}
 				return false;
@@ -61,20 +59,12 @@ FInputContext::FInputContext(
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseWheel.AddDynamic(
 			[this](const FOnMouseWheel& EventArgs)->bool
 			{
-				auto WheelDelta{ EventArgs.WheelDelta };
-				while (WheelDelta-- > 0)
+				for (auto WheelMove : EventArgs.WheelDelta)
 				{
-					InputEvents.emplace(
-						FPulseInput{
-							.Event{ EPulseInput::RolledUp },
-							.InputCode{ EMouseButton::Middle } });
-				}
-				while (WheelDelta++ < 0)
-				{
-					InputEvents.emplace(
-						FPulseInput{
-							.Event{ EPulseInput::RolledDown },
-							.InputCode{ EMouseButton::Middle } });
+					if (DispatchInputAction(WheelMove))
+					{
+						return true;
+					}
 				}
 				return false;
 			});
@@ -82,9 +72,7 @@ FInputContext::FInputContext(
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseMove.AddDynamic(
 			[this](const FOnMouseMove& EventArgs)->bool
 			{
-				InputEvents.emplace(
-					FMouseMovement{
-						.CursorLocation = EventArgs.CursorLocation });
+				MouseCursorLocation = EventArgs.CursorLocation;
 				return false;
 			});
 	}
@@ -100,29 +88,17 @@ bool FInputContext::IsValid() const noexcept
 	return InputWindow.IsValid();
 }
 
-void FInputContext::ProcessInput()
-{
-	if (IsValid())
-	{
-		while (!InputEvents.empty())
-		{
-			// @WIP: std::visit(..., InputEvents.front());
-			InputEvents.pop();
-		}
-	}
-}
-
 ESwitchState FInputContext::GetKeyboardKeyState(EKeyboardKey Key) const noexcept
 {
-	return KeyboardFunctions::IsValidKey(Key)
-		? KeyboardKeyStates.at(static_cast<std::size_t>(Key))
+	return InputFunctions::IsValidKey(Key)
+		? KeyboardKeyStates.at(InputFunctions::ToIndex(Key))
 		: ESwitchState::Up;
 }
 
 ESwitchState FInputContext::GetMouseButtonState(EMouseButton Button) const noexcept
 {
-	return MouseFunctions::IsValidButton(Button)
-		? MouseButtonStates.at(static_cast<std::size_t>(Button))
+	return InputFunctions::IsValidButton(Button)
+		? MouseButtonStates.at(InputFunctions::ToIndex(Button))
 		: ESwitchState::Up;
 }
 
@@ -156,4 +132,42 @@ void FInputContext::UnbindInputController(AInputController& Handle) noexcept
 				[Index](const auto& Pair)->bool { return Pair.first == Index; }));
 		Handle.Release();
 	}
+}
+
+bool FInputContext::DispatchInputAction(const FInputTrigger& Trigger)
+{
+	for (const auto& [Id, Controller] : Controllers)
+	{
+		const auto& [cItBegin, cItEnd] = Controller->GetIterators();
+		const auto& Action{ std::find_if(
+			std::execution::par_unseq,
+			cItBegin,
+			cItEnd,
+			[this, &Trigger](const FInputAction& Action)->bool
+			{
+				if (Action.Chord.GetTrigger() == Trigger) // @WIP: Problematic!
+				{
+					const auto& Modifiers{ Action.Chord.GetModifiers().InputCodes };
+					return std::transform_reduce(
+						std::execution::par_unseq,
+						std::cbegin(Modifiers),
+						std::cend(Modifiers),
+						true,
+						std::logical_and{},
+						[this](const FInputCode& Modifier)->bool
+						{
+							return std::visit(stdhelp::overloaded{
+								[this](EKeyboardKey Key)->bool { return IsKeyboardKeyDown(Key); },
+								[this](EMouseButton Button)->bool { return IsMouseButtonDown(Button); }, },
+								Modifier); });
+				}
+				return false;
+			}) };
+		if (Action != cItEnd
+			&& Action->Callback.Execute(*this))
+		{
+			return true;
+		}
+	}
+	return false;
 }

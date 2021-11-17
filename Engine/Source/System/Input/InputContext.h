@@ -18,7 +18,7 @@ private:
 	struct FMouseMovement final { FScreenLocation CursorLocation{}; };
 
 	using FInputEvent = std::variant<
-		FPulseInput,
+		FInputTrigger,
 		FMouseMovement>;
 
 public:
@@ -34,14 +34,21 @@ public:
 
 public:
 	bool IsValid() const noexcept;
-	void ProcessInput();
 
 	ESwitchState GetKeyboardKeyState(EKeyboardKey Key) const noexcept;
 	ESwitchState GetMouseButtonState(EMouseButton Button) const noexcept;
 	inline const FScreenLocation& GetMouseCursorLocation() const noexcept { return MouseCursorLocation; }
 
+	inline bool IsKeyboardKeyUp(EKeyboardKey Key) const noexcept { return GetKeyboardKeyState(Key) == ESwitchState::Up; }
+	inline bool IsKeyboardKeyDown(EKeyboardKey Key) const noexcept { return GetKeyboardKeyState(Key) == ESwitchState::Down; }
+	inline bool IsMouseButtonUp(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Up; }
+	inline bool IsMouseButtonDown(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Down; }
+
 	AInputController BindInputController(AObject<IInputController>&& Controller);
 	void UnbindInputController(AInputController& Handle) noexcept;
+
+private:
+	bool DispatchInputAction(const FInputTrigger& Trigger);
 
 private:
 	FInput* Input;
@@ -51,7 +58,6 @@ private:
 	FKeyboardKeyStates KeyboardKeyStates;
 	FMouseButtonStates MouseButtonStates;
 	FScreenLocation MouseCursorLocation;
-	std::queue<FInputEvent> InputEvents;
 
 	FUniqueIdIssuer Issuer;
 	std::list<std::pair<std::size_t, AObject<IInputController>>> Controllers;

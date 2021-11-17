@@ -55,8 +55,8 @@ public:
 
 	virtual ~FString() noexcept = default;
 
-	inline friend bool operator==(const FString& Lhs, const FString& Rhs) noexcept = default;
-	inline friend bool operator!=(const FString& Lhs, const FString& Rhs) noexcept = default;
+	friend inline bool operator==(const FString& Lhs, const FString& Rhs) noexcept = default;
+	friend inline bool operator!=(const FString& Lhs, const FString& Rhs) noexcept = default;
 
 	template<typename T>
 	inline FString& operator+=(T&& Param) { Str += std::forward<T>(Param); return *this; }

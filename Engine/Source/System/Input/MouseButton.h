@@ -15,12 +15,12 @@ enum class EMouseButton : std::size_t
 	ENUM_END
 };
 
-namespace MouseFunctions
+namespace InputFunctions
 {
-	constexpr std::size_t ButtonCount{ static_cast<std::size_t>(EMouseButton::ENUM_END) };
+	constexpr std::size_t MouseButtonCount{ static_cast<std::size_t>(EMouseButton::ENUM_END) };
 
-	inline bool IsValidButton(EMouseButton ButtonCode) noexcept { return ButtonCode > EMouseButton::Invalid && ButtonCode < EMouseButton::ENUM_END; }
-	inline std::size_t ButtonCodeToIndex(EMouseButton ButtonCode) noexcept { return IsValidButton(ButtonCode) ? static_cast<std::size_t>(ButtonCode) : ButtonCount; }
+	inline bool IsValidButton(EMouseButton Button) noexcept { return Button > EMouseButton::Invalid && Button < EMouseButton::ENUM_END; }
+	inline std::size_t ToIndex(EMouseButton Button) noexcept { return IsValidButton(Button) ? static_cast<std::size_t>(Button) : MouseButtonCount; }
 }
 
-using FMouseButtonStates = std::array<ESwitchState, MouseFunctions::ButtonCount>;
+using FMouseButtonStates = std::array<ESwitchState, InputFunctions::MouseButtonCount>;

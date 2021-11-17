@@ -28,18 +28,17 @@ public:
 	using Iterator = ContainerType::iterator;
 	using ConstIterator = ContainerType::const_iterator;
 
-public:
-	inline [[nodiscard]] Iterator begin() noexcept { return std::begin(Actions); }
-	inline [[nodiscard]] Iterator end() noexcept { return std::end(Actions); }
-	inline [[nodiscard]] ConstIterator begin() const noexcept { return std::begin(Actions); }
-	inline [[nodiscard]] ConstIterator end() const noexcept { return std::end(Actions); }
-	inline [[nodiscard]] ConstIterator cbegin() const noexcept { return std::cbegin(Actions); }
-	inline [[nodiscard]] ConstIterator cend() const noexcept { return std::cend(Actions); }
+	using IteratorPair = std::pair<Iterator, Iterator>;
+	using ConstIteratorPair = std::pair<ConstIterator, ConstIterator>;
 
+public:
 	inline FInputActionBindings& operator+=(const FInputAction& Action) { if (Action.IsValid()) { Actions.emplace_back(Action); } return *this; }
 	inline FInputActionBindings& operator+=(FInputAction&& Action) { if (Action.IsValid()) { Actions.emplace_back(std::move(Action)); } return *this; }
 
 public:
+	inline IteratorPair GetIterators() noexcept { return { std::begin(Actions), std::end(Actions) }; }
+	inline ConstIteratorPair GetIterators() const noexcept { return { std::cbegin(Actions), std::cend(Actions) }; }
+
 	inline bool IsEmpty() const noexcept { return Actions.empty(); }
 	inline void Clear() noexcept { Actions.clear(); }
 

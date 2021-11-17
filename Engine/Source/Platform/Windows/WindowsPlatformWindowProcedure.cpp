@@ -8,6 +8,7 @@
 #include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
 #include "System/Input/SwitchState.h"
+#include "System/Input/InputTrigger.h"
 
 std::size_t WindowsPlatform::FWndProc::RegisterCount{};
 
@@ -204,6 +205,8 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 	using namespace SystemWindowEventTypes;
 
 	auto& Window{ GetWindow() };
+
+	bool bPulse{ true };
 	auto KeyState{ ESwitchState::Up };
 	switch (uMsg)
 	{
@@ -217,14 +220,18 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 		case WM_KEYDOWN:
 		case WM_SYSKEYDOWN:
 			KeyState = ESwitchState::Down;
+			bPulse = !(lParam & (1 << 30));
 			[[fallthrough]];
 		case WM_KEYUP:
 		case WM_SYSKEYUP:
 		{
-			if (auto Key{ WindowsPlatform::TranslateKeyboardKey(LOWORD(wParam)) };
-				KeyboardFunctions::IsValidKey(Key))
+			if (bPulse)
 			{
-				Window.Events.Enqueue(FOnKeyboardKey{ .Key{ Key }, .State{ KeyState } });
+				if (auto Key{ WindowsPlatform::TranslateKeyboardKey(LOWORD(wParam)) };
+					InputFunctions::IsValidKey(Key))
+				{
+					Window.Events.Enqueue(FOnKeyboardKey{ .Key{ Key }, .State{ KeyState } });
+				}
 			}
 		}
 		return { true, 0 };
@@ -288,7 +295,7 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 					return {};
 				} };
 			if (auto Button{ WindowsPlatform::TranslateMouseButton(GetVirtualKey(uMsg, wParam)) };
-				MouseFunctions::IsValidButton(Button))
+				InputFunctions::IsValidButton(Button))
 			{
 				Stack.push(FOnMouseButton{ .Button{ Button }, .State{ ButtonState } });
 			}
@@ -297,7 +304,28 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 
 		case WM_MOUSEWHEEL:
 		{
-			Stack.push(FOnMouseWheel{ .WheelDelta{ GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA } });
+			FOnMouseWheel WheelMove{};
+
+			auto WheelDelta{ GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA };
+			if (WheelDelta < 0)
+			{
+				while (WheelDelta++ != 0)
+				{
+					WheelMove.WheelDelta.emplace_back(EMouseWheelTrigger::RollDown);
+				}
+			}
+			else if (WheelDelta > 0)
+			{
+				while (WheelDelta-- != 0)
+				{
+					WheelMove.WheelDelta.emplace_back(EMouseWheelTrigger::RollUp);
+				}
+			}
+
+			if (!WheelMove.WheelDelta.empty())
+			{
+				Stack.push(std::move(WheelMove));
+			}
 		}
 		break;
 

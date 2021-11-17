@@ -71,7 +71,6 @@ void FApplication::Terminate() noexcept
 void FApplication::Tick(FTimeDuration DeltaTime)
 {
 	Window->Events.Process();
-	Input->ProcessInput();
 }
 
 void FApplication::Render(FTimeDuration DeltaTime)

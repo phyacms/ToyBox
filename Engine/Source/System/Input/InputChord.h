@@ -2,26 +2,7 @@
 
 #pragma once
 
-#include "SwitchState.h"
-#include "InputCode.h"
-
-enum class EPulseInput : std::size_t
-{
-	Idle     = static_cast<std::size_t>(ESwitchEvent::Idle),
-	Pressed  = static_cast<std::size_t>(ESwitchEvent::Pressed),
-	Released = static_cast<std::size_t>(ESwitchEvent::Released),
-	Repeated = static_cast<std::size_t>(ESwitchEvent::Repeated),
-	RolledDown,
-	RolledUp,
-};
-
-struct FPulseInput final
-{
-	EPulseInput Event{};
-	FInputCode InputCode{};
-	inline operator bool() const noexcept { return IsValid(); }
-	bool IsValid() const noexcept;
-};
+#include "InputTrigger.h"
 
 struct FInputChord final
 {
@@ -36,19 +17,17 @@ public:
 	inline operator bool() const noexcept { return IsValid(); }
 
 public:
-	inline bool IsValid() const noexcept { return Trigger.IsValid(); }
-	inline void Reset() noexcept { Trigger = FPulseInput{}; Modifiers.Values.clear(); }
+	bool IsValid() const noexcept;
+	inline void Reset() noexcept { Trigger = {}; Modifiers.InputCodes.clear(); }
 
-	inline FInputChord& SetEvent(EPulseInput Event) noexcept { Trigger.Event = Event; return *this; }
-	inline FInputChord& SetTrigger(FInputCode InputCode) noexcept { Trigger.InputCode = std::move(InputCode); return *this; }
-	inline FInputChord& AddModifier(FInputCode InputCode) { if (InputCode.IsValid()) { Modifiers += InputCode; } return *this; }
-	inline FInputChord& RemoveModifier(FInputCode InputCode) noexcept { if (InputCode.IsValid()) { Modifiers -= InputCode; } return *this; }
+	FInputChord& SetTrigger(FInputTrigger Trigger) noexcept;
+	FInputChord& AddModifier(FInputCode InputCode) noexcept;
+	FInputChord& RemoveModifier(FInputCode InputCode) noexcept;
 
-	inline EPulseInput GetEvent() const noexcept { return Trigger.Event; }
-	inline FInputCode GetTrigger() const noexcept { return Trigger.InputCode; }
+	inline const FInputTrigger& GetTrigger() const noexcept { return Trigger; }
 	inline const FInputCodes& GetModifiers() const noexcept { return Modifiers; }
 
 private:
-	FPulseInput Trigger;
+	FInputTrigger Trigger;
 	FInputCodes Modifiers;
 };

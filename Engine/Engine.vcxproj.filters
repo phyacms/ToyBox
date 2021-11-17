@@ -193,6 +193,9 @@
     <ClInclude Include="Source\System\Input\IInputController.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Input\InputTrigger.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -273,7 +276,7 @@
     <ClCompile Include="Source\System\Input\InputChord.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Input\IInputController.cpp">
+    <ClCompile Include="Source\System\Input\InputTrigger.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
   </ItemGroup>

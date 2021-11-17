@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Engine.h"
 #include "Type/Object.h"
 #include "Type/UniqueId.h"
 #include "InputAction.h"
@@ -16,12 +17,12 @@ private:
 	using Iterator = FInputActionBindings::Iterator;
 	using ConstIterator = FInputActionBindings::ConstIterator;
 
-	using IteratorPair = std::pair<Iterator, Iterator>;
-	using ConstIteratorPair = std::pair<ConstIterator, ConstIterator>;
+	using IteratorPair = FInputActionBindings::IteratorPair;
+	using ConstIteratorPair = FInputActionBindings::ConstIteratorPair;
 
 public:
-	IInputController();
-	virtual ~IInputController() noexcept;
+	IInputController() : TObject<IInputController>(*this), Actions{} {}
+	virtual ~IInputController() noexcept = default;
 
 	IInputController(const IInputController&) = delete;
 	IInputController& operator=(const IInputController&) & = delete;
@@ -29,13 +30,16 @@ public:
 	IInputController& operator=(IInputController&&) & noexcept = delete;
 
 public:
-	void BindStatics();
+	inline void BindStatics() {
+		std::call_once(
+			Actions.first,
+			[this]()->void { BindInputActions(Actions.second); }); }
+
+	inline IteratorPair GetIterators() noexcept { return Actions.second.GetIterators(); }
+	inline ConstIteratorPair GetIterators() const noexcept { return Actions.second.GetIterators(); }
 
 private:
 	virtual void BindInputActions(FInputActionBindings& Actions) = 0;
-
-	IteratorPair GetIterators() noexcept;
-	ConstIteratorPair GetIterators() const noexcept;
 
 private:
 	std::pair<std::once_flag, FInputActionBindings> Actions;

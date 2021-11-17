@@ -118,6 +118,7 @@
     <ClInclude Include="Source\System\Input\InputChord.h" />
     <ClInclude Include="Source\System\Input\InputCode.h" />
     <ClInclude Include="Source\System\Input\InputContext.h" />
+    <ClInclude Include="Source\System\Input\InputTrigger.h" />
     <ClInclude Include="Source\System\Input\KeyboardKey.h" />
     <ClInclude Include="Source\System\Input\MouseButton.h" />
     <ClInclude Include="Source\System\Input\SwitchState.h" />
@@ -153,11 +154,11 @@
     <ClCompile Include="Source\System\Graphics\Direct3D11\Shader\IDirect3D11Shader.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
-    <ClCompile Include="Source\System\Input\IInputController.cpp" />
     <ClCompile Include="Source\System\Input\Input.cpp" />
     <ClCompile Include="Source\System\Input\InputChord.cpp" />
     <ClCompile Include="Source\System\Input\InputCode.cpp" />
     <ClCompile Include="Source\System\Input\InputContext.cpp" />
+    <ClCompile Include="Source\System\Input\InputTrigger.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />
