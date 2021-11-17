@@ -48,6 +48,11 @@ void WindowsPlatform::FWndProc::Present() noexcept
 	}
 }
 
+void WindowsPlatform::FWndProc::Close() noexcept
+{
+	::SendMessageW(hWnd, WM_CLOSE, 0, 0);
+}
+
 bool WindowsPlatform::FWndProc::RegisterClass() noexcept
 {
 	bRegistered = true;

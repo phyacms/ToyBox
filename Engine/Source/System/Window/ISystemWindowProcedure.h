@@ -23,6 +23,7 @@ public:
 	void Terminate(FSystemWindow& OwnerWindow) noexcept;
 
 	virtual void Present() noexcept = 0;
+	virtual void Close() noexcept = 0;
 
 	FSystemWindow& GetWindow() noexcept { return *OwnerWindow; }
 

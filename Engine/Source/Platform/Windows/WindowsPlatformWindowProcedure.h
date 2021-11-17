@@ -27,6 +27,7 @@ namespace WindowsPlatform
 		virtual void TerminateImpl(FSystemWindow& OwnerWindow) noexcept override final;
 
 		virtual void Present() noexcept override final;
+		virtual void Close() noexcept override final;
 
 		inline virtual HWND GetHandle() const noexcept override final { return hWnd; }
 

@@ -75,3 +75,11 @@ void FSystemWindow::Present() noexcept
 		WndProc->Present();
 	}
 }
+
+void FSystemWindow::Close() noexcept
+{
+	if (IsValid())
+	{
+		WndProc->Close();
+	}
+}

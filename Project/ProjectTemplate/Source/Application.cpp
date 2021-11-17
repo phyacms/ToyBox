@@ -14,6 +14,7 @@ FApplication::FApplication(FSystem& System)
 	, Window{}
 	, DH_OnClosed{}
 	, Input{}
+	, IC_Input{}
 	, Graphics{}
 {
 }
@@ -56,12 +57,23 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 	}
 
 	Window->Present();
+	IC_Input = Input->BindInputController(*this);
 
 	return true;
 }
 
+void FApplication::BindInputActions(FInputActionBindings& Actions)
+{
+	Actions += FInputAction{
+		.Chord{ FInputChord{}
+			.AddModifier(EKeyboardKey::Alt)
+			.SetTrigger(FInputCodeTrigger{.InputCode{ EKeyboardKey::F4 }, .Event{ ESwitchEvent::Pressed } }) },
+		.Callback{ [this](const FInputContext&)->bool { Window->Close(); return true; } } };
+}
+
 void FApplication::Terminate() noexcept
 {
+	IC_Input.Release();
 	Graphics.reset();
 	Input.reset();
 	DH_OnClosed.Release();

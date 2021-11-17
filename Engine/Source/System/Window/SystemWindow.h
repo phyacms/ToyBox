@@ -55,6 +55,7 @@ public:
 	inline FStringView GetTitle() const noexcept { return Title; }
 
 	void Present() noexcept;
+	void Close() noexcept;
 
 	template<typename T>
 	inline T& InterfaceAs() { return dynamic_cast<T&>(*WndProc); }

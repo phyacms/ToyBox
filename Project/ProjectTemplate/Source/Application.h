@@ -2,8 +2,10 @@
 
 #pragma once
 
+#include <Type/UniqueId.h>
 #include <Type/MulticastDelegate.h>
 #include <Application/IApplication.h>
+#include <System/Input/IInputController.h>
 
 class FSystemWindow;
 class FInputContext;
@@ -11,6 +13,7 @@ class IGraphicsContext;
 
 class FApplication final
 	: public IApplication
+	, public IInputController
 {
 public:
 	explicit FApplication(FSystem& System);
@@ -18,6 +21,7 @@ public:
 
 private:
 	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept override final;
+	virtual void BindInputActions(FInputActionBindings& Actions) override final;
 	virtual void Terminate() noexcept override final;
 
 	void Tick(FTimeDuration DeltaTime) override final;
@@ -28,5 +32,7 @@ private:
 	ADelegateHandle DH_OnClosed;
 
 	std::unique_ptr<FInputContext> Input;
+	AInputController IC_Input;
+
 	std::unique_ptr<IGraphicsContext> Graphics;
 };
