@@ -85,7 +85,7 @@ class ISerializable
 {
 public:
 	virtual bool Deserialize(const FByteBuffer& Bytes) = 0;
-	virtual FByteBuffer Serialize() const = 0;
+	virtual [[nodiscard]] FByteBuffer Serialize() const = 0;
 };
 
 namespace TypeTraits

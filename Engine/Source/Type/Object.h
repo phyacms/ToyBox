@@ -41,7 +41,7 @@ class AConstObject final
 {
 public:
 	AConstObject() : Object{} {}
-	AConstObject(const T& Buffer) : Object{ const_cast<T&>(Buffer) } {}
+	AConstObject(const T& Object) : Object{ const_cast<T&>(Object) } {}
 	~AConstObject() noexcept = default;
 
 	AConstObject(const AConstObject&) = default;

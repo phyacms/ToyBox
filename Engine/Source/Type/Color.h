@@ -65,7 +65,7 @@ namespace sRGB
 		typename = std::enable_if_t<
 		TypeTraits::bIsColorValue<std::remove_cv_t<To>>&&
 		TypeTraits::bIsColorValue<std::remove_cvref_t<From>>>>
-		inline To ConvertValue(const From& Value)
+		inline [[nodiscard]] To ConvertValue(const From& Value)
 	{
 		using DestType = std::remove_cvref_t<To>;
 		using SrcType = std::remove_cvref_t<From>;
@@ -120,7 +120,7 @@ namespace sRGB
 		typename = std::enable_if_t<
 		TypeTraits::bIsColorFormat<std::remove_cv_t<To>>&&
 		TypeTraits::bIsColorFormat<std::remove_cvref_t<From>>>>
-		inline To ConvertFormat(const From& Var)
+		inline [[nodiscard]] To ConvertFormat(const From& Var)
 	{
 		using DestType = std::remove_cvref_t<To>;
 		using SrcType = std::remove_cvref_t<From>;
@@ -200,7 +200,7 @@ public:
 	inline void Set(Ts&&... Params) { operator=(FColor{ std::forward<Ts>(Params)... }); }
 
 	template<typename T>
-	inline T GetAs() const
+	inline [[nodiscard]] T GetAs() const
 	{
 		return std::visit(stdhelp::overloaded{
 			[](const T& Var)->T { return Var; },
@@ -208,7 +208,7 @@ public:
 			Var);
 	}
 	template<typename T, sRGB::Format Format>
-	inline T GetAs() const
+	inline [[nodiscard]] T GetAs() const
 	{
 		using VarType =
 			std::conditional_t<Format == sRGB::Format::ARGB, sRGB::ARGB,

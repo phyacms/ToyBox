@@ -11,7 +11,7 @@ template<
 	typename T,
 	std::endian Endiannessness = std::endian::little,
 	typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
-inline std::array<Byte, sizeof(T)> ToByteArray(const T& Value)
+inline [[nodiscard]] std::array<Byte, sizeof(T)> ToByteArray(const T& Value)
 {
 	static_assert(!TypeTraits::bIsMixedEndian);
 
@@ -31,7 +31,7 @@ template<
 	typename T,
 	std::endian Endiannessness = std::endian::little,
 	typename = std::enable_if_t<TypeTraits::bIsTriviallySerializable<T>>>
-inline T FromByteArray(const Byte* Bytes)
+inline [[nodiscard]] T FromByteArray(const Byte* Bytes)
 {
 	static_assert(!TypeTraits::bIsMixedEndian);
 

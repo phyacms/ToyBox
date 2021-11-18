@@ -85,7 +85,7 @@ public:
 
 	// @NOTE: Serialization/Deserialization is performed via UTF-8 encoding/decoding.
 	virtual bool Deserialize(const FByteBuffer& Bytes) override final;
-	virtual FByteBuffer Serialize() const override final;
+	virtual [[nodiscard]] FByteBuffer Serialize() const override final;
 
 private:
 	StringType Str;
@@ -107,7 +107,7 @@ namespace TypeConversion
 template<
 	typename IntegralType,
 	typename = std::enable_if<std::is_integral_v<IntegralType>>>
-FString ToString(
+[[nodiscard]] FString ToString(
 	IntegralType Value,
 	TypeConversion::IntegerBase Base = TypeConversion::IntegerBase::Decimal)
 {
@@ -153,7 +153,7 @@ FString ToString(
 }
 
 template<typename T, typename... Ts>
-inline FString ToString(const std::atomic<T>& Value, Ts&&... Params)
+inline [[nodiscard]] FString ToString(const std::atomic<T>& Value, Ts&&... Params)
 {
 	return ::ToString(Value.load(), std::forward<Ts>(Params)...);
 }
