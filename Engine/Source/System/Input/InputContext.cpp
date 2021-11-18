@@ -145,7 +145,7 @@ bool FInputContext::DispatchInputAction(const FInputTrigger& Trigger)
 			cItEnd,
 			[this, &Trigger](const FInputAction& Action)->bool
 			{
-				if (Action.Chord.GetTrigger() == Trigger) // @WIP: Problematic!
+				if (Action.Chord.GetTrigger() == Trigger)
 				{
 					const auto& Modifiers{ Action.Chord.GetModifiers().InputCodes };
 					return std::transform_reduce(
