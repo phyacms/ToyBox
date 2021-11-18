@@ -10,9 +10,9 @@ const FLogEndl& FLogEndl::GetInstance()
 	return Instance;
 }
 
-void FLogStream::operator<<(const FLogEndl& Endl) && noexcept
+void FLogStream::operator<<(const FLogEndl&) && noexcept
 {
-	PlatformFunctions::PrintDebugOutput(Buffer);
+	PlatformFunctions::PrintDebugOutput(std::move(Buffer));
 }
 
 FLog& FLog::GetThreadLogger() noexcept
@@ -26,9 +26,4 @@ FLog::FLog()
 		std::hash<std::thread::id>{}(std::this_thread::get_id()),
 		TypeConversion::IntegerBase::Hexadecimal) }
 {
-}
-
-void FLog::SetIdentifier(FStringView Identifier)
-{
-	this->Identifier = Identifier;
 }

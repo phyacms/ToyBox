@@ -26,10 +26,10 @@ public:
 	inline FTimePoint PreciseNow() const noexcept { return FTimeClock::now(); }
 
 	void RequestAppExit(std::int32_t ExitCode) const noexcept;
-	void PrintDebugOutput(FStringView Message) const noexcept;
-	void ShowPopupMessage(FStringView Title, FStringView Content) const noexcept;
+	void PrintDebugOutput(const FString& Message) const noexcept;
+	void ShowPopupMessage(const FString& Title, const FString& Content) const noexcept;
 
-	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FStringView Title) const noexcept;
+	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FString Title) const noexcept;
 	FInput& GetInput() noexcept;
 	FGraphics& GetGraphics() noexcept;
 

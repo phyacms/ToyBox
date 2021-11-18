@@ -44,10 +44,10 @@ void FSystemWindow::FSystemWindowEvents::Process()
 #undef DefineEventDispatcher
 #undef DispatchEvent
 
-FSystemWindow::FSystemWindow(std::unique_ptr<ISystemWindowProcedure> WndProc, FStringView Title)
+FSystemWindow::FSystemWindow(std::unique_ptr<ISystemWindowProcedure> WndProc, FString Title)
 	: TObject<FSystemWindow>(*this)
 	, WndProc{ std::move(WndProc) }
-	, Title{ Title }
+	, Title{ std::move(Title) }
 	, Events{}
 {
 	if (this->WndProc != nullptr)

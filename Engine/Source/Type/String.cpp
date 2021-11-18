@@ -14,10 +14,10 @@ bool FString::Deserialize(const FByteBuffer& Bytes)
 		std::begin(Chars),
 		[](Byte Value)->char8_t { return static_cast<char8_t>(Value); });
 
-	auto Converted{ PlatformFunctions::UTF8ToString(Chars) };
-	if (Converted.has_value())
+	if (auto Str{ PlatformFunctions::UTF8ToString(Chars) };
+		Str.has_value())
 	{
-		*this = std::move(Converted).value();
+		*this = std::move(Str.value());
 		return true;
 	}
 	else
@@ -29,10 +29,10 @@ bool FString::Deserialize(const FByteBuffer& Bytes)
 FByteBuffer FString::Serialize() const
 {
 	FByteBuffer Bytes{};
-	const auto& Converted{ PlatformFunctions::StringToUTF8(*this) };
-	if (Converted.has_value())
+	if (const auto& UTF8Str{ PlatformFunctions::StringToUTF8(*this) };
+		UTF8Str.has_value())
 	{
-		const auto& UTF8Chars{ Converted.value() };
+		const auto& UTF8Chars{ UTF8Str.value() };
 		Bytes.Reallocate(UTF8Chars.size());
 		std::transform(
 			std::execution::par_unseq,

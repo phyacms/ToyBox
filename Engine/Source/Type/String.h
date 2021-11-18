@@ -41,27 +41,21 @@ public:
 
 public:
 	FString() : Str{} {}
+	template<
+		typename... Ts,
+		typename = std::enable_if_t<std::is_constructible_v<StringType, Ts...>>>
+	FString(Ts&&... Params) : Str{ std::forward<Ts>(Params)... } {}
 	FString(const FString&) = default;
 	FString(FString&&) noexcept = default;
 	FString& operator=(const FString&) & = default;
 	FString& operator=(FString&&) &noexcept = default;
-
-	// @TODO: Define constrained constructors and assignment operators
-	//        instead of using universal-referenced ones.
-	template<typename... Ts>
-	FString(Ts&&... Params) : Str{ std::forward<Ts>(Params)... } {}
-	template<typename... Ts>
-	FString& operator=(Ts&&... Params) { Str.operator=(std::forward<Ts>(Params)...); return *this; }
-
 	virtual ~FString() noexcept = default;
 
 	friend inline bool operator==(const FString& Lhs, const FString& Rhs) noexcept = default;
 	friend inline bool operator!=(const FString& Lhs, const FString& Rhs) noexcept = default;
 
-	template<typename T>
-	inline FString& operator+=(T&& Param) { Str += std::forward<T>(Param); return *this; }
-	inline FString& operator+=(FString&& Other) { return operator+=(std::move(Other.Str)); }
-	inline FString& operator+=(const FString& Other) { return operator+=(Other.Str); }
+	inline FString& operator+=(const FString& Other) { Str.append(Other.Str); return *this; }
+	inline FString& operator+=(FString&& Other) { return operator+=(Other); }
 
 public:
 	inline bool IsEmpty() const noexcept { return Str.empty(); }
@@ -90,8 +84,6 @@ public:
 private:
 	StringType Str;
 };
-
-using FStringView = const FString&;
 
 namespace TypeConversion
 {

@@ -21,6 +21,9 @@ public:
 		typename = std::enable_if_t<sizeof...(Parameters) == Dimension>>
 	explicit TPoint(Parameters&&... Params) : Coord{ std::forward<Parameters>(Params)... } {}
 	explicit TPoint(const CompatibleVectorType& V) : Coord{ V } {}
+	explicit TPoint& operator=(const CompatibleVectorType& V) & { Coord = V; return *this; }
+	explicit TPoint(CompatibleVectorType&& V) noexcept { Coord = std::move(V); return *this; }
+	explicit TPoint& operator=(CompatibleVectorType&& V) & noexcept : Coord{ std::move(V) } {}
 	TPoint(const TPoint&) = default;
 	TPoint& operator=(const TPoint&) & = default;
 	TPoint(TPoint&&) noexcept = default;

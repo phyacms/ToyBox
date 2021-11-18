@@ -17,6 +17,8 @@ struct FInputCodes final
 	std::unordered_set<FInputCode> InputCodes{};
 	friend bool operator==(const FInputCodes&, const FInputCodes&) = default;
 	friend bool operator!=(const FInputCodes&, const FInputCodes&) = default;
-	inline FInputCodes& operator+=(const FInputCode& InputCode) noexcept { InputCodes.emplace(InputCode); return *this; }
+	inline FInputCodes& operator+=(const FInputCode& InputCode) { InputCodes.emplace(InputCode); return *this; }
+	inline FInputCodes& operator+=(FInputCode&& InputCode) { InputCodes.emplace(std::move(InputCode)); return *this; }
 	inline FInputCodes& operator-=(const FInputCode& InputCode) noexcept { InputCodes.erase(InputCode); return *this; }
+	inline FInputCodes& operator-=(FInputCode&& InputCode) noexcept { InputCodes.erase(std::move(InputCode)); return *this; }
 };

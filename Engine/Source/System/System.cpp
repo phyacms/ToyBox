@@ -21,14 +21,14 @@ FSystem::~FSystem() noexcept
 }
 
 void FSystem::RequestAppExit(std::int32_t ExitCode) const noexcept { PlatformFunctions::RequestAppExit(ExitCode); }
-void FSystem::PrintDebugOutput(FStringView Message) const noexcept { PlatformFunctions::PrintDebugOutput(Message); }
-void FSystem::ShowPopupMessage(FStringView Title, FStringView Content) const noexcept { PlatformFunctions::ShowPopupMessage(Title, Content); }
+void FSystem::PrintDebugOutput(const FString& Message) const noexcept { PlatformFunctions::PrintDebugOutput(Message); }
+void FSystem::ShowPopupMessage(const FString& Title, const FString& Content) const noexcept { PlatformFunctions::ShowPopupMessage(Title, Content); }
 
-std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FStringView Title) const noexcept
+std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FString Title) const noexcept
 {
 	return std::make_unique<FSystemWindow>(
 		PlatformFunctions::CreateWindowProcedure(),
-		Title);
+		std::move(Title));
 }
 
 FInput& FSystem::GetInput() noexcept

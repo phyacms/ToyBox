@@ -173,7 +173,9 @@ class FColor final
 public:
 	FColor() : FColor(sRGB::Color::White) {};
 	FColor(const FColor&) = default;
+	FColor& operator=(const FColor&) & = default;
 	FColor(FColor&&) noexcept = default;
+	FColor& operator=(FColor&&) & noexcept = default;
 	FColor(const sRGB::ColorVar& Var) : Var{ Var } {}
 	FColor(const sRGB::ColorValue& Value, sRGB::Format Format) : FColor()
 	{
@@ -188,8 +190,6 @@ public:
 	}
 	~FColor() noexcept = default;
 
-	FColor& operator=(const FColor&) & = default;
-	FColor& operator=(FColor&&) &noexcept = default;
 	template<typename... Ts>
 	inline FColor& operator=(Ts&&... Params) { Set(std::forward<Ts>(Params)...); return *this; }
 

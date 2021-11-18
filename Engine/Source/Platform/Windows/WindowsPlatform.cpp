@@ -19,7 +19,7 @@ void PlatformFunctions::RequestAppExit(std::int32_t ExitCode) noexcept
 		LPARAM{});
 }
 
-void PlatformFunctions::PrintDebugOutput(FStringView Message) noexcept
+void PlatformFunctions::PrintDebugOutput(const FString& Message) noexcept
 {
 	static std::mutex Mutex{};
 	std::unique_lock<std::mutex> Lock{ Mutex };
@@ -27,7 +27,7 @@ void PlatformFunctions::PrintDebugOutput(FStringView Message) noexcept
 	::OutputDebugStringW(TEXT("\n"));
 }
 
-void PlatformFunctions::ShowPopupMessage(FStringView Title, FStringView Content) noexcept
+void PlatformFunctions::ShowPopupMessage(const FString& Title, const FString& Content) noexcept
 {
 	::MessageBoxW(
 		nullptr,
@@ -41,7 +41,7 @@ std::unique_ptr<ISystemWindowProcedure> PlatformFunctions::CreateWindowProcedure
 	return std::make_unique<WindowsPlatform::FWndProc>();
 }
 
-std::optional<std::vector<char8_t>> PlatformFunctions::StringToUTF8(FStringView Str)
+std::optional<std::vector<char8_t>> PlatformFunctions::StringToUTF8(const FString& Str)
 {
 	auto RequiredBufferSize{ ::WideCharToMultiByte(
 		CP_UTF8,

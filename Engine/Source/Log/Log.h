@@ -25,7 +25,7 @@ public:
 	FLogStream(const FLogStream&) = delete;
 	FLogStream& operator=(const FLogStream&) & = delete;
 	FLogStream& operator=(FLogStream&&) & = delete;
-	virtual ~FLogStream() noexcept = default;
+	~FLogStream() noexcept = default;
 
 	template<typename T>
 	inline FLogStream operator<<(T&& Arg) &&
@@ -41,7 +41,7 @@ public:
 		}
 		else { static_assert(false); }
 	}
-	void operator<<(const FLogEndl& Endl) && noexcept;
+	void operator<<(const FLogEndl&) && noexcept;
 
 private:
 	FString Buffer;
@@ -61,8 +61,9 @@ public:
 	inline FLogStream operator<<(T&& Param) const { return FLogStream{} << std::forward<T>(Param); }
 
 public:
-	void SetIdentifier(FStringView Identifier);
-	inline FStringView GetIdentifier() const noexcept { return Identifier; }
+	inline void SetIdentifier(const FString& Identifier) { this->Identifier = Identifier; }
+	inline void SetIdentifier(FString&& Identifier) noexcept { this->Identifier = std::move(Identifier); }
+	inline const FString& GetIdentifier() const noexcept { return Identifier; }
 
 private:
 	FString Identifier;

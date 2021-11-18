@@ -42,7 +42,7 @@ class FSystemWindow final
 public:
 	FSystemWindow(
 		std::unique_ptr<ISystemWindowProcedure> WndProc,
-		FStringView Title);
+		FString Title);
 	~FSystemWindow() noexcept;
 
 	FSystemWindow(const FSystemWindow&) = delete;
@@ -52,7 +52,7 @@ public:
 
 public:
 	bool IsValid() const noexcept;
-	inline FStringView GetTitle() const noexcept { return Title; }
+	inline const FString& GetTitle() const noexcept { return Title; }
 
 	void Present() noexcept;
 	void Close() noexcept;
