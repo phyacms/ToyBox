@@ -14,10 +14,7 @@ class IInputController
 private:
 	struct FBindings;
 
-	using Iterator = FInputActionBindings::Iterator;
 	using ConstIterator = FInputActionBindings::ConstIterator;
-
-	using IteratorPair = FInputActionBindings::IteratorPair;
 	using ConstIteratorPair = FInputActionBindings::ConstIteratorPair;
 
 public:
@@ -35,8 +32,7 @@ public:
 			Actions.first,
 			[this]()->void { BindInputActions(Actions.second); }); }
 
-	inline IteratorPair GetIterators() noexcept { return Actions.second.GetIterators(); }
-	inline ConstIteratorPair GetIterators() const noexcept { return Actions.second.GetIterators(); }
+	inline ConstIteratorPair GetIterators() const& noexcept { return Actions.second.GetIterators(); }
 
 private:
 	virtual void BindInputActions(FInputActionBindings& Actions) = 0;

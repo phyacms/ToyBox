@@ -69,12 +69,13 @@ public:
 	inline bool IsValid() const noexcept { return IsReflected() && IsValidImpl(); }
 	void BindResource(ID3D11DeviceContext& Context) const noexcept;
 
-	inline ID3D11ShaderReflection& GetShaderReflector() const noexcept { return *Reflector.Get(); }
-	inline const D3D11_SHADER_DESC& GetShaderDescriptions() const noexcept { return ShaderDesc; }
+	inline ID3D11ShaderReflection& GetShaderReflector() const& noexcept { return *Reflector.Get(); }
+	inline const D3D11_SHADER_DESC& GetShaderDescriptions() const& noexcept { return ShaderDesc; }
+	inline D3D11_SHADER_DESC GetShaderDescriptions() const&& noexcept { return ShaderDesc; }
 
 	using ConstantBufferRef = std::optional<std::reference_wrapper<IDirect3D11ShaderConstantBuffer>>;
-	ConstantBufferRef QueryConstantBuffer(std::size_t SlotIndex) const noexcept;
-	inline ConstantBufferRef QueryConstantBuffer(std::string_view Name) const noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
+	ConstantBufferRef QueryConstantBuffer(std::size_t SlotIndex) const& noexcept;
+	inline ConstantBufferRef QueryConstantBuffer(std::string_view Name) const& noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
 	std::size_t QueryConstantBufferIndex(std::string_view Name) const noexcept;
 
 private:

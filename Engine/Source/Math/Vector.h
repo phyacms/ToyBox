@@ -90,18 +90,24 @@ public:
 		return operator*=(std::move(Divisors));
 	}
 
-	inline ValueType& operator[](std::size_t Index) { return Components[Index]; }
-	inline const ValueType& operator[](std::size_t Index) const { return Components[Index]; }
-
 public:
+	inline ValueType& operator[](std::size_t Index) & { return Components[Index]; }
+	inline const ValueType& operator[](std::size_t Index) const& { return Components[Index]; }
+
 	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline ValueType& At() noexcept { return At(Index); }
+	inline ValueType& At() & noexcept { return At(Index); }
 	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline const ValueType& At() const noexcept { return At(Index); }
-	inline ValueType& At(std::size_t Index) { return Components.at(Index); }
-	inline const ValueType& At(std::size_t Index) const { return Components.at(Index); }
+	inline const ValueType& At() const& noexcept { return At(Index); }
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline ValueType At() const&& noexcept { return At(Index); }
+
+	inline ValueType& At(std::size_t Index) & { return Components.at(Index); }
+	inline const ValueType& At(std::size_t Index) & const { return Components.at(Index); }
+	inline ValueType At(std::size_t Index) const&& { return Components.at(Index); }
+
 	EnumerateAxisIndex(DeclareAxisIndexOperations)
 
+public:
 	inline bool IsZero() const noexcept { return *this == TVector{}; }
 	inline bool IsNormalized() const noexcept { return LengthSq() == ValueType{ 1 }; }
 	inline ValueType LengthSq() const noexcept { return DotProduct(*this); }

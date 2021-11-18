@@ -44,7 +44,7 @@ public:
 	inline bool IsMouseButtonUp(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Up; }
 	inline bool IsMouseButtonDown(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Down; }
 
-	AInputController BindInputController(AObject<IInputController>&& Controller);
+	[[nodiscard]] AInputController BindInputController(AObject<IInputController>&& Controller);
 	void UnbindInputController(AInputController& Handle) noexcept;
 
 private:

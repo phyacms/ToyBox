@@ -18,7 +18,7 @@ public:
 	FInput& operator=(FInput&&) & noexcept = delete;
 
 public:
-	std::unique_ptr<FInputContext> CreateContext(FSystemWindow& OutputWindow);
+	[[nodiscard]] std::unique_ptr<FInputContext> CreateContext(FSystemWindow& OutputWindow) &;
 
 private:
 	FSystem* System;

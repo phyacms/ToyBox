@@ -4,13 +4,13 @@
 #include "Log.h"
 #include "Platform/Platform.h"
 
-const FLogEndl& FLogEndl::GetInstance()
+const FLog::FEndl& FLog::FEndl::GetInstance()
 {
-	static FLogEndl Instance{};
+	static FLog::FEndl Instance{};
 	return Instance;
 }
 
-void FLogStream::operator<<(const FLogEndl&) && noexcept
+void FLog::FStream::operator<<(const FEndl&) && noexcept
 {
 	PlatformFunctions::PrintDebugOutput(std::move(Buffer));
 }

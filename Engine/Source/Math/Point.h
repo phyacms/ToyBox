@@ -33,7 +33,8 @@ public:
 	friend inline bool operator==(const TPoint& Lhs, const TPoint& Rhs) noexcept = default;
 	friend inline bool operator!=(const TPoint& Lhs, const TPoint& Rhs) noexcept = default;
 
-	inline TPoint operator+() const { return *this; }
+	inline const TPoint& operator+() const& { return *this; }
+	inline TPoint operator+() const&& { return *this; }
 	inline TPoint operator-() const { return TPoint{ -Coord }; }
 
 	inline TPoint operator+(const CompatibleVectorType& V) const { TPoint P{ *this }; P += V; return P; }
@@ -53,18 +54,25 @@ public:
 	inline TPoint& operator/=(const ValueType& Divisor) & { Coord /= Divisor; return *this; }
 	inline TPoint& operator/=(const CompatibleVectorType& Divisors) & { Coord /= Divisors; return *this; }
 
-	inline ValueType& operator[](std::size_t Index) { return Coord.operator[](Index); }
-	inline const ValueType& operator[](std::size_t Index) const { return Coord.operator[](Index); }
-
 public:
+	inline ValueType& operator[](std::size_t Index) & { return Coord.operator[](Index); }
+	inline const ValueType& operator[](std::size_t Index) const& { return Coord.operator[](Index); }
+
 	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline ValueType& At() noexcept { return At(Index); }
+	inline ValueType& At() & noexcept { return At(Index); }
 	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline const ValueType& At() const noexcept { return At(Index); }
+	inline const ValueType& At() const& noexcept { return At(Index); }
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline ValueType At() const&& noexcept { return At(Index); }
+
 	inline ValueType& At(std::size_t Index) { return Coord.At(Index); }
-	inline const ValueType& At(std::size_t Index) const { return Coord.At(Index); }
+	inline const ValueType& At(std::size_t Index) const& { return Coord.At(Index); }
+	inline ValueType& At(std::size_t Index) { return Coord.At(Index); }
+	inline ValueType At(std::size_t Index) const&& { return Coord.At(Index); }
+
 	EnumerateAxisIndex(DeclareAxisIndexOperations)
 
+public:
 	inline bool IsOrigin() const noexcept { return Coord.IsZero(); }
 	inline ValueType DistanceSq(const TPoint& P = TPoint{}) const { return operator-(P).LengthSquare(); }
 	inline ValueType Distance(const TPoint& P = TPoint{}) const { return operator-(P).Length(); }

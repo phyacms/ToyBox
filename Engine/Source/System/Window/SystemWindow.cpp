@@ -58,7 +58,10 @@ FSystemWindow::FSystemWindow(std::unique_ptr<ISystemWindowProcedure> WndProc, FS
 
 FSystemWindow::~FSystemWindow() noexcept
 {
-	WndProc->Terminate(*this);
+	if (WndProc != nullptr)
+	{
+		WndProc->Terminate(*this);
+	}
 }
 
 bool FSystemWindow::IsValid() const noexcept

@@ -21,7 +21,7 @@ public:
 
 public:
 	bool SetRendererType(EGraphicsRendererType RendererType) noexcept;
-	[[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow);
+	[[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) &;
 
 private:
 	FSystem* System;

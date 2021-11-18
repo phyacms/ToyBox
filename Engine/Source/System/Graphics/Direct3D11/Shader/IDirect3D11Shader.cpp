@@ -118,7 +118,7 @@ void IDirect3D11Shader::BindResource(ID3D11DeviceContext& Context) const noexcep
 	}
 }
 
-IDirect3D11Shader::ConstantBufferRef IDirect3D11Shader::QueryConstantBuffer(std::size_t SlotIndex) const noexcept
+IDirect3D11Shader::ConstantBufferRef IDirect3D11Shader::QueryConstantBuffer(std::size_t SlotIndex) const& noexcept
 {
 	if (ConstBuf.Objects.contains(SlotIndex)) { return std::ref(*ConstBuf.Objects.at(SlotIndex)); }
 	else { return std::nullopt; }

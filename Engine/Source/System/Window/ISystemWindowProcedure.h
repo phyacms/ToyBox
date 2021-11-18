@@ -25,7 +25,7 @@ public:
 	virtual void Present() noexcept = 0;
 	virtual void Close() noexcept = 0;
 
-	FSystemWindow& GetWindow() noexcept { return *OwnerWindow; }
+	FSystemWindow& GetWindow() & noexcept { return *OwnerWindow; }
 
 private:
 	virtual bool IsValidImpl() const noexcept = 0;

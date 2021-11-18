@@ -165,7 +165,7 @@ bool FDirect3D11Renderer::IsValid() const noexcept
 		|| !DWriteFactory);
 }
 
-std::unique_ptr<IGraphicsContext> FDirect3D11Renderer::CreateContext(FSystemWindow& OutputWindow)
+std::unique_ptr<IGraphicsContext> FDirect3D11Renderer::CreateContext(FSystemWindow& OutputWindow) &
 {
 	return std::make_unique<FDirect3D11SwapChain>(*this, OutputWindow);
 }

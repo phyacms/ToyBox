@@ -26,16 +26,16 @@ private:
 
 public:
 	virtual bool IsValid() const noexcept override final;
-	virtual [[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) override final;
+	virtual [[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) & override final;
 
-	inline IDXGIFactory1& GetFactory() const noexcept { return *Factory.Get(); }
-	inline IDXGIAdapter1& GetAdapter() const noexcept { return *Adapter.Get(); }
+	inline IDXGIFactory1& GetFactory() const& noexcept { return *Factory.Get(); }
+	inline IDXGIAdapter1& GetAdapter() const& noexcept { return *Adapter.Get(); }
 
-	inline ID3D11Device& GetDevice() const noexcept { return *Device.Get(); }
-	inline ID3D11DeviceContext& GetDeviceContext() const noexcept { return *Context.Get(); }
+	inline ID3D11Device& GetDevice() const& noexcept { return *Device.Get(); }
+	inline ID3D11DeviceContext& GetDeviceContext() const& noexcept { return *Context.Get(); }
 
-	inline ID2D1Factory& GetD2D1Factory() const noexcept { return *D2D1Factory.Get(); }
-	inline IDWriteFactory& GetDWriteFactory() const noexcept { return *DWriteFactory.Get(); }
+	inline ID2D1Factory& GetD2D1Factory() const& noexcept { return *D2D1Factory.Get(); }
+	inline IDWriteFactory& GetDWriteFactory() const& noexcept { return *DWriteFactory.Get(); }
 
 	inline bool AllowsTearing() const noexcept { return bAllowTearing; }
 

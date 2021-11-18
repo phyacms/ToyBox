@@ -29,9 +29,9 @@ public:
 	void PrintDebugOutput(const FString& Message) const noexcept;
 	void ShowPopupMessage(const FString& Title, const FString& Content) const noexcept;
 
-	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FString Title) const noexcept;
-	FInput& GetInput() noexcept;
-	FGraphics& GetGraphics() noexcept;
+	[[nodiscard]] std::unique_ptr<FSystemWindow> CreateWindow(FString Title) const& noexcept;
+	FInput& GetInput() & noexcept;
+	FGraphics& GetGraphics() & noexcept;
 
 private:
 	std::unique_ptr<FInput> Input;

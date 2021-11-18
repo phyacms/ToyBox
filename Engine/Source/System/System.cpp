@@ -24,14 +24,14 @@ void FSystem::RequestAppExit(std::int32_t ExitCode) const noexcept { PlatformFun
 void FSystem::PrintDebugOutput(const FString& Message) const noexcept { PlatformFunctions::PrintDebugOutput(Message); }
 void FSystem::ShowPopupMessage(const FString& Title, const FString& Content) const noexcept { PlatformFunctions::ShowPopupMessage(Title, Content); }
 
-std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FString Title) const noexcept
+std::unique_ptr<FSystemWindow> FSystem::CreateWindow(FString Title) const& noexcept
 {
 	return std::make_unique<FSystemWindow>(
 		PlatformFunctions::CreateWindowProcedure(),
 		std::move(Title));
 }
 
-FInput& FSystem::GetInput() noexcept
+FInput& FSystem::GetInput() & noexcept
 {
 	if (Input == nullptr)
 	{
@@ -40,7 +40,7 @@ FInput& FSystem::GetInput() noexcept
 	return *Input;
 }
 
-FGraphics& FSystem::GetGraphics() noexcept
+FGraphics& FSystem::GetGraphics() & noexcept
 {
 	if (Graphics == nullptr)
 	{

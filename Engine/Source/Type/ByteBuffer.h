@@ -32,13 +32,16 @@ public:
 	template<typename T>
 	inline FByteBuffer& operator+=(T&& Param) { return Append(std::forward<T>(Param)); }
 
-	inline Byte& operator[](std::size_t BytePos) { return Buffer[BytePos]; }
-	inline const Byte& operator[](std::size_t BytePos) const { return Buffer[BytePos]; }
+public:
+	inline Byte& operator[](std::size_t BytePos) & { return Buffer[BytePos]; }
+	inline const Byte& operator[](std::size_t BytePos) const& { return Buffer[BytePos]; }
+	inline Byte operator[](std::size_t BytePos) const&& { return Buffer[BytePos]; }
+
+	inline Byte& At(std::size_t BytePos) & { return Buffer.at(BytePos); }
+	inline const Byte& At(std::size_t BytePos) const& { return Buffer.at(BytePos); }
+	inline Byte At(std::size_t BytePos) const&& { return Buffer.at(BytePos); }
 
 public:
-	inline Byte& At(std::size_t BytePos) { return Buffer.at(BytePos); }
-	inline const Byte& At(std::size_t BytePos) const { return Buffer.at(BytePos); }
-
 	inline bool IsEmpty() const noexcept { return CurrentSize == 0; }
 	inline std::size_t GetByteSize() const noexcept { return CurrentSize; }
 
@@ -71,9 +74,9 @@ public:
 
 	void Swap(FByteBuffer& Other) noexcept;
 
-	inline Byte* GetPtr() noexcept { return Buffer.data(); }
-	inline const Byte* GetPtr() const noexcept { return Buffer.data(); }
-	inline FIOContext& GetIOContext() const noexcept { return IOContext; }
+	inline Byte* GetPtr() & noexcept { return Buffer.data(); }
+	inline const Byte* GetPtr() const& noexcept { return Buffer.data(); }
+	inline FIOContext& GetIOContext() const& noexcept { return IOContext; }
 
 private:
 	std::vector<Byte> Buffer;

@@ -74,8 +74,9 @@ public:
 	inline std::size_t GetCharacterCount() const noexcept { return Length<EStringLength::CodePoint>(); }
 	inline std::size_t GetByteSize() const noexcept { return Length<EStringLength::CodeUnit>(); }
 
-	inline const StringType& GetStr() const noexcept { return Str; }
-	inline const CodeUnit* GetPtr() const noexcept { return GetStr().c_str(); }
+	inline const StringType& GetStr() const& noexcept { return Str; }
+	inline StringType GetStr() const&& noexcept { return Str; }
+	inline const CodeUnit* GetPtr() const& noexcept { return GetStr().c_str(); }
 
 	// @NOTE: Serialization/Deserialization is performed via UTF-8 encoding/decoding.
 	virtual bool Deserialize(const FByteBuffer& Bytes) override final;

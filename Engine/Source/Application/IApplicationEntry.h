@@ -25,7 +25,7 @@ public:
 		typename T,
 		typename... Ts,
 		typename = std::enable_if_t<std::is_base_of_v<IApplication, T>>>
-		inline std::int32_t Launch(Ts&&... Params)
+	inline [[nodiscard]] std::int32_t Launch(Ts&&... Params)
 	{
 		if (Application != nullptr)
 		{
@@ -36,7 +36,7 @@ public:
 	}
 
 protected:
-	struct FEntryGuard final
+	[[nodiscard]] struct FEntryGuard final
 	{
 		friend class IApplicationEntry;
 

@@ -191,7 +191,7 @@ public:
 	~FColor() noexcept = default;
 
 	template<typename... Ts>
-	inline FColor& operator=(Ts&&... Params) { Set(std::forward<Ts>(Params)...); return *this; }
+	inline FColor& operator=(Ts&&... Params) & { Set(std::forward<Ts>(Params)...); return *this; }
 
 public:
 	inline void Set(const FColor& Other) { if (this != &Other) { Set(Other.Var); } }

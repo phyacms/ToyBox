@@ -13,7 +13,7 @@ FInput::~FInput() noexcept
 {
 }
 
-std::unique_ptr<FInputContext> FInput::CreateContext(FSystemWindow& InputWindow)
+std::unique_ptr<FInputContext> FInput::CreateContext(FSystemWindow& InputWindow) &
 {
 	auto Context{ std::make_unique<FInputContext>(*this, InputWindow) };
 	if (Context != nullptr && Context->IsValid())

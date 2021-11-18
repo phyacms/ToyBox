@@ -45,7 +45,7 @@ bool FGraphics::SetRendererType(EGraphicsRendererType RendererType) noexcept
 	}
 }
 
-std::unique_ptr<IGraphicsContext> FGraphics::CreateContext(FSystemWindow& OutputWindow)
+std::unique_ptr<IGraphicsContext> FGraphics::CreateContext(FSystemWindow& OutputWindow) &
 {
 	if (Renderer != nullptr)
 	{

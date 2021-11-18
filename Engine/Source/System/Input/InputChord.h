@@ -24,8 +24,10 @@ public:
 	FInputChord& AddModifier(FInputCode InputCode) noexcept;
 	FInputChord& RemoveModifier(FInputCode InputCode) noexcept;
 
-	inline const FInputTrigger& GetTrigger() const noexcept { return Trigger; }
-	inline const FInputCodes& GetModifiers() const noexcept { return Modifiers; }
+	inline const FInputTrigger& GetTrigger() const& noexcept { return Trigger; }
+	inline FInputTrigger GetTrigger() const&& noexcept { return Trigger; }
+	inline const FInputCodes& GetModifiers() const& noexcept { return Modifiers; }
+	inline FInputCodes GetModifiers() const&& noexcept { return Modifiers; }
 
 private:
 	FInputTrigger Trigger;

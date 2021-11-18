@@ -20,7 +20,7 @@ public:
 	virtual ~FDirect3D11SwapChain() noexcept;
 
 	FDirect3D11SwapChain(FDirect3D11SwapChain&&) noexcept = default;
-	FDirect3D11SwapChain& operator=(FDirect3D11SwapChain&&) noexcept = default;
+	FDirect3D11SwapChain& operator=(FDirect3D11SwapChain&&) & noexcept = default;
 
 private:
 	bool Initialize() noexcept;
@@ -38,8 +38,8 @@ private:
 
 public:
 	inline FDirect3D11Renderer& GetRenderer() const noexcept { return *Renderer; }
-	inline IDXGISwapChain& GetSwapChain() const noexcept { return *SwapChain.Get(); }
-	inline ID2D1RenderTarget& GetD2DRenderTarget() const noexcept { return *D2DRenderTarget.Get(); }
+	inline IDXGISwapChain& GetSwapChain() const& noexcept { return *SwapChain.Get(); }
+	inline ID2D1RenderTarget& GetD2DRenderTarget() const& noexcept { return *D2DRenderTarget.Get(); }
 
 private:
 	FDirect3D11Renderer* Renderer;

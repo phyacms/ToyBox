@@ -21,7 +21,7 @@ public:
 	IMulticastDelegate& operator=(IMulticastDelegate&&) & noexcept = delete;
 
 public:
-	virtual void RemoveDynamic(ADelegateHandle& Handle) noexcept = 0;
+	virtual void RemoveDynamic(ADelegateHandle& Handle) & noexcept = 0;
 
 protected:
 	ADelegateHandle Issue();
@@ -134,7 +134,7 @@ public:
 	inline R operator()(Ts... Params) const { return Broadcast(std::forward<Ts>(Params...)); }
 
 public:
-	[[nodiscard]] ADelegateHandle AddDynamic(CompatibleDelegateType Delegate)
+	[[nodiscard]] ADelegateHandle AddDynamic(CompatibleDelegateType Delegate) &
 	{
 		ADelegateHandle Issued{ Issue() };
 		if (Issued.IsValid())
@@ -143,7 +143,7 @@ public:
 		}
 		return Issued;
 	}
-	inline virtual void RemoveDynamic(ADelegateHandle& Handle) noexcept override final
+	inline virtual void RemoveDynamic(ADelegateHandle& Handle) & noexcept override final
 	{
 		auto Index{ Revoke(Handle) };
 		if (Index != ADelegateHandle::InvalidHandle)
