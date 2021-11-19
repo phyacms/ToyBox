@@ -279,5 +279,8 @@
     <ClCompile Include="Source\System\Input\InputTrigger.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Type\Color.cpp">
+      <Filter>Source\Type</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

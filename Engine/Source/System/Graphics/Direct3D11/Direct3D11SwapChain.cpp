@@ -289,9 +289,7 @@ void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 
 	auto& Context = GetRenderer().GetDeviceContext();
 
-	Context.ClearRenderTargetView(
-		RenderTargetView.Get(),
-		ClearColor.GetAs<sRGB::normal4, sRGB::Format::RGBA>().Normals.data());
+	Context.ClearRenderTargetView(RenderTargetView.Get(), ClearColor.GetPtr());
 	Context.ClearDepthStencilView(
 		DepthStencilView.Get(),
 		D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL,

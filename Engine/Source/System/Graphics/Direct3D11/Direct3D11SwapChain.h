@@ -33,7 +33,7 @@ private:
 	virtual bool IsValidImpl() const noexcept override final;
 	virtual void ResizeBuffer(const FScreenSize& ClientAreaSize) override final;
 
-	virtual void BeginScene(const FColor& ClearColor = FColor{ sRGB::Color::CornflowerBlue }) const override final;
+	virtual void BeginScene(const FColor& ClearColor = FColor{ ColorCodes::CornflowerBlue }) const override final;
 	virtual void EndScene() const override final;
 
 public:
@@ -47,15 +47,15 @@ private:
 	TComPtr<IDXGISwapChain> SwapChain;
 	UINT PresentFlags;
 
-	TComPtr<ID3D11Resource> BackBuffer{};
-	TComPtr<ID3D11RenderTargetView> RenderTargetView{};
-	TComPtr<ID3D11DepthStencilState> DepthStencilState{};
-	TComPtr<ID3D11DepthStencilView> DepthStencilView{};
-	TComPtr<ID3D11RasterizerState> RasterizerState{};
-	TComPtr<ID3D11BlendState> BlendState{};
-	D3D11_VIEWPORT Viewport{};
-	D3D11_RECT ScissorRect{};
-	TComPtr<ID2D1RenderTarget> D2DRenderTarget{};
+	TComPtr<ID3D11Resource> BackBuffer;
+	TComPtr<ID3D11RenderTargetView> RenderTargetView;
+	TComPtr<ID3D11DepthStencilState> DepthStencilState;
+	TComPtr<ID3D11DepthStencilView> DepthStencilView;
+	TComPtr<ID3D11RasterizerState> RasterizerState;
+	TComPtr<ID3D11BlendState> BlendState;
+	D3D11_VIEWPORT Viewport;
+	D3D11_RECT ScissorRect;
+	TComPtr<ID2D1RenderTarget> D2DRenderTarget;
 };
 
 #endif

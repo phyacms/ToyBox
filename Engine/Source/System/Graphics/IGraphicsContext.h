@@ -24,7 +24,7 @@ public:
 public:
 	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
 
-	virtual void BeginScene(const FColor& ClearColor = FColor{ sRGB::Color::CornflowerBlue }) const = 0;
+	virtual void BeginScene(const FColor& ClearColor = ColorCodes::CornflowerBlue) const = 0;
 	virtual void EndScene() const = 0;
 
 protected:
