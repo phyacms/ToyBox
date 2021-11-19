@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "ByteBuffer.h"
+
 enum class EColorByteOrder : std::size_t { ARGB, RGBA };
 
 struct FColorCode final
@@ -25,6 +27,7 @@ namespace ColorCodes
 
 // Represents 32-bit color.
 class FColor final
+	: public ISerializable
 {
 public:
 	using UNorms = std::array<float, 4>;
@@ -54,6 +57,10 @@ public:
 
 	// @NOTE: Returns pointer to RGBA normals.
 	inline const float* GetPtr() const noexcept { return Norms.data(); }
+
+	// @NOTE: Serialization/Deserialization is performed via conversion from/to ARGB color code.
+	virtual bool Deserialize(const FByteBuffer& Bytes) override final;
+	virtual [[nodiscard]] FByteBuffer Serialize() const override final;
 
 private:
 	UNorms Norms;

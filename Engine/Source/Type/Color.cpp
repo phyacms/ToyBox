@@ -2,7 +2,6 @@
 
 #include "Engine.h"
 #include "Color.h"
-#include "Byte.h"
 
 FColor::UNorms FColor::ConvertByteOrder(UNorms Norms, EColorByteOrder From, EColorByteOrder To)
 {
@@ -80,4 +79,20 @@ FColorCode FColor::GetAsColorCode(EColorByteOrder ByteOrder) const noexcept
 FColor::UNorms FColor::GetAsNormals(EColorByteOrder ByteOrder) const noexcept
 {
 	return ConvertByteOrder(Norms, DefaultByteOrder, ByteOrder);
+}
+
+bool FColor::Deserialize(const FByteBuffer& Bytes)
+{
+	Set(FColorCode{
+		.Code{ Bytes.ReadAs<std::uint32_t>(0) },
+		.ByteOrder{ EColorByteOrder::ARGB } });
+	return true;
+}
+
+FByteBuffer FColor::Serialize() const
+{
+	FByteBuffer Buffer{};
+	Buffer.Reserve(sizeof(std::uint32_t));
+	Buffer.Append(GetAsColorCode(EColorByteOrder::ARGB).Code);
+	return Buffer;
 }
