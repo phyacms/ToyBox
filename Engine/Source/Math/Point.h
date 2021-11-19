@@ -75,7 +75,8 @@ public:
 public:
 	inline bool IsOrigin() const noexcept { return Coord.IsZero(); }
 	inline ValueType DistanceSq(const TPoint& P = TPoint{}) const { return operator-(P).LengthSq(); }
-	inline ValueType Distance(const TPoint& P = TPoint{}) const { return operator-(P).Length(); }
+	template<typename T = CompatibleVectorType::LengthType>
+	inline T Distance(const TPoint& P = TPoint{}) const { return operator-(P).Length<T>(); }
 	inline const CompatibleVectorType& FromOrigin() const noexcept { return Coord; }
 
 private:

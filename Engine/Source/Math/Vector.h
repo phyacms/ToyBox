@@ -10,7 +10,13 @@ class TVector final
 {
 public:
 	using ValueType = T;
-	static_assert(std::is_floating_point_v<ValueType>);
+	static_assert(std::is_arithmetic_v<ValueType>);
+
+	using LengthType = std::conditional_t<
+		std::is_floating_point_v<ValueType>,
+		ValueType,
+		double>;
+
 	inline static constexpr auto Dimension{ N };
 
 public:
@@ -112,7 +118,8 @@ public:
 	inline bool IsZero() const noexcept { return *this == TVector{}; }
 	inline bool IsNormalized() const noexcept { return LengthSq() == ValueType{ 1 }; }
 	inline ValueType LengthSq() const noexcept { return DotProduct(*this); }
-	inline ValueType Length() const noexcept { return std::sqrt(LengthSq()); }
+	template<typename T = LengthType>
+	inline T Length() const noexcept { return static_cast<T>(std::sqrt(static_cast<LengthType>(LengthSq()))); }
 	inline TVector Normalized() const { TVector U{ *this }; U.Normalize(); return U; }
 	inline ValueType DotProduct(const TVector& V) const { return operator*(V).Summation(); }
 	template<typename RetType = std::enable_if_t<Dimension == 3, TVector>>
