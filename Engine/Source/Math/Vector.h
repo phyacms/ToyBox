@@ -93,17 +93,18 @@ public:
 public:
 	inline ValueType& operator[](std::size_t Index) & { return Components[Index]; }
 	inline const ValueType& operator[](std::size_t Index) const& { return Components[Index]; }
-
-	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline ValueType& At() & noexcept { return At(Index); }
-	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline const ValueType& At() const& noexcept { return At(Index); }
-	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline ValueType At() const&& noexcept { return At(Index); }
+	inline ValueType operator[](std::size_t Index) const&& { return Components[Index]; }
 
 	inline ValueType& At(std::size_t Index) & { return Components.at(Index); }
-	inline const ValueType& At(std::size_t Index) & const { return Components.at(Index); }
+	inline const ValueType& At(std::size_t Index) const& { return Components.at(Index); }
 	inline ValueType At(std::size_t Index) const&& { return Components.at(Index); }
+
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline ValueType& At() & { return std::get<Index>(Components); }
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline const ValueType& At() const& { return std::get<Index>(Components); }
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline ValueType At() const&& { return std::get<Index>(Components); }
 
 	EnumerateAxisIndex(DeclareAxisIndexOperations)
 
@@ -147,8 +148,8 @@ public:
 			std::multiplies<ValueType>{});
 	}
 
-	inline TVector& Normalize() & noexcept { return operator/=(Length()); }
+	inline TVector& Normalize() noexcept { return operator/=(Length()); }
 
 private:
-	std::array<T, N> Components;
+	std::array<ValueType, Dimension> Components;
 };

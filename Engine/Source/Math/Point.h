@@ -21,9 +21,9 @@ public:
 		typename = std::enable_if_t<sizeof...(Parameters) == Dimension>>
 	explicit TPoint(Parameters&&... Params) : Coord{ std::forward<Parameters>(Params)... } {}
 	explicit TPoint(const CompatibleVectorType& V) : Coord{ V } {}
-	explicit TPoint& operator=(const CompatibleVectorType& V) & { Coord = V; return *this; }
-	explicit TPoint(CompatibleVectorType&& V) noexcept { Coord = std::move(V); return *this; }
-	explicit TPoint& operator=(CompatibleVectorType&& V) & noexcept : Coord{ std::move(V) } {}
+	TPoint& operator=(const CompatibleVectorType& V) & { Coord = V; return *this; }
+	explicit TPoint(CompatibleVectorType&& V) noexcept : Coord{ std::move(V) } {}
+	TPoint& operator=(CompatibleVectorType&& V) & noexcept { Coord = std::move(V); return *this; }
 	TPoint(const TPoint&) = default;
 	TPoint& operator=(const TPoint&) & = default;
 	TPoint(TPoint&&) noexcept = default;
@@ -55,26 +55,26 @@ public:
 	inline TPoint& operator/=(const CompatibleVectorType& Divisors) & { Coord /= Divisors; return *this; }
 
 public:
-	inline ValueType& operator[](std::size_t Index) & { return Coord.operator[](Index); }
-	inline const ValueType& operator[](std::size_t Index) const& { return Coord.operator[](Index); }
+	inline ValueType& operator[](std::size_t Index) & { return Coord[Index]; }
+	inline const ValueType& operator[](std::size_t Index) const& { return Coord[Index]; }
+	inline ValueType operator[](std::size_t Index) const&& { return Coord[Index]; }
 
-	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline ValueType& At() & noexcept { return At(Index); }
-	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline const ValueType& At() const& noexcept { return At(Index); }
-	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
-	inline ValueType At() const&& noexcept { return At(Index); }
-
-	inline ValueType& At(std::size_t Index) { return Coord.At(Index); }
+	inline ValueType& At(std::size_t Index) & { return Coord.At(Index); }
 	inline const ValueType& At(std::size_t Index) const& { return Coord.At(Index); }
-	inline ValueType& At(std::size_t Index) { return Coord.At(Index); }
 	inline ValueType At(std::size_t Index) const&& { return Coord.At(Index); }
+
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline ValueType& At() & { return Coord.At<Index>(); }
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline const ValueType& At() const& { return Coord.At<Index>(); }
+	template<std::size_t Index, typename = std::enable_if_t<Index < Dimension>>
+	inline ValueType At() const&& { return Coord.At<Index>(); }
 
 	EnumerateAxisIndex(DeclareAxisIndexOperations)
 
 public:
 	inline bool IsOrigin() const noexcept { return Coord.IsZero(); }
-	inline ValueType DistanceSq(const TPoint& P = TPoint{}) const { return operator-(P).LengthSquare(); }
+	inline ValueType DistanceSq(const TPoint& P = TPoint{}) const { return operator-(P).LengthSq(); }
 	inline ValueType Distance(const TPoint& P = TPoint{}) const { return operator-(P).Length(); }
 	inline const CompatibleVectorType& FromOrigin() const noexcept { return Coord; }
 
