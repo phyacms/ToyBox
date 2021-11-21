@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Type/Object.h"
-#include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
 #include "IInputController.h"
 

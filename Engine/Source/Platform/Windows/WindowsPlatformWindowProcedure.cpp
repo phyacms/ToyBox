@@ -5,7 +5,6 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
 #include "System/Input/SwitchState.h"
 #include "System/Input/InputTrigger.h"
@@ -184,10 +183,10 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 			if (wParam != SIZE_MINIMIZED)
 			{
 				FOnResized OnResized{
-					.ClientAreaSize{
-						.Width{ static_cast<std::uint32_t>(LOWORD(lParam)) },
-						.Height{ static_cast<std::uint32_t>(HIWORD(lParam)) }} };
-				if (OnResized.ClientAreaSize.Width != 0 && OnResized.ClientAreaSize.Height != 0)
+					.ClientAreaSize{ FScreenSize{
+						static_cast<std::uint32_t>(LOWORD(lParam)),
+						static_cast<std::uint32_t>(HIWORD(lParam)) } } };
+				if (OnResized.ClientAreaSize.Multiplication() != 0)
 				{
 					Window.Events.Enqueue(std::move(OnResized));
 				}
@@ -340,10 +339,11 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 			break;
 	}
 
-	Window.Events.Enqueue(FOnMouseMove{
-		.CursorLocation{ FScreenLocation{
-			.X{ GET_X_LPARAM(lParam) },
-			.Y{ GET_Y_LPARAM(lParam) }} } });
+	Window.Events.Enqueue(
+		FOnMouseMove{
+			.CursorLocation{ FScreenLocation{
+				GET_X_LPARAM(lParam),
+				GET_Y_LPARAM(lParam) } } });
 	while (!Stack.empty())
 	{
 		Window.Events.Enqueue(std::move(Stack.top()));

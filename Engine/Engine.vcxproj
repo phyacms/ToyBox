@@ -126,7 +126,6 @@
     <ClInclude Include="Source\System\Input\SwitchState.h" />
     <ClInclude Include="Source\System\System.h" />
     <ClInclude Include="Source\System\Window\ISystemWindowProcedure.h" />
-    <ClInclude Include="Source\System\Window\ScreenSpace.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
     <ClInclude Include="Source\Type\Byte.h" />
     <ClInclude Include="Source\Type\ByteBuffer.h" />

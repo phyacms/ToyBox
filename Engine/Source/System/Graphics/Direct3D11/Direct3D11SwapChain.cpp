@@ -271,8 +271,8 @@ void FDirect3D11SwapChain::ResizeBuffer(const FScreenSize& ClientAreaSize)
 		{
 			if (SUCCEEDED(SwapChain->ResizeBuffers(
 				0,
-				static_cast<UINT>(ClientAreaSize.Width),
-				static_cast<UINT>(ClientAreaSize.Height),
+				ClientAreaSize.X<UINT>(),
+				ClientAreaSize.Y<UINT>(),
 				SwapChainDesc.BufferDesc.Format,
 				SwapChainDesc.Flags)))
 			{

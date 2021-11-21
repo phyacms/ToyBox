@@ -4,7 +4,6 @@
 
 #include "Type/Object.h"
 #include "Type/Color.h"
-#include "System/Window/ScreenSpace.h"
 #include "System/Window/SystemWindow.h"
 #include "IGraphicsRenderer.h"
 

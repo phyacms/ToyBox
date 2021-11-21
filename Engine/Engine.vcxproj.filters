@@ -169,9 +169,6 @@
     <ClInclude Include="Source\System\Input\InputContext.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Window\ScreenSpace.h">
-      <Filter>Source\System\Window</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\Input\MouseButton.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
