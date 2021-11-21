@@ -33,7 +33,14 @@ public:
 	FInput& GetInput() & noexcept;
 	FGraphics& GetGraphics() & noexcept;
 
+	inline double GetMaximumTickRate() const noexcept { return MaximumTickRate; }
+	inline double GetMaximumFrameRate() const noexcept { return MaximumFrameRate; }
+
 private:
 	std::unique_ptr<FInput> Input;
 	std::unique_ptr<FGraphics> Graphics;
+
+	// @TODO: Engine configuration.
+	double MaximumTickRate;
+	double MaximumFrameRate;
 };

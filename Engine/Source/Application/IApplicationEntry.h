@@ -60,12 +60,14 @@ protected:
 	CreateEntryGuard(IApplication& Application);
 
 private:
-	void BeginThreads();
-	void EndThreads() noexcept;
+	virtual bool Initialize() noexcept = 0;
+	virtual void Terminate() noexcept = 0;
 
-private:
 	virtual FCommandLineArgs ParseCommandLine() const noexcept = 0;
 	virtual std::int32_t AppMain(IApplication& Application) = 0;
+
+	void BeginThreads();
+	void EndThreads() noexcept;
 
 private:
 	FSystem System;
@@ -75,10 +77,6 @@ private:
 	std::thread GameThread;
 	std::thread RenderThread;
 	std::mutex Mutex;
-
-	// @TODO: Engine configuration.
-	double TickRate;
-	double FrameRate;
 };
 
 #endif

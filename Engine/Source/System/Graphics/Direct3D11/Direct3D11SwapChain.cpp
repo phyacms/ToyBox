@@ -71,25 +71,26 @@ bool FDirect3D11SwapChain::CreateSwapChain() noexcept
 		: 0;
 
 	// Create swap chain.
-	DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
-	SwapChainDesc.BufferDesc.Width = 0;
-	SwapChainDesc.BufferDesc.Height = 0;
-	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
-	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 1;
-	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 0;
-	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
-	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	SwapChainDesc.SampleDesc.Count = 1;
-	SwapChainDesc.SampleDesc.Quality = 0;
-	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	SwapChainDesc.BufferCount = 2;
-	SwapChainDesc.OutputWindow = hWnd;
-	SwapChainDesc.Windowed = TRUE;
-	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	SwapChainDesc.Flags = bAllowTearing
-		? DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING
-		: 0;
-
+	DXGI_SWAP_CHAIN_DESC SwapChainDesc
+	{
+		.BufferDesc{
+			.Width{},
+			.Height{},
+			.RefreshRate{ .Numerator{ 1 }, .Denominator{} },
+			.Format{ DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM },
+			.ScanlineOrdering{ DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED },
+			.Scaling{ DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED } },
+		.SampleDesc{ .Count{ 1 }, .Quality{} },
+		.BufferUsage{ DXGI_USAGE_RENDER_TARGET_OUTPUT },
+		.BufferCount{ 2 },
+		.OutputWindow{ hWnd },
+		.Windowed{ TRUE },
+		.SwapEffect{ DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD },
+		.Flags{
+			bAllowTearing
+			? DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING
+			: UINT{}},
+	};
 	if (FAILED(Factory.CreateSwapChain(&Device, &SwapChainDesc, &SwapChain)))
 	{
 		return false;
@@ -122,37 +123,43 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	}
 
 	// Depth-stencil state.
-	D3D11_DEPTH_STENCIL_DESC DepthStencilDesc{};
-	DepthStencilDesc.DepthEnable = TRUE;
-	DepthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
-	DepthStencilDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
+	D3D11_DEPTH_STENCIL_DESC DepthStencilDesc{
+		.DepthEnable{ TRUE },
+		.DepthWriteMask{ D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL },
+		.DepthFunc{ D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS },
+		.StencilEnable{},
+		.StencilReadMask{},
+		.StencilWriteMask{},
+		.FrontFace{},
+		.BackFace{} };
 	if (FAILED(Device.CreateDepthStencilState(&DepthStencilDesc, &DepthStencilState)))
 	{
 		return false;
 	}
 
 	TComPtr<ID3D11Texture2D> DepthStencilBuffer;
-	D3D11_TEXTURE2D_DESC DepthStencilBufferDesc{};
-	DepthStencilBufferDesc.Width = SwapChainDesc.BufferDesc.Width;
-	DepthStencilBufferDesc.Height = SwapChainDesc.BufferDesc.Height;
-	DepthStencilBufferDesc.MipLevels = 1;
-	DepthStencilBufferDesc.ArraySize = 1;
-	DepthStencilBufferDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
-	DepthStencilBufferDesc.SampleDesc = SwapChainDesc.SampleDesc;
-	DepthStencilBufferDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
-	DepthStencilBufferDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-	DepthStencilBufferDesc.CPUAccessFlags = 0;
-	DepthStencilBufferDesc.MiscFlags = 0;
+	D3D11_TEXTURE2D_DESC DepthStencilBufferDesc{
+		.Width{ SwapChainDesc.BufferDesc.Width },
+		.Height{ SwapChainDesc.BufferDesc.Height },
+		.MipLevels{ 1 },
+		.ArraySize{ 1 },
+		.Format{ DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT },
+		.SampleDesc{ SwapChainDesc.SampleDesc },
+		.Usage{ D3D11_USAGE::D3D11_USAGE_DEFAULT },
+		.BindFlags{ D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL },
+		.CPUAccessFlags{},
+		.MiscFlags{} };
 	if (FAILED(Device.CreateTexture2D(&DepthStencilBufferDesc, nullptr, &DepthStencilBuffer)))
 	{
 		return false;
 	}
 
 	// Depth-stencil view.
-	D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc{};
-	DepthStencilViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
-	DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
-	DepthStencilViewDesc.Texture2D.MipSlice = 0;
+	D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc{
+		.Format{ DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT },
+		.ViewDimension{ D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D },
+		.Flags{},
+		.Texture2D{ .MipSlice{} } };
 	if (FAILED(Device.CreateDepthStencilView(
 		DepthStencilBuffer.Get(),
 		&DepthStencilViewDesc,
@@ -162,52 +169,56 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	}
 
 	// Rasterizer state.
-	D3D11_RASTERIZER_DESC RasterizerDesc{};
-	RasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-	RasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-	RasterizerDesc.FrontCounterClockwise = TRUE;
-	RasterizerDesc.DepthBias = D3D11_DEFAULT_DEPTH_BIAS;
-	RasterizerDesc.DepthBiasClamp = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
-	RasterizerDesc.SlopeScaledDepthBias = D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
-	RasterizerDesc.DepthClipEnable = TRUE;
-	RasterizerDesc.ScissorEnable = FALSE;
-	RasterizerDesc.MultisampleEnable = FALSE;
-	RasterizerDesc.AntialiasedLineEnable = FALSE;
+	D3D11_RASTERIZER_DESC RasterizerDesc{
+		.FillMode{ D3D11_FILL_MODE::D3D11_FILL_SOLID },
+		.CullMode{ D3D11_CULL_MODE::D3D11_CULL_BACK },
+		.FrontCounterClockwise{ TRUE },
+		.DepthBias{ D3D11_DEFAULT_DEPTH_BIAS },
+		.DepthBiasClamp{ D3D11_DEFAULT_DEPTH_BIAS_CLAMP },
+		.SlopeScaledDepthBias{ D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS },
+		.DepthClipEnable{ TRUE },
+		.ScissorEnable{ FALSE },
+		.MultisampleEnable{ FALSE },
+		.AntialiasedLineEnable{ FALSE } };
 	if (FAILED(Device.CreateRasterizerState(&RasterizerDesc, &RasterizerState)))
 	{
 		return false;
 	}
 
 	// Blend state.
-	D3D11_BLEND_DESC BlendDesc{};
-	BlendDesc.AlphaToCoverageEnable = FALSE;
-	BlendDesc.IndependentBlendEnable = FALSE;
-	BlendDesc.RenderTarget[0].BlendEnable = TRUE;
-	BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
-	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA;
-	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-	BlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA;
-	BlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
-	BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-	BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE::D3D11_COLOR_WRITE_ENABLE_ALL;
+	D3D11_BLEND_DESC BlendDesc{
+		.AlphaToCoverageEnable{ FALSE },
+		.IndependentBlendEnable{ FALSE },
+		.RenderTarget{ {
+			.BlendEnable{ TRUE },
+			.SrcBlend{ D3D11_BLEND::D3D11_BLEND_SRC_ALPHA },
+			.DestBlend{ D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA },
+			.BlendOp{ D3D11_BLEND_OP::D3D11_BLEND_OP_ADD },
+			.SrcBlendAlpha{ D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA },
+			.DestBlendAlpha{ D3D11_BLEND::D3D11_BLEND_ZERO },
+			.BlendOpAlpha{ D3D11_BLEND_OP::D3D11_BLEND_OP_ADD },
+			.RenderTargetWriteMask{ D3D11_COLOR_WRITE_ENABLE::D3D11_COLOR_WRITE_ENABLE_ALL } }, } };
 	if (FAILED(Device.CreateBlendState(&BlendDesc, &BlendState)))
 	{
 		return false;
 	}
 
 	// Viewport setup.
-	Viewport.Width = static_cast<FLOAT>(SwapChainDesc.BufferDesc.Width);
-	Viewport.Height = static_cast<FLOAT>(SwapChainDesc.BufferDesc.Height);
-	Viewport.TopLeftX = 0.0f;
-	Viewport.TopLeftY = 0.0f;
-	Viewport.MinDepth = 0.0f;
-	Viewport.MaxDepth = 1.0f;
+	Viewport = {
+		.TopLeftX{},
+		.TopLeftY{},
+		.Width{ static_cast<FLOAT>(SwapChainDesc.BufferDesc.Width) },
+		.Height{ static_cast<FLOAT>(SwapChainDesc.BufferDesc.Height) },
+		.MinDepth{},
+		.MaxDepth{ 1.0f },
+	};
 
 	// Scissor rect setup.
-	ScissorRect.left = 0;
-	ScissorRect.top = 0;
-	ScissorRect.right = static_cast<LONG>(SwapChainDesc.BufferDesc.Width);
-	ScissorRect.bottom = static_cast<LONG>(SwapChainDesc.BufferDesc.Height);
+	ScissorRect = {
+		.left{},
+		.top{},
+		.right{ static_cast<LONG>(SwapChainDesc.BufferDesc.Width) },
+		.bottom{ static_cast<LONG>(SwapChainDesc.BufferDesc.Height) } };
 
 	// Interoperable Direct2D render target.
 	TComPtr<IDXGISurface> Surface{};

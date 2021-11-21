@@ -20,23 +20,34 @@ DWORD WindowsPlatform::GetMessageThreadId() noexcept { return ::g_MessageThreadI
 FWindowsPlatformEntry::FWindowsPlatformEntry(HINSTANCE hInstance)
 	: bCoInit{}
 {
-	if (::g_hInstance == nullptr)
-	{
-		::g_hInstance = hInstance;
-
-		bCoInit = SUCCEEDED(::CoInitializeEx(nullptr, COINIT::COINIT_APARTMENTTHREADED));
-
-#ifndef NDEBUG
-		// Enables run-time memory check in debug build.
-		::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-		::_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-#endif
-
-		::SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-	}
+	::g_hInstance = hInstance;
+	::g_MessageThreadId = ::GetCurrentThreadId();
 }
 
 FWindowsPlatformEntry::~FWindowsPlatformEntry() noexcept
+{
+}
+
+bool FWindowsPlatformEntry::Initialize() noexcept
+{
+	bCoInit = SUCCEEDED(::CoInitializeEx(nullptr, COINIT::COINIT_APARTMENTTHREADED));
+	if (!bCoInit)
+	{
+		return false;
+	}
+
+#ifndef NDEBUG
+	// Enables run-time memory check in debug build.
+	::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	::_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+#endif
+
+	::SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+	return true;
+}
+
+void FWindowsPlatformEntry::Terminate() noexcept
 {
 	if (bCoInit)
 	{
@@ -85,33 +96,21 @@ FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() const noexcept
 
 std::int32_t FWindowsPlatformEntry::AppMain(IApplication& Application)
 {
-	if (::g_MessageThreadId == DWORD{} && bCoInit)
+	const auto& EntryGuard{ CreateEntryGuard(Application) };
+	if (EntryGuard.IsInitialized())
 	{
-		::g_MessageThreadId = ::GetCurrentThreadId();
-		struct FMessageThreadIdGuard final
+		MSG Msg{};
+		while (::GetMessageW(&Msg, nullptr, 0, 0) != FALSE)
 		{
-			~FMessageThreadIdGuard() noexcept { ::g_MessageThreadId = DWORD{}; }
-		}
-		MessageThreadIdGuard{};
-
-		auto EntryGuard{ CreateEntryGuard(Application) };
-		if (EntryGuard.IsInitialized())
-		{
-			MSG Msg{};
-			while (::GetMessageW(&Msg, nullptr, 0, 0) != FALSE)
+			if (Msg.message == WM_QUIT)
 			{
-				if (Msg.message == WM_QUIT)
-				{
-					break;
-				}
-				::TranslateMessage(&Msg);
-				::DispatchMessageW(&Msg);
+				break;
 			}
-
-			return static_cast<std::int32_t>(Msg.wParam);
+			::TranslateMessage(&Msg);
+			::DispatchMessageW(&Msg);
 		}
+		return static_cast<std::int32_t>(Msg.wParam);
 	}
-
 	return EXIT_FAILURE;
 }
 

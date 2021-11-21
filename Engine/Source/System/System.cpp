@@ -11,6 +11,8 @@
 FSystem::FSystem()
 	: Input{}
 	, Graphics{}
+	, MaximumTickRate{ 100000.0 }
+	, MaximumFrameRate{ 300.0 }
 {
 }
 

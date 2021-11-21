@@ -17,6 +17,9 @@ public:
 	virtual ~FWindowsPlatformEntry() noexcept;
 
 private:
+	virtual bool Initialize() noexcept override final;
+	virtual void Terminate() noexcept override final;
+
 	virtual FCommandLineArgs ParseCommandLine() const noexcept override final;
 	virtual std::int32_t AppMain(IApplication& Application) override final;
 

@@ -50,7 +50,7 @@ public:
 public:
 	inline bool IsValid() const noexcept { return Id.IsValid(); }
 	inline std::size_t GetHash() const noexcept { return Id.GetHash(); }
-	inline void Release() noexcept { return Id.Release(); }
+	inline void Release() noexcept { Id.Release(); }
 
 private:
 	AUniqueId Id{};

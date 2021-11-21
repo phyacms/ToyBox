@@ -32,7 +32,7 @@ bool IDirect3D11Shader::CreateReflection(ID3D11Device& Device, ID3DBlob& ByteCod
 	if (FAILED(::D3DReflect(
 		ByteCode.GetBufferPointer(),
 		ByteCode.GetBufferSize(),
-		IID_ID3D11ShaderReflection,
+		::IID_ID3D11ShaderReflection,
 		&Reflector)))
 	{
 		return false;

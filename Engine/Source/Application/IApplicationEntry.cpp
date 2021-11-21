@@ -3,7 +3,7 @@
 #include "Engine.h"
 #include "IApplicationEntry.h"
 #include "IApplication.h"
-#include "Log/Log.h"
+#include "System/System.h"
 
 IApplicationEntry::FEntryGuard::FEntryGuard(
 	IApplicationEntry& Entry,
@@ -15,7 +15,9 @@ IApplicationEntry::FEntryGuard::FEntryGuard(
 {
 	FLog::GetThreadLogger().SetIdentifier(USTR("MainThread"));
 
-	bInit = !CmdLine.empty() && Application.Initialize(CmdLine);
+	bInit = !CmdLine.empty()
+		&& Entry.Initialize()
+		&& Application.Initialize(CmdLine);
 	if (IsInitialized())
 	{
 		ReleaseLog(LogEngine) << USTR("Application initialized.") << LogEndl;
@@ -27,6 +29,7 @@ IApplicationEntry::FEntryGuard::~FEntryGuard() noexcept
 {
 	Entry->EndThreads();
 	Application->Terminate();
+	Entry->Terminate();
 	ReleaseLog(LogEngine) << USTR("Application terminated.") << LogEndl;
 }
 
@@ -37,8 +40,6 @@ IApplicationEntry::IApplicationEntry()
 	, GameThread{}
 	, RenderThread{}
 	, Mutex{}
-	, TickRate{ 100000.0 }
-	, FrameRate{ 300.0 }
 {
 }
 
@@ -59,7 +60,7 @@ void IApplicationEntry::BeginThreads()
 			{
 				const auto Now{ System.PreciseNow() };
 				const auto DeltaTime{ Now - TickTime };
-				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / TickRate })
+				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / System.GetMaximumTickRate() })
 				{
 					std::unique_lock<std::mutex> Lock(Mutex, std::defer_lock);
 					if (Lock.try_lock())
@@ -84,7 +85,7 @@ void IApplicationEntry::BeginThreads()
 			{
 				const auto Now{ System.PreciseNow() };
 				const auto DeltaTime{ Now - FrameTime };
-				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / FrameRate })
+				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / System.GetMaximumFrameRate() })
 				{
 					std::unique_lock<std::mutex> Lock(Mutex);
 					if (!bAbortThreads)
