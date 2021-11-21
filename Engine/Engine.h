@@ -23,6 +23,7 @@
 #include <utility>
 #include <execution>
 #include <memory>
+#include <future>
 #include <thread>
 #include <atomic>
 #include <mutex>

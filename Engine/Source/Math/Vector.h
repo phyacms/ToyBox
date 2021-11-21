@@ -3,21 +3,22 @@
 #pragma once
 
 #include "Engine.h"
+#include "MathFunctions.h"
 #include "AxisIndex.h"
 
 template<typename T, std::size_t N>
 class TVector final
 {
 public:
-	using ValueType = T;
-	static_assert(std::is_arithmetic_v<ValueType>);
+	inline static constexpr auto Dimension{ N };
 
+	using ValueType = T;
 	using LengthType = std::conditional_t<
 		std::is_floating_point_v<ValueType>,
 		ValueType,
 		double>;
 
-	inline static constexpr auto Dimension{ N };
+	static_assert(std::is_arithmetic_v<ValueType> && Dimension > 0);
 
 public:
 	TVector() : Components{} {}
@@ -29,10 +30,26 @@ public:
 	TVector& operator=(const TVector&) & = default;
 	TVector(TVector&&) noexcept = default;
 	TVector& operator=(TVector&&) & noexcept = default;
-	~TVector() noexcept = default;
+	~TVector() noexcept { static_assert(sizeof(TVector) == sizeof(ValueType) * Dimension); }
 
-	friend inline bool operator==(const TVector& Lhs, const TVector& Rhs) noexcept = default;
-	friend inline bool operator!=(const TVector& Lhs, const TVector& Rhs) noexcept = default;
+	friend inline bool operator==(const TVector& Lhs, const TVector& Rhs) noexcept
+	{
+		return std::equal(
+			std::execution::par_unseq,
+			std::cbegin(Lhs.Components),
+			std::cend(Lhs.Components),
+			std::cbegin(Rhs.Components),
+			MathFunctions::TIsEqualTo<ValueType>{});
+	}
+	friend inline bool operator!=(const TVector& Lhs, const TVector& Rhs) noexcept
+	{
+		return std::equal(
+			std::execution::par_unseq,
+			std::cbegin(Lhs.Components),
+			std::cend(Lhs.Components),
+			std::cbegin(Rhs.Components),
+			MathFunctions::TIsNotEqualTo<ValueType>{});
+	}
 
 	inline TVector operator+() const { return *this; }
 	inline TVector operator-() const
@@ -66,11 +83,25 @@ public:
 			std::plus<ValueType>{});
 		return *this;
 	}
-	inline TVector& operator-=(const TVector& V) & { return operator+=(-V); }
+	inline TVector& operator-=(const TVector& V) &
+	{
+		std::transform(
+			std::execution::par_unseq,
+			std::cbegin(Components),
+			std::cend(Components),
+			std::cbegin(V.Components),
+			std::begin(Components),
+			std::minus<ValueType>{});
+		return *this;
+	}
 	inline TVector& operator*=(const ValueType& Factor) &
 	{
 		TVector U{};
-		std::fill(std::execution::par_unseq, std::begin(U.Components), std::end(U.Components), Factor);
+		std::fill(
+			std::execution::par_unseq,
+			std::begin(U.Components),
+			std::end(U.Components),
+			Factor);
 		return operator*=(std::move(U));
 	}
 	inline TVector& operator*=(const TVector& Factors) &
@@ -84,7 +115,7 @@ public:
 			std::multiplies<ValueType>{});
 		return *this;
 	}
-	inline TVector& operator/=(const ValueType& Divisor) & { return operator*=(std::divides<ValueType>{}(ValueType{ 1 }, Divisor)); }
+	inline TVector& operator/=(const ValueType& Divisor) & { return operator*=(std::divides<ValueType>{}(1, Divisor)); }
 	inline TVector& operator/=(TVector Divisors) &
 	{
 		std::transform(
@@ -156,6 +187,9 @@ public:
 	}
 
 	inline TVector& Normalize() noexcept { return operator/=(Length()); }
+
+public:
+	const ValueType* GetPtr() const noexcept { return Components.data(); }
 
 private:
 	std::array<ValueType, Dimension> Components;

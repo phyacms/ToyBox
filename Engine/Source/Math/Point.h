@@ -12,6 +12,7 @@ class TPoint final
 public:
 	using CompatibleVectorType = TVector<T, N>;
 	using ValueType = CompatibleVectorType::ValueType;
+
 	inline static constexpr auto Dimension{ CompatibleVectorType::Dimension };
 
 public:
@@ -28,7 +29,7 @@ public:
 	TPoint& operator=(const TPoint&) & = default;
 	TPoint(TPoint&&) noexcept = default;
 	TPoint& operator=(TPoint&&) & noexcept = default;
-	~TPoint() noexcept = default;
+	~TPoint() noexcept { static_assert(sizeof(TPoint) == sizeof(ValueType) * Dimension); }
 
 	friend inline bool operator==(const TPoint& Lhs, const TPoint& Rhs) noexcept = default;
 	friend inline bool operator!=(const TPoint& Lhs, const TPoint& Rhs) noexcept = default;
@@ -78,6 +79,9 @@ public:
 	template<typename T = CompatibleVectorType::LengthType>
 	inline T Distance(const TPoint& P = TPoint{}) const { return operator-(P).Length<T>(); }
 	inline const CompatibleVectorType& FromOrigin() const noexcept { return Coord; }
+
+public:
+	const ValueType* GetPtr() const noexcept { return Coord.GetPtr(); }
 
 private:
 	CompatibleVectorType Coord;

@@ -9,7 +9,8 @@ FColor::UNorms FColor::ConvertByteOrder(UNorms Norms, EColorByteOrder From, ECol
 	{
 		static constexpr auto RotateLeft{
 			[](auto& Container)->void {
-				std::rotate(std::begin(Container),
+				std::rotate(
+					std::begin(Container),
 					std::begin(Container) + 1,
 					std::end(Container)); } };
 
