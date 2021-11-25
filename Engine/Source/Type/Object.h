@@ -47,7 +47,7 @@ public:
 	AConstObject(const AConstObject&) = default;
 	AConstObject& operator=(const AConstObject&) & = default;
 	AConstObject(AConstObject&&) noexcept = default;
-	AConstObject& operator=(AConstObject&&) &noexcept = default;
+	AConstObject& operator=(AConstObject&&) & noexcept = default;
 
 	inline operator bool() const noexcept { return IsValid(); }
 	inline const T* operator->() const noexcept { return GetAddress(); }

@@ -208,6 +208,9 @@
     <ClInclude Include="Source\Type\Container.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Normals.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">

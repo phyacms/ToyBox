@@ -94,6 +94,7 @@
     <ClInclude Include="Source\Math\AxisIndex.h" />
     <ClInclude Include="Source\Math\MathFunctions.h" />
     <ClInclude Include="Source\Math\Matrix.h" />
+    <ClInclude Include="Source\Math\Normals.h" />
     <ClInclude Include="Source\Math\Point.h" />
     <ClInclude Include="Source\Math\Vector.h" />
     <ClInclude Include="Source\Platform\Platform.h" />

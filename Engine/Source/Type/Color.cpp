@@ -3,7 +3,10 @@
 #include "Engine.h"
 #include "Color.h"
 
-FColor::UNorms FColor::ConvertByteOrder(UNorms Norms, EColorByteOrder From, EColorByteOrder To)
+FColor::UNorms::VectorType FColor::ConvertByteOrder(
+	UNorms::VectorType Norms,
+	EColorByteOrder From,
+	EColorByteOrder To)
 {
 	if (From != To)
 	{
@@ -47,17 +50,12 @@ FColor::FColor(FColorCode ColorCode)
 
 void FColor::Set(FColorCode ColorCode) noexcept
 {
-	const auto& Bytes{ ::ToByteArray<std::uint32_t, std::endian::big>(ColorCode.Code) };
+	const auto& Bytes{ ::ToByteArray<decltype(FColorCode::Code), std::endian::big>(ColorCode.Code) };
+	Norms.Set<Byte>(Bytes, 0, 255);
+	auto Vector{ Norms.GetAsVector() };
 
-	UNorms Norms{};
-	std::transform(
-		std::execution::par_unseq,
-		std::cbegin(Bytes),
-		std::cend(Bytes),
-		std::begin(Norms),
-		[](Byte Value)->float { return Value / 255.0f; });
 
-	this->Norms = ConvertByteOrder(Norms, ColorCode.ByteOrder, DefaultByteOrder);
+	Norms.Set<float>(ConvertByteOrder(Vector, ColorCode.ByteOrder, DefaultByteOrder));
 }
 
 FColorCode FColor::GetAsColorCode(EColorByteOrder ByteOrder) const noexcept
@@ -73,19 +71,21 @@ FColorCode FColor::GetAsColorCode(EColorByteOrder ByteOrder) const noexcept
 		[](float Norm)->Byte { return static_cast<Byte>(Norm * 255.0f); });
 
 	return {
-		.Code{ ::FromByteArray<std::uint32_t, std::endian::big>(Bytes.data()) },
+		.Code{ ::FromByteArray<decltype(FColorCode::Code), std::endian::big>(Bytes.data()) },
 		.ByteOrder{ ByteOrder } };
 }
 
 FColor::UNorms FColor::GetAsNormals(EColorByteOrder ByteOrder) const noexcept
 {
-	return ConvertByteOrder(Norms, DefaultByteOrder, ByteOrder);
+	UNorms Norms{};
+	Norms.Set<float>(ConvertByteOrder(this->Norms.GetAsVector(), DefaultByteOrder, ByteOrder));
+	return Norms;
 }
 
 bool FColor::Deserialize(const FByteBuffer& Bytes)
 {
 	Set(FColorCode{
-		.Code{ Bytes.ReadAs<std::uint32_t>(0) },
+		.Code{ Bytes.ReadAs<decltype(FColorCode::Code)>(0) },
 		.ByteOrder{ EColorByteOrder::ARGB } });
 	return true;
 }
@@ -93,7 +93,7 @@ bool FColor::Deserialize(const FByteBuffer& Bytes)
 FByteBuffer FColor::Serialize() const
 {
 	FByteBuffer Buffer{};
-	Buffer.Reserve(sizeof(std::uint32_t));
+	Buffer.Reserve(sizeof(FColorCode::Code));
 	Buffer.Append(GetAsColorCode(EColorByteOrder::ARGB).Code);
 	return Buffer;
 }

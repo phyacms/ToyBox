@@ -166,12 +166,11 @@ public:
 	inline ColumnVectorType operator*(const RowVectorType& V) const
 	{
 		ColumnVectorType U{};
-		const auto& Rows{ GetRows() };
 
 		std::array<std::future<void>, RowDimension> Tasks{};
 		const auto DotProduct{
-			[&U, &V, &Rows](std::size_t RowIndex)->void {
-				U[RowIndex] = Rows[RowIndex].DotProduct(V); } };
+			[this, &U, &V](std::size_t RowIndex)->void {
+				U[RowIndex] = GetRow(RowIndex).DotProduct(V); } };
 
 		for (std::size_t RowIndex{}; RowIndex != RowDimension; ++RowIndex)
 		{

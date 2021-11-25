@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Math/Normals.h"
 #include "ByteBuffer.h"
 
 enum class EColorByteOrder : std::size_t { ARGB, RGBA };
@@ -30,11 +31,11 @@ class FColor final
 	: public ISerializable
 {
 public:
-	using UNorms = std::array<float, 4>;
+	using UNorms = TNormals<float, 4>;
 	inline static constexpr auto DefaultByteOrder{ EColorByteOrder::RGBA };
 
 private:
-	static UNorms ConvertByteOrder(UNorms Norms, EColorByteOrder From, EColorByteOrder To);
+	static UNorms::VectorType ConvertByteOrder(UNorms::VectorType Norms, EColorByteOrder From, EColorByteOrder To);
 
 public:
 	FColor();
@@ -56,7 +57,7 @@ public:
 	UNorms GetAsNormals(EColorByteOrder ByteOrder) const noexcept;
 
 	// @NOTE: Returns pointer to RGBA normals.
-	inline const float* GetPtr() const noexcept { return Norms.data(); }
+	inline const float* GetPtr() const noexcept { return Norms.GetPtr(); }
 
 	// @NOTE: Serialization/Deserialization is performed via conversion from/to ARGB color code.
 	virtual bool Deserialize(const FByteBuffer& Bytes) override final;

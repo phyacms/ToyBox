@@ -48,7 +48,7 @@ public:
 	FString(const FString&) = default;
 	FString(FString&&) noexcept = default;
 	FString& operator=(const FString&) & = default;
-	FString& operator=(FString&&) &noexcept = default;
+	FString& operator=(FString&&) & noexcept = default;
 	virtual ~FString() noexcept = default;
 
 	friend inline bool operator==(const FString& Lhs, const FString& Rhs) noexcept = default;
