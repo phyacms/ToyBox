@@ -5,7 +5,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "System/Graphics/Direct3D11/Buffer/IDirect3D11ShaderConstantBuffer.h"
+#include "Utility/DirectX/Direct3D11/Buffer/IDirect3D11ShaderConstantBuffer.h"
 
 IDirect3D11Shader::IDirect3D11Shader()
 	: Reflector{}

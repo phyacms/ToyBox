@@ -5,7 +5,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "System/Graphics/Direct3D11/Buffer/Direct3D11VertexShaderConstantBuffer.h"
+#include "Utility/DirectX/Direct3D11/Buffer/Direct3D11VertexShaderConstantBuffer.h"
 
 FDirect3D11VertexShader::FDirect3D11VertexShader(ID3D11Device& Device, ID3DBlob& CompiledVertexShaderObject)
 	: IDirect3D11Shader()

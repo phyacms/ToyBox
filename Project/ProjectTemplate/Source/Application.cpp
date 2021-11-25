@@ -8,6 +8,7 @@
 #include <System/Input/InputContext.h>
 #include <System/Graphics/Graphics.h>
 #include <System/Graphics/IGraphicsContext.h>
+#include <Utility/DirectX/Direct3D11/Direct3D11Renderer.h>
 
 FApplication::FApplication(FSystem& System)
 	: IApplication(System)
@@ -45,7 +46,7 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 	}
 
 	auto& SystemGraphics{ System.GetGraphics() };
-	if (!SystemGraphics.SetRendererType(EGraphicsRendererType::Direct3D11))
+	if (!SystemGraphics.CreateRenderer<FDirect3D11Renderer>())
 	{
 		return false;
 	}

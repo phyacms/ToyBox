@@ -4,7 +4,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "System/Graphics/Direct3D11/Direct3D11.h"
+#include "Utility/DirectX/Direct3D11/Direct3D11.h"
 
 class IDirect3D11Buffer
 {

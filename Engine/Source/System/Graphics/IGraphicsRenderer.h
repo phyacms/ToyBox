@@ -9,12 +9,6 @@ class FSystemWindow;
 class FGraphics;
 class IGraphicsContext;
 
-enum class EGraphicsRendererType : std::size_t
-{
-	Unknown,
-	Direct3D11, // @NOTE: Available in Windows platform only.
-};
-
 class IGraphicsRenderer
 	: public TObject<IGraphicsRenderer>
 {

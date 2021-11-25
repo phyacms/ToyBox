@@ -2,11 +2,11 @@
 
 #pragma once
 
+#include "IGraphicsRenderer.h"
+
 class FSystem;
 class FSystemWindow;
-class IGraphicsRenderer;
 class IGraphicsContext;
-enum class EGraphicsRendererType : std::size_t;
 
 class FGraphics final
 {
@@ -20,7 +20,18 @@ public:
 	FGraphics& operator=(FGraphics&&) & noexcept = delete;
 
 public:
-	bool SetRendererType(EGraphicsRendererType RendererType) noexcept;
+	template<typename T, typename... Ts, typename = std::enable_if_t<std::is_base_of_v<IGraphicsRenderer, T>>>
+	inline bool CreateRenderer(Ts&&... Params) noexcept
+	{
+		Renderer = std::make_unique<T>(*this, std::forward<Ts>(Params)...);
+		if (Renderer == nullptr || !Renderer->IsValid())
+		{
+			Renderer.reset();
+			return false;
+		}
+
+		return true;
+	}
 	[[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) &;
 
 private:
