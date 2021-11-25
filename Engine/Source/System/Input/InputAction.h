@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "Type/Delegate.h"
+#include "Type/Container.h"
 #include "InputChord.h"
 
 class FInputContext;
@@ -25,16 +26,13 @@ private:
 	using ContainerType = std::vector<FInputAction>;
 
 public:
-	using ConstIterator = ContainerType::const_iterator;
-	using ConstIteratorPair = std::pair<ConstIterator, ConstIterator>;
-
-public:
 	inline FInputActionBindings& operator+=(const FInputAction& Action) { if (Action.IsValid()) { Actions.emplace_back(Action); } return *this; }
 	inline FInputActionBindings& operator+=(FInputAction&& Action) { if (Action.IsValid()) { Actions.emplace_back(std::move(Action)); } return *this; }
 
 public:
-	inline ConstIteratorPair GetIterators() const& noexcept { return { std::cbegin(Actions), std::cend(Actions) }; }
+	EnumerateConstIterators(Actions, ExposeConstIterators)
 
+public:
 	inline bool IsEmpty() const noexcept { return Actions.empty(); }
 	inline void Clear() noexcept { Actions.clear(); }
 

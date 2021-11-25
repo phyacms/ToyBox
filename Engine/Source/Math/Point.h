@@ -11,9 +11,10 @@ class TPoint final
 {
 public:
 	using CompatibleVectorType = TVector<T, N>;
-	using ValueType = CompatibleVectorType::ValueType;
 
 	inline static constexpr auto Dimension{ CompatibleVectorType::Dimension };
+
+	using ValueType = CompatibleVectorType::ValueType;
 
 public:
 	TPoint() : Coord{} {}
@@ -72,6 +73,8 @@ public:
 	inline ValueType At() const&& noexcept { return Coord.At<Index>(); }
 
 	EnumerateAxisIndex(DeclareAxisIndexOperations)
+	DeclareIterators(Coord)
+	DeclareReverseIterators(Coord)
 
 public:
 	inline bool IsOrigin() const noexcept { return Coord.IsZero(); }
@@ -81,7 +84,7 @@ public:
 	inline const CompatibleVectorType& FromOrigin() const noexcept { return Coord; }
 
 public:
-	const ValueType* GetPtr() const noexcept { return Coord.GetPtr(); }
+	inline const ValueType* GetPtr() const noexcept { return Coord.GetPtr(); }
 
 private:
 	CompatibleVectorType Coord;

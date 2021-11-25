@@ -205,6 +205,9 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.h">
       <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\Container.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">

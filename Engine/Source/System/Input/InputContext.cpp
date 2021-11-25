@@ -138,11 +138,10 @@ bool FInputContext::DispatchInputAction(const FInputTrigger& Trigger)
 {
 	for (const auto& [Id, Controller] : Controllers)
 	{
-		const auto& [cItBegin, cItEnd] = Controller->GetIterators();
 		const auto& Action{ std::find_if(
 			std::execution::par_unseq,
-			cItBegin,
-			cItEnd,
+			Controller->cbegin(),
+			Controller->cend(),
 			[this, &Trigger](const FInputAction& Action)->bool
 			{
 				if (Action.Chord.GetTrigger() == Trigger)
@@ -163,7 +162,7 @@ bool FInputContext::DispatchInputAction(const FInputTrigger& Trigger)
 				}
 				return false;
 			}) };
-		if (Action != cItEnd
+		if (Action != Controller->cend()
 			&& Action->Callback.Execute(*this))
 		{
 			return true;

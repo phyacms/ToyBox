@@ -14,9 +14,6 @@ class IInputController
 private:
 	struct FBindings;
 
-	using ConstIterator = FInputActionBindings::ConstIterator;
-	using ConstIteratorPair = FInputActionBindings::ConstIteratorPair;
-
 public:
 	IInputController() : TObject<IInputController>(*this), Actions{} {}
 	virtual ~IInputController() noexcept = default;
@@ -27,12 +24,13 @@ public:
 	IInputController& operator=(IInputController&&) & noexcept = delete;
 
 public:
+	EnumerateConstIterators(Actions.second, ExposeConstIterators)
+
+public:
 	inline void BindStatics() {
 		std::call_once(
 			Actions.first,
 			[this]()->void { BindInputActions(Actions.second); }); }
-
-	inline ConstIteratorPair GetIterators() const& noexcept { return Actions.second.GetIterators(); }
 
 private:
 	virtual void BindInputActions(FInputActionBindings& Actions) = 0;

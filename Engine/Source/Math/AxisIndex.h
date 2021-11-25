@@ -10,8 +10,10 @@
     Enumerate(Z, 2)						\
 	Enumerate(W, 3)
 
-#define DeclareAxisIndexOperations(Name, Index)							\
-inline ValueType& Name() & noexcept { return At(Index); }				\
+#define DeclareAxisIndexWriteOperations(Name, Index)	\
+inline ValueType& Name() & noexcept { return At(Index); }
+
+#define DeclareAxisIndexReadOperations(Name, Index)						\
 inline const ValueType& Name() const& noexcept { return At(Index); }	\
 inline ValueType Name() const&& noexcept { return At(Index); }			\
 template<																\
@@ -20,3 +22,7 @@ template<																\
 		(Dimension > Index) &&											\
 		std::is_convertible_v<ValueType, ReturnType>>>					\
 inline ReturnType Name() const noexcept { return static_cast<ReturnType>(At(Index)); }
+
+#define DeclareAxisIndexOperations(Name, Index)	\
+DeclareAxisIndexReadOperations(Name, Index)		\
+DeclareAxisIndexWriteOperations(Name, Index)

@@ -254,6 +254,11 @@ public:
 		return V;
 	}
 
+	template<std::size_t RowIndex, typename = std::enable_if_t<RowIndex < RowDimension>>
+	inline RowVectorType GetRow() const noexcept { return GetRow(RowIndex); }
+	template<std::size_t ColumnIndex, typename = std::enable_if_t<ColumnIndex < ColumnDimension>>
+	inline ColumnVectorType GetColumn() const noexcept { return GetColumn(ColumnIndex); }
+
 	inline std::array<RowVectorType, RowDimension> GetRows() const noexcept
 	{
 		std::array<RowVectorType, RowDimension> Rows{};
@@ -288,6 +293,9 @@ public:
 
 		return Columns;
 	}
+
+	ExposeIterators(Elements)
+	ExposeReverseIterators(Elements)
 
 public:
 	inline bool IsZero() const noexcept { return *this == TMatrix{}; }
@@ -436,7 +444,7 @@ public:
 	inline RetType& Invert() { return *this = Inverse(); }
 
 public:
-	const ValueType* GetPtr() const noexcept { return Elements.data(); }
+	inline const ValueType* GetPtr() const noexcept { return Elements.data(); }
 
 private:
 	template<typename RetType = std::enable_if_t<IsSquare(), TMatrix>>

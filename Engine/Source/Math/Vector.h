@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "MathFunctions.h"
 #include "AxisIndex.h"
+#include "Type/Container.h"
 
 template<typename T, std::size_t N>
 class TVector final
@@ -144,6 +145,8 @@ public:
 	inline ValueType At() const&& noexcept { return std::get<Index>(Components); }
 
 	EnumerateAxisIndex(DeclareAxisIndexOperations)
+	ExposeIterators(Components)
+	ExposeReverseIterators(Components)
 
 public:
 	inline bool IsZero() const noexcept { return *this == TVector{}; }
@@ -189,7 +192,7 @@ public:
 	inline TVector& Normalize() noexcept { return operator/=(Length()); }
 
 public:
-	const ValueType* GetPtr() const noexcept { return Components.data(); }
+	inline const ValueType* GetPtr() const noexcept { return Components.data(); }
 
 private:
 	std::array<ValueType, Dimension> Components;

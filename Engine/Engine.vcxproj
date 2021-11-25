@@ -121,6 +121,7 @@
     <ClInclude Include="Source\Type\ByteBuffer.h" />
     <ClInclude Include="Source\Type\ByteStream.h" />
     <ClInclude Include="Source\Type\Color.h" />
+    <ClInclude Include="Source\Type\Container.h" />
     <ClInclude Include="Source\Type\Delegate.h" />
     <ClInclude Include="Source\Type\EventDispatcher.h" />
     <ClInclude Include="Source\Type\MulticastDelegate.h" />
