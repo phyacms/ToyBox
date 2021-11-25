@@ -26,6 +26,9 @@ namespace WindowsPlatform
 		virtual bool InitializeImpl(FSystemWindow& OwnerWindow) noexcept override final;
 		virtual void TerminateImpl(FSystemWindow& OwnerWindow) noexcept override final;
 
+		virtual FScreenArea GetWindowArea() const noexcept override final;
+		virtual FScreenArea GetClientArea() const noexcept override final;
+
 		virtual void Present() noexcept override final;
 		virtual void Close() noexcept override final;
 

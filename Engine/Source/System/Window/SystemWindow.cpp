@@ -71,6 +71,20 @@ bool FSystemWindow::IsValid() const noexcept
 		&& &WndProc->GetWindow() == this;
 }
 
+FScreenArea FSystemWindow::GetWindowArea() const noexcept
+{
+	return IsValid()
+		? WndProc->GetWindowArea()
+		: FScreenArea{};
+}
+
+FScreenArea FSystemWindow::GetClientArea() const noexcept
+{
+	return IsValid()
+		? WndProc->GetClientArea()
+		: FScreenArea{};
+}
+
 void FSystemWindow::Present() noexcept
 {
 	if (IsValid())

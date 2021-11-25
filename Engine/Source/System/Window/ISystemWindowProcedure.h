@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Type/String.h"
+#include "SystemWindow.h"
 
 class FSystemWindow;
 
@@ -21,6 +22,9 @@ public:
 	inline bool IsValid() const noexcept { return OwnerWindow != nullptr && IsValidImpl(); }
 	bool Initialize(FSystemWindow& OwnerWindow) noexcept;
 	void Terminate(FSystemWindow& OwnerWindow) noexcept;
+
+	virtual FScreenArea GetWindowArea() const noexcept = 0;
+	virtual FScreenArea GetClientArea() const noexcept = 0;
 
 	virtual void Present() noexcept = 0;
 	virtual void Close() noexcept = 0;

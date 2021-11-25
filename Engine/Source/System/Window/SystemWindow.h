@@ -15,6 +15,11 @@ class ISystemWindowProcedure;
 
 using FScreenLocation = TPoint<std::int32_t, 2>;
 using FScreenSize = TVector<std::uint32_t, 2>;
+struct FScreenArea final
+{
+	FScreenLocation Location{};
+	FScreenSize Size{};
+};
 
 #define EnumerateSystemWindowEvents(Enumerate)	\
 	Enumerate(OnClosed)							\
@@ -57,6 +62,8 @@ public:
 public:
 	bool IsValid() const noexcept;
 	inline const FString& GetTitle() const noexcept { return Title; }
+	FScreenArea GetWindowArea() const noexcept;
+	FScreenArea GetClientArea() const noexcept;
 
 	void Present() noexcept;
 	void Close() noexcept;

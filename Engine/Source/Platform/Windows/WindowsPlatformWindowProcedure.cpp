@@ -5,7 +5,6 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "System/Window/SystemWindow.h"
 #include "System/Input/SwitchState.h"
 #include "System/Input/InputTrigger.h"
 
@@ -37,6 +36,38 @@ bool WindowsPlatform::FWndProc::InitializeImpl(FSystemWindow& OwnerWindow) noexc
 
 void WindowsPlatform::FWndProc::TerminateImpl(FSystemWindow& OwnerWindow) noexcept
 {
+}
+
+FScreenArea WindowsPlatform::FWndProc::GetWindowArea() const noexcept
+{
+	RECT WindowRect{};
+	::GetWindowRect(hWnd, &WindowRect);
+
+	return FScreenArea{
+		.Location{ FScreenLocation{
+			WindowRect.left,
+			WindowRect.top } },
+		.Size{ FScreenSize{
+			WindowRect.right - WindowRect.left,
+			WindowRect.bottom - WindowRect.top } } };
+}
+
+FScreenArea WindowsPlatform::FWndProc::GetClientArea() const noexcept
+{
+	RECT ClientRect{};
+	::GetClientRect(hWnd, &ClientRect);
+
+	FScreenArea ClientArea{
+		.Location{},
+		.Size{ FScreenSize{
+			ClientRect.right - ClientRect.left,
+			ClientRect.bottom - ClientRect.top } } };
+
+	::ClientToScreen(hWnd, reinterpret_cast<LPPOINT>(&ClientRect));
+	ClientArea.Location.X() = ClientRect.left;
+	ClientArea.Location.Y() = ClientRect.top;
+
+	return ClientArea;
 }
 
 void WindowsPlatform::FWndProc::Present() noexcept
