@@ -2,24 +2,15 @@
 
 #pragma once
 
-#include "Math/Vector.h"
-#include "Math/Point.h"
 #include "Type/Object.h"
 #include "Type/String.h"
 #include "Type/EventDispatcher.h"
 #include "System/Input/KeyboardKey.h"
 #include "System/Input/MouseButton.h"
 #include "System/Input/InputTrigger.h"
+#include "Math/Coordinate/ScreenSpace.h"
 
 class ISystemWindowProcedure;
-
-using FScreenLocation = TPoint<std::int32_t, 2>;
-using FScreenSize = TVector<std::uint32_t, 2>;
-struct FScreenArea final
-{
-	FScreenLocation Location{};
-	FScreenSize Size{};
-};
 
 #define EnumerateSystemWindowEvents(Enumerate)	\
 	Enumerate(OnClosed)							\

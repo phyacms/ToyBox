@@ -99,7 +99,7 @@ std::optional<FString> PlatformFunctions::UTF8ToString(const std::vector<char8_t
 		return std::nullopt;
 	}
 
-	return FString(u16Chars.data(), u16Chars.find_first_of(u'\0'));
+	return FString{ u16Chars.data(), u16Chars.find_first_of(u'\0') };
 }
 
 EKeyboardKey WindowsPlatform::TranslateKeyboardKey(int VirtualKey) noexcept

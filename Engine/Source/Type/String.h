@@ -142,7 +142,7 @@ template<
 
 	// @NOTE: Character code '-' is in universal ASCII code page.
 	Converted.insert(Converted.find_first_of(u'-') + 1, Prefix);
-	return FString{ std::move(Converted) };
+	return std::move(Converted);
 }
 
 template<typename T, typename... Ts>

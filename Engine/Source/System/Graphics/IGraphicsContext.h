@@ -26,6 +26,8 @@ public:
 	virtual void BeginScene(const FColor& ClearColor = ColorCodes::CornflowerBlue) const = 0;
 	virtual void EndScene() const = 0;
 
+	virtual FScreenArea GetViewportArea() const noexcept = 0;
+
 protected:
 	inline FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }
 

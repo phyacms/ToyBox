@@ -192,6 +192,18 @@ public:
 	inline TVector& Normalize() noexcept { return operator/=(Length()); }
 
 public:
+	template<typename T>
+	inline TVector<T, Dimension> CastAs() const noexcept
+	{
+		TVector<T, Dimension> V{};
+		std::transform(
+			std::execution::par_unseq,
+			std::cbegin(Components),
+			std::cend(Components),
+			std::begin(V),
+			[](const ValueType& Value)->T { return static_cast<T>(Value); });
+		return V;
+	}
 	inline const ValueType* GetPtr() const noexcept { return Components.data(); }
 
 private:

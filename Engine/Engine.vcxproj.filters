@@ -49,6 +49,9 @@
     <Filter Include="Source\Utility\DirectX\Direct3D11\Shader">
       <UniqueIdentifier>{b64122a5-8be9-48da-9869-35f773148b88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Math\Coordinate">
+      <UniqueIdentifier>{5a170298-c7f7-4576-b92c-a4698c7156f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -211,6 +214,12 @@
     <ClInclude Include="Source\Math\Normals.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Coordinate\ScreenSpace.h">
+      <Filter>Source\Math\Coordinate</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Coordinate\UISpace.h">
+      <Filter>Source\Math\Coordinate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -296,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Coordinate\UISpace.cpp">
+      <Filter>Source\Math\Coordinate</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

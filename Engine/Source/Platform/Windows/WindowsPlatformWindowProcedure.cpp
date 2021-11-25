@@ -43,13 +43,9 @@ FScreenArea WindowsPlatform::FWndProc::GetWindowArea() const noexcept
 	RECT WindowRect{};
 	::GetWindowRect(hWnd, &WindowRect);
 
-	return FScreenArea{
-		.Location{ FScreenLocation{
-			WindowRect.left,
-			WindowRect.top } },
-		.Size{ FScreenSize{
-			WindowRect.right - WindowRect.left,
-			WindowRect.bottom - WindowRect.top } } };
+	return {
+		.Location{ FScreenLocation{ WindowRect.left, WindowRect.top } },
+		.Size{ FScreenSize{ WindowRect.right - WindowRect.left, WindowRect.bottom - WindowRect.top } } };
 }
 
 FScreenArea WindowsPlatform::FWndProc::GetClientArea() const noexcept

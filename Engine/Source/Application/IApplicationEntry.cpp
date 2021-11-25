@@ -45,7 +45,7 @@ IApplicationEntry::IApplicationEntry()
 
 IApplicationEntry::FEntryGuard IApplicationEntry::CreateEntryGuard(IApplication& Application)
 {
-	return FEntryGuard{ *this, Application, ParseCommandLine() };
+	return { *this, Application, ParseCommandLine() };
 }
 
 void IApplicationEntry::BeginThreads()
