@@ -33,7 +33,7 @@ private:
 	virtual bool IsValidImpl() const noexcept override final;
 	virtual void ResizeBuffer(const FScreenSize& ClientAreaSize) override final;
 
-	virtual void BeginScene(const FColor& ClearColor = FColor{ ColorCodes::CornflowerBlue }) const override final;
+	virtual void BeginScene(const FColor& ClearColor) const override final;
 	virtual void EndScene() const override final;
 
 public:

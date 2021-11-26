@@ -49,8 +49,11 @@
     <Filter Include="Source\Utility\DirectX\Direct3D11\Shader">
       <UniqueIdentifier>{b64122a5-8be9-48da-9869-35f773148b88}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Math\Coordinate">
-      <UniqueIdentifier>{5a170298-c7f7-4576-b92c-a4698c7156f1}</UniqueIdentifier>
+    <Filter Include="Source\Player">
+      <UniqueIdentifier>{ed9808c9-8db2-4a8d-8478-d18ea47cd877}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Player\HUD">
+      <UniqueIdentifier>{ca123d2c-1ff4-43e4-b2c6-5e0556af1eac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,11 +217,14 @@
     <ClInclude Include="Source\Math\Normals.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Coordinate\ScreenSpace.h">
-      <Filter>Source\Math\Coordinate</Filter>
+    <ClInclude Include="Source\Player\HUD\HUD.h">
+      <Filter>Source\Player\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Coordinate\UISpace.h">
-      <Filter>Source\Math\Coordinate</Filter>
+    <ClInclude Include="Source\Player\HUD\UISpace.h">
+      <Filter>Source\Player\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Window\ScreenSpace.h">
+      <Filter>Source\System\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -306,8 +312,11 @@
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\Coordinate\UISpace.cpp">
-      <Filter>Source\Math\Coordinate</Filter>
+    <ClCompile Include="Source\Player\HUD\HUD.cpp">
+      <Filter>Source\Player\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\HUD\UISpace.cpp">
+      <Filter>Source\Player\HUD</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

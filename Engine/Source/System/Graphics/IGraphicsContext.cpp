@@ -5,10 +5,14 @@
 
 IGraphicsContext::IGraphicsContext(
 	AObject<IGraphicsRenderer>&& Renderer,
-	AObject<FSystemWindow>&& OutputWindow)
-	: Renderer{ std::move(Renderer) }
+	AObject<FSystemWindow>&& OutputWindow,
+	FColor ClearColor)
+	: TObject<IGraphicsContext>(*this)
+	, Renderer{ std::move(Renderer) }
 	, OutputWindow{ std::move(OutputWindow) }
 	, DH_OnResized{}
+	, ClearColor{ ClearColor }
+	, OnViewportAreaChanged{}
 {
 	if (this->OutputWindow.IsValid())
 	{
@@ -16,13 +20,39 @@ IGraphicsContext::IGraphicsContext(
 
 		DH_OnResized = this->OutputWindow->Events.OnResized.AddDynamic(
 			[this](const FOnResized& EventArgs)->bool {
-				ResizeBuffer(EventArgs.ClientAreaSize); return false; });
+				ResizeBuffer(EventArgs.ClientAreaSize);
+				OnViewportAreaChanged.Broadcast(GetViewportArea());
+				return false; });
 	}
 }
 
 IGraphicsContext::~IGraphicsContext() noexcept
 {
+	ClearRenderCommands();
 	DH_OnResized.Release();
 	OutputWindow.Release();
 	Renderer.Release();
+}
+
+void IGraphicsContext::AddCommand(FRenderCommand&& Command)
+{
+	CommandQueue.emplace(std::move(Command));
+}
+
+void IGraphicsContext::ExecuteCommands(const FTimeDuration& DeltaTime)
+{
+	struct FScene final
+	{
+		const IGraphicsContext* Context{};
+		FScene(const IGraphicsContext& Context)
+			: Context{ &Context } { Context.BeginScene(Context.ClearColor); }
+		~FScene() noexcept { Context->EndScene(); }
+	}
+	Scene{ *this };
+
+	while (!CommandQueue.empty())
+	{
+		CommandQueue.front().Execute(DeltaTime);
+		CommandQueue.pop();
+	}
 }

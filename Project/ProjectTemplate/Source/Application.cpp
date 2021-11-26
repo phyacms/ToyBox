@@ -8,15 +8,18 @@
 #include <System/Input/InputContext.h>
 #include <System/Graphics/Graphics.h>
 #include <System/Graphics/IGraphicsContext.h>
+#include <Player/HUD/HUD.h>
 #include <Utility/DirectX/Direct3D11/Direct3D11Renderer.h>
 
 FApplication::FApplication(FSystem& System)
 	: IApplication(System)
 	, Window{}
-	, DH_OnClosed{}
 	, Input{}
-	, IC_Input{}
 	, Graphics{}
+	, HUD{}
+	, DH_OnClosed{}
+	, IC_Application{}
+	, IC_HUD{}
 {
 }
 
@@ -57,8 +60,15 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 		return false;
 	}
 
+	HUD = std::make_unique<FHUD>(*Input, *Graphics);
+	if (HUD == nullptr || !HUD->IsValid())
+	{
+		return false;
+	}
+
 	Window->Present();
-	IC_Input = Input->BindInputController(*this);
+	IC_Application = Input->BindInputController(*this);
+	IC_HUD = Input->BindInputController(*HUD);
 
 	return true;
 }
@@ -74,7 +84,7 @@ void FApplication::BindInputActions(FInputActionBindings& Actions)
 
 void FApplication::Terminate() noexcept
 {
-	IC_Input.Release();
+	IC_Application.Release();
 	Graphics.reset();
 	Input.reset();
 	DH_OnClosed.Release();
@@ -88,9 +98,7 @@ void FApplication::Tick(FTimeDuration DeltaTime)
 
 void FApplication::Render(FTimeDuration DeltaTime)
 {
-	Graphics->BeginScene();
-	{
+	HUD->Render();
 
-	}
-	Graphics->EndScene();
+	Graphics->ExecuteCommands(DeltaTime);
 }

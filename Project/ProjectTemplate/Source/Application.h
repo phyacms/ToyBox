@@ -10,6 +10,7 @@
 class FSystemWindow;
 class FInputContext;
 class IGraphicsContext;
+class FHUD;
 
 class FApplication final
 	: public IApplication
@@ -29,10 +30,13 @@ private:
 
 private:
 	std::unique_ptr<FSystemWindow> Window;
-	ADelegateHandle DH_OnClosed;
 
 	std::unique_ptr<FInputContext> Input;
-	AInputController IC_Input;
-
 	std::unique_ptr<IGraphicsContext> Graphics;
+
+	std::unique_ptr<FHUD> HUD;
+
+	ADelegateHandle DH_OnClosed;
+	AInputController IC_Application;
+	AInputController IC_HUD;
 };

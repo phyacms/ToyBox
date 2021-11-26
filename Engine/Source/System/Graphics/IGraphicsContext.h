@@ -3,16 +3,23 @@
 #pragma once
 
 #include "Type/Object.h"
+#include "Type/TimePoint.h"
+#include "Type/Delegate.h"
+#include "Type/MulticastDelegate.h"
 #include "Type/Color.h"
 #include "System/Window/SystemWindow.h"
 #include "IGraphicsRenderer.h"
 
+using FRenderCommand = TDelegate<void(const FTimeDuration&)>;
+
 class IGraphicsContext
+	: public TObject<IGraphicsContext>
 {
 public:
 	IGraphicsContext(
 		AObject<IGraphicsRenderer>&& Renderer,
-		AObject<FSystemWindow>&& OutputWindow);
+		AObject<FSystemWindow>&& OutputWindow,
+		FColor ClearColor = ColorCodes::CornflowerBlue);
 	virtual ~IGraphicsContext() noexcept;
 
 	IGraphicsContext(const IGraphicsContext&) = delete;
@@ -23,10 +30,13 @@ public:
 public:
 	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
 
-	virtual void BeginScene(const FColor& ClearColor = ColorCodes::CornflowerBlue) const = 0;
-	virtual void EndScene() const = 0;
-
+	inline const FColor& GetClearColor() const noexcept { return ClearColor; }
 	virtual FScreenArea GetViewportArea() const noexcept = 0;
+
+	inline void SetClearColor(FColor ClearColor) noexcept { this->ClearColor = std::move(ClearColor); }
+
+	void AddCommand(FRenderCommand&& Command);
+	void ExecuteCommands(const FTimeDuration& DeltaTime);
 
 protected:
 	inline FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }
@@ -35,8 +45,20 @@ private:
 	virtual bool IsValidImpl() const noexcept = 0;
 	virtual void ResizeBuffer(const FScreenSize& ClientAreaSize) = 0;
 
+	virtual void BeginScene(const FColor& ClearColor) const = 0;
+	virtual void EndScene() const = 0;
+
+	void ClearRenderCommands() noexcept { CommandQueue = {}; }
+
 private:
 	AObject<IGraphicsRenderer> Renderer;
 	AObject<FSystemWindow> OutputWindow;
 	ADelegateHandle DH_OnResized;
+	FColor ClearColor;
+
+	std::queue<FRenderCommand> CommandQueue;
+
+public:
+	using FOnViewportAreaChanged = TMulticastDelegate<void(const FScreenArea&)>;
+	FOnViewportAreaChanged OnViewportAreaChanged;
 };

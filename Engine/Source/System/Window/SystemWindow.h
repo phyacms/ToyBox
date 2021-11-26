@@ -5,10 +5,10 @@
 #include "Type/Object.h"
 #include "Type/String.h"
 #include "Type/EventDispatcher.h"
+#include "ScreenSpace.h"
 #include "System/Input/KeyboardKey.h"
 #include "System/Input/MouseButton.h"
 #include "System/Input/InputTrigger.h"
-#include "Math/Coordinate/ScreenSpace.h"
 
 class ISystemWindowProcedure;
 
