@@ -84,6 +84,7 @@ void FApplication::BindInputActions(FInputActionBindings& Actions)
 
 void FApplication::Terminate() noexcept
 {
+	IC_HUD.Release();
 	IC_Application.Release();
 	Graphics.reset();
 	Input.reset();

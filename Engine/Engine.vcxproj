@@ -107,6 +107,7 @@
     <ClInclude Include="Source\System\Graphics\Graphics.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
+    <ClInclude Include="Source\System\Graphics\ISurface2D.h" />
     <ClInclude Include="Source\System\Input\IInputController.h" />
     <ClInclude Include="Source\System\Input\Input.h" />
     <ClInclude Include="Source\System\Input\InputAction.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11VertexShaderConstantBuffer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.h" />
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11SwapChain.h" />
@@ -171,6 +173,7 @@
     <ClCompile Include="Source\Type\UniqueId.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp" />
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct3D11SwapChain.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Shader\Direct3D11PixelShader.cpp" />

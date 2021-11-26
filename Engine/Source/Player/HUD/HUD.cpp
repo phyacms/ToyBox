@@ -25,6 +25,9 @@ FHUD::FHUD(
 
 FHUD::~FHUD() noexcept
 {
+	DH_OnViewportAreaChanged.Release();
+	Input.Release();
+	Graphics.Release();
 }
 
 bool FHUD::IsValid() const noexcept
@@ -35,20 +38,10 @@ bool FHUD::IsValid() const noexcept
 
 void FHUD::SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) noexcept
 {
-	if (MinimumAspectRatio < 0.0f)
-	{
-		MinimumAspectRatio = DefaultMinimumAspectRatio;
-	}
-
-	if (MaximumAspectRatio < 0.0f)
-	{
-		MaximumAspectRatio = DefaultMaximumAspectRatio;
-	}
-
-	if (MaximumAspectRatio < MinimumAspectRatio)
-	{
-		MaximumAspectRatio = MinimumAspectRatio;
-	}
+	// Sanitize arguments.
+	if (MinimumAspectRatio < 0.0f) { MinimumAspectRatio = DefaultMinimumAspectRatio; }
+	if (MaximumAspectRatio < 0.0f) { MaximumAspectRatio = DefaultMaximumAspectRatio; }
+	if (MaximumAspectRatio < MinimumAspectRatio) { MaximumAspectRatio = MinimumAspectRatio; }
 
 	this->MinimumAspectRatio = MinimumAspectRatio;
 	this->MaximumAspectRatio = MaximumAspectRatio;
@@ -56,9 +49,19 @@ void FHUD::SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) no
 	UpdateUIArea();
 }
 
-void FHUD::Render() const
+void FHUD::Render()
 {
 	// @TODO: Render HUD.
+
+	// @TEST: Visualize UI area.
+	Graphics->AddCommand(
+		[this](const FTimeDuration& DeltaTime)->void
+		{
+			Graphics->GetSurface().DrawRect(
+				UIArea, {
+					.Color{ ColorCodes::Green },
+					.Width{ 3.0f } });
+		});
 }
 
 void FHUD::UpdateUIArea() noexcept

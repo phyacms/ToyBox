@@ -22,7 +22,7 @@ FDirect3D11SwapChain::FDirect3D11SwapChain(
 	, BlendState{}
 	, Viewport{}
 	, ScissorRect{}
-	, D2DRenderTarget{}
+	, D2DRT{}
 {
 	if (!Initialize())
 	{
@@ -227,18 +227,7 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 		return false;
 	}
 
-	const D2D1_RENDER_TARGET_PROPERTIES& RenderTargetProperties = D2D1::RenderTargetProperties(
-		D2D1_RENDER_TARGET_TYPE::D2D1_RENDER_TARGET_TYPE_DEFAULT,
-		D2D1::PixelFormat(DXGI_FORMAT::DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE::D2D1_ALPHA_MODE_PREMULTIPLIED),
-		96.0f,
-		96.0f,
-		D2D1_RENDER_TARGET_USAGE::D2D1_RENDER_TARGET_USAGE_NONE,
-		D2D1_FEATURE_LEVEL::D2D1_FEATURE_LEVEL_DEFAULT);
-
-	if (FAILED(Renderer.GetD2D1Factory().CreateDxgiSurfaceRenderTarget(
-		Surface.Get(),
-		&RenderTargetProperties,
-		D2DRenderTarget.GetAddressOf())))
+	if (!D2DRT.Initialize(Renderer.GetD2D1Factory(), *Surface.Get()))
 	{
 		return false;
 	}
@@ -256,7 +245,7 @@ void FDirect3D11SwapChain::DestroyResources() noexcept
 	BlendState.Reset();
 	Viewport = {};
 	ScissorRect = {};
-	D2DRenderTarget.Reset();
+	D2DRT.Terminate();
 }
 
 bool FDirect3D11SwapChain::IsValidImpl() const noexcept
@@ -269,7 +258,7 @@ bool FDirect3D11SwapChain::IsValidImpl() const noexcept
 		|| !DepthStencilView
 		|| !RasterizerState
 		|| !BlendState
-		|| !D2DRenderTarget);
+		|| !D2DRT.IsValid());
 }
 
 void FDirect3D11SwapChain::ResizeBuffer(const FScreenSize& ClientAreaSize)
@@ -314,12 +303,12 @@ void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 	Context.OMSetBlendState(BlendState.Get(), BlendFactor, SampleMask);
 	Context.OMSetDepthStencilState(DepthStencilState.Get(), 1);
 
-	D2DRenderTarget->BeginDraw();
+	D2DRT.GetRenderTarget().BeginDraw();
 }
 
 void FDirect3D11SwapChain::EndScene() const
 {
-	D2DRenderTarget->EndDraw();
+	D2DRT.GetRenderTarget().EndDraw();
 	SwapChain->Present(0, PresentFlags);
 }
 

@@ -9,7 +9,8 @@ enum class EColorByteOrder : std::size_t { ARGB, RGBA };
 
 struct FColorCode final
 {
-	std::uint32_t Code{};
+	using ValueType = std::uint32_t;
+	ValueType Code{};
 	EColorByteOrder ByteOrder{};
 };
 
@@ -44,7 +45,7 @@ public:
 	FColor& operator=(const FColor&) & = default;
 	FColor(FColor&&) noexcept = default;
 	FColor& operator=(FColor&&) & noexcept = default;
-	~FColor() noexcept = default;
+	~FColor() noexcept { static_assert(sizeof(UNorms) == sizeof(float) * 4); }
 
 	friend bool operator==(const FColor&, const FColor&) noexcept = default;
 	friend bool operator!=(const FColor&, const FColor&) noexcept = default;

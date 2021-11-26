@@ -34,7 +34,7 @@ public:
 
 	inline const FScreenArea& GetUIArea() const noexcept { return UIArea; }
 
-	void Render() const;
+	void Render();
 
 private:
 	void UpdateUIArea() noexcept;

@@ -6,6 +6,7 @@
 
 #include "Direct3D11.h"
 #include "Direct3D11Renderer.h"
+#include "Direct2D1RenderTarget.h"
 #include "System/Graphics/IGraphicsContext.h"
 
 class FSystemWindow;
@@ -38,10 +39,11 @@ private:
 
 public:
 	virtual FScreenArea GetViewportArea() const noexcept override final;
+	inline virtual ISurface2D& GetSurface() noexcept override final { return D2DRT; }
 
 	inline FDirect3D11Renderer& GetRenderer() const noexcept { return *Renderer; }
 	inline IDXGISwapChain& GetSwapChain() const& noexcept { return *SwapChain.Get(); }
-	inline ID2D1RenderTarget& GetD2DRenderTarget() const& noexcept { return *D2DRenderTarget.Get(); }
+	inline ID2D1RenderTarget& GetD2DRenderTarget() const& noexcept { return D2DRT.GetRenderTarget(); }
 
 private:
 	FDirect3D11Renderer* Renderer;
@@ -57,7 +59,7 @@ private:
 	TComPtr<ID3D11BlendState> BlendState;
 	D3D11_VIEWPORT Viewport;
 	D3D11_RECT ScissorRect;
-	TComPtr<ID2D1RenderTarget> D2DRenderTarget;
+	FDirect2D1RenderTarget D2DRT;
 };
 
 #endif

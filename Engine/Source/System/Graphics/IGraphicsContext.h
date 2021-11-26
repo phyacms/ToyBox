@@ -9,6 +9,7 @@
 #include "Type/Color.h"
 #include "System/Window/SystemWindow.h"
 #include "IGraphicsRenderer.h"
+#include "ISurface2D.h"
 
 using FRenderCommand = TDelegate<void(const FTimeDuration&)>;
 
@@ -37,6 +38,8 @@ public:
 
 	void AddCommand(FRenderCommand&& Command);
 	void ExecuteCommands(const FTimeDuration& DeltaTime);
+
+	virtual ISurface2D& GetSurface() noexcept = 0;
 
 protected:
 	inline FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }

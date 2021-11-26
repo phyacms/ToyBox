@@ -220,11 +220,17 @@
     <ClInclude Include="Source\Player\HUD\HUD.h">
       <Filter>Source\Player\HUD</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Window\ScreenSpace.h">
+      <Filter>Source\System\Window</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Player\HUD\UISpace.h">
       <Filter>Source\Player\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Window\ScreenSpace.h">
-      <Filter>Source\System\Window</Filter>
+    <ClInclude Include="Source\System\Graphics\ISurface2D.h">
+      <Filter>Source\System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.h">
+      <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="Source\Player\HUD\UISpace.cpp">
       <Filter>Source\Player\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
