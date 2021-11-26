@@ -6,6 +6,7 @@
 #include "System/Window/ScreenSpace.h"
 #include "System/Input/InputContext.h"
 #include "System/Graphics/IGraphicsContext.h"
+#include "UISpace.h"
 
 class FHUD final
 	: public IInputController
@@ -39,15 +40,16 @@ public:
 private:
 	void UpdateUIArea() noexcept;
 
-	inline virtual void BindInputActions(FInputActionBindings& Actions) override final {}
+	virtual void BindInputActions(FInputActionBindings& Actions) override final;
+	UCoord GetMouseCursorLocation(const FInputContext& Context) const noexcept;
 
 private:
 	AObject<FInputContext> Input;
 	AObject<IGraphicsContext> Graphics;
 
+	FScreenArea ViewportArea{};
 	ADelegateHandle DH_OnViewportAreaChanged;
 
-	FScreenArea ViewportArea{};
 	float MinimumAspectRatio;
 	float MaximumAspectRatio;
 	FScreenArea UIArea;

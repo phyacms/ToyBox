@@ -11,10 +11,10 @@ FHUD::FHUD(
 	: IInputController()
 	, Input{ std::move(Input) }
 	, Graphics{ std::move(Graphics) }
+	, ViewportArea{ this->Graphics->GetViewportArea() }
 	, DH_OnViewportAreaChanged{}
 	, MinimumAspectRatio(MinimumAspectRatio)
 	, MaximumAspectRatio(MaximumAspectRatio)
-	, ViewportArea{ this->Graphics->GetViewportArea() }
 	, UIArea{}
 {
 	DH_OnViewportAreaChanged = this->Graphics->OnViewportAreaChanged.AddDynamic(
@@ -55,13 +55,11 @@ void FHUD::Render()
 
 	// @TEST: Visualize UI area.
 	Graphics->AddCommand(
-		[this](const FTimeDuration& DeltaTime)->void
-		{
+		[this](const FTimeDuration& DeltaTime)->void {
 			Graphics->GetSurface().DrawRect(
 				UIArea, {
 					.Color{ ColorCodes::Green },
-					.Width{ 3.0f } });
-		});
+					.Width{ 3.0f } }); });
 }
 
 void FHUD::UpdateUIArea() noexcept
@@ -85,4 +83,14 @@ void FHUD::UpdateUIArea() noexcept
 		Y = static_cast<FScreenLocation::ValueType>(Height - dH) / 2;
 		Height = dH;
 	}
+}
+
+void FHUD::BindInputActions(FInputActionBindings& Actions)
+{
+}
+
+UCoord FHUD::GetMouseCursorLocation(const FInputContext& Context) const noexcept
+{
+	return UAbsCoord{ FScreenLocation()
+		+ (Context.GetMouseCursorLocation() - UIArea.Location) };
 }

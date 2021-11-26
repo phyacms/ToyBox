@@ -13,9 +13,11 @@ FDirect2D1RenderTarget::FDirect2D1RenderTarget()
 
 bool FDirect2D1RenderTarget::Initialize(ID2D1Factory& Factory, IDXGISurface& Surface) noexcept
 {
-	const D2D1_RENDER_TARGET_PROPERTIES& RenderTargetProperties = D2D1::RenderTargetProperties(
+	const D2D1_RENDER_TARGET_PROPERTIES& Properties = D2D1::RenderTargetProperties(
 		D2D1_RENDER_TARGET_TYPE::D2D1_RENDER_TARGET_TYPE_DEFAULT,
-		D2D1::PixelFormat(DXGI_FORMAT::DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE::D2D1_ALPHA_MODE_PREMULTIPLIED),
+		D2D1::PixelFormat(
+			DXGI_FORMAT::DXGI_FORMAT_UNKNOWN,
+			D2D1_ALPHA_MODE::D2D1_ALPHA_MODE_PREMULTIPLIED),
 		96.0f,
 		96.0f,
 		D2D1_RENDER_TARGET_USAGE::D2D1_RENDER_TARGET_USAGE_NONE,
@@ -23,7 +25,7 @@ bool FDirect2D1RenderTarget::Initialize(ID2D1Factory& Factory, IDXGISurface& Sur
 
 	if (FAILED(Factory.CreateDxgiSurfaceRenderTarget(
 		&Surface,
-		&RenderTargetProperties,
+		&Properties,
 		&RenderTarget)))
 	{
 		return false;
@@ -40,7 +42,9 @@ void FDirect2D1RenderTarget::DrawLine(
 	RenderTarget->DrawLine(
 		::ToPoint(Begin),
 		::ToPoint(End),
-		&GetBrush(Stroke.Color), Stroke.Width, nullptr);
+		&GetBrush(Stroke.Color),
+		Stroke.Width,
+		nullptr);
 }
 
 void FDirect2D1RenderTarget::DrawRect(
@@ -50,7 +54,8 @@ void FDirect2D1RenderTarget::DrawRect(
 	RenderTarget->DrawRectangle(
 		::ToRect(Rect),
 		&GetBrush(Stroke.Color),
-		Stroke.Width, nullptr);
+		Stroke.Width,
+		nullptr);
 }
 
 ID2D1SolidColorBrush& FDirect2D1RenderTarget::GetBrush(const FColor& Color)
@@ -58,7 +63,7 @@ ID2D1SolidColorBrush& FDirect2D1RenderTarget::GetBrush(const FColor& Color)
 	const auto& Index{ Color.GetAsColorCode(EColorByteOrder::ARGB).Code };
 	if (Brushes.find(Index) == std::cend(Brushes))
 	{
-		auto [cIt, bEmplaced] = Brushes.emplace(Index, decltype(Brushes)::mapped_type{});
+		const auto& [cIt, bEmplaced] = Brushes.emplace(Index, decltype(Brushes)::mapped_type{});
 		if (!bEmplaced)
 		{
 			throw std::runtime_error{ __FUNCTION__ "(): Failed to emplace new element in std::unordered_map." };

@@ -15,17 +15,17 @@ UAbsCoord::UAbsCoord(const FScreenLocation& Coord)
 			return static_cast<UVector::ValueType>(Value); });
 }
 
-UAbsCoord ToAbsolute(const URelCoord& Rel, const FScreenArea& Area) noexcept
+UAbsCoord ToAbsolute(const URelCoord& Rel, const FScreenSize& Size) noexcept
 {
 	UAbsCoord Abs{};
-	Abs.Coord = Area.Location.FromOrigin().CastAs<float>() + Rel.GetAsVector() * Area.Size.CastAs<float>();
+	Abs.Coord = Rel.GetAsVector() * Size.CastAs<float>();
 	return Abs;
 }
 
-URelCoord ToRelative(const UAbsCoord& Abs, const FScreenArea& Area) noexcept
+URelCoord ToRelative(const UAbsCoord& Abs, const FScreenSize& Size) noexcept
 {
 	URelCoord Rel{};
-	Rel.Norms.Set<float>(Abs.GetAsVector() / Area.Size.CastAs<float>());
+	Rel.Norms.Set<float>(Abs.GetAsVector() / Size.CastAs<float>());
 	return Rel;
 }
 
@@ -54,16 +54,16 @@ UCoord& UCoord::operator-=(const UCoord& U) noexcept
 	return *this;
 }
 
-UAbsCoord UCoord::GetAsAbsolute(const FScreenArea& Area) const noexcept
+UAbsCoord UCoord::GetAsAbsolute(const FScreenSize& Size) const noexcept
 {
 	UAbsCoord Abs{};
-	Abs.Coord = this->Abs.GetAsVector() + ::ToAbsolute(Rel, Area).GetAsVector();
+	Abs.Coord = this->Abs.GetAsVector() + ::ToAbsolute(Rel, Size).GetAsVector();
 	return Abs;
 }
 
-URelCoord UCoord::GetAsRelative(const FScreenArea& Area) const noexcept
+URelCoord UCoord::GetAsRelative(const FScreenSize& Size) const noexcept
 {
 	URelCoord Rel{};
-	Rel.Norms.Set<float>(this->Rel.Norms.GetAsVector() + ::ToRelative(Abs, Area).GetAsVector());
+	Rel.Norms.Set<float>(this->Rel.Norms.GetAsVector() + ::ToRelative(Abs, Size).GetAsVector());
 	return Rel.Norms;
 }

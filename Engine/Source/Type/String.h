@@ -88,7 +88,9 @@ private:
 
 namespace TypeConversion
 {
-	enum class IntegerBase : int
+	inline constexpr std::size_t StringBufferSize{ 128 };
+
+	enum class IntegerBase : std::size_t
 	{
 		Decimal = 10,
 		Binary = 2,
@@ -100,18 +102,18 @@ namespace TypeConversion
 template<
 	typename IntegralType,
 	typename = std::enable_if<std::is_integral_v<IntegralType>>>
-[[nodiscard]] FString ToString(
+inline [[nodiscard]] FString ToString(
 	IntegralType Value,
 	TypeConversion::IntegerBase Base = TypeConversion::IntegerBase::Decimal)
 {
-	std::array<char, 128> Buffer{};
+	std::array<char, TypeConversion::StringBufferSize> Buffer{};
+
 	auto [EndPtr, Ec]
 		= std::to_chars(
 			Buffer.data(),
 			Buffer.data() + Buffer.size(),
 			Value,
 			static_cast<int>(Base));
-
 	if (Ec != std::errc{})
 	{
 		return {};
@@ -144,6 +146,43 @@ template<
 	Converted.insert(Converted.find_first_of(u'-') + 1, Prefix);
 	return std::move(Converted);
 }
+
+template<
+	typename FloatingPointType,
+	typename = std::enable_if_t<std::is_floating_point_v<FloatingPointType>>>
+inline [[nodiscard]] FString ToString(
+	FloatingPointType Value,
+	std::chars_format Format = std::chars_format::general)
+{
+	std::array<char, TypeConversion::StringBufferSize> Buffer{};
+
+	auto [EndPtr, Ec]
+		= std::to_chars(
+			Buffer.data(),
+			Buffer.data() + Buffer.size(),
+			Value,
+			Format);
+	if (Ec != std::errc{})
+	{
+		return {};
+	}
+
+	const auto ByteSize{ EndPtr - Buffer.data() };
+	FString::StringType Converted(ByteSize, FString::CodeUnit{});
+	std::transform(
+		std::execution::par_unseq,
+		Buffer.data(),
+		EndPtr,
+		std::begin(Converted),
+		[](char Code)->FString::CodeUnit { return static_cast<FString::CodeUnit>(Code); });
+
+	return std::move(Converted);
+}
+
+// Provided best matches for floading-point types.
+inline [[nodiscard]] FString ToString(float Value, std::chars_format Format = std::chars_format::general) { return ::ToString<float>(Value, Format); }
+inline [[nodiscard]] FString ToString(double Value, std::chars_format Format = std::chars_format::general) { return ::ToString<double>(Value, Format); }
+inline [[nodiscard]] FString ToString(long double Value, std::chars_format Format = std::chars_format::general) { return ::ToString<long double>(Value, Format); }
 
 template<typename T, typename... Ts>
 inline [[nodiscard]] FString ToString(const std::atomic<T>& Value, Ts&&... Params)

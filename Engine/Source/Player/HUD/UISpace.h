@@ -13,7 +13,7 @@ class URelCoord;
 
 class UAbsCoord final
 {
-	friend UAbsCoord ToAbsolute(const URelCoord& Rel, const FScreenArea& Area) noexcept;
+	friend UAbsCoord ToAbsolute(const URelCoord& Rel, const FScreenSize& Size) noexcept;
 	friend class UCoord;
 
 public:
@@ -38,7 +38,7 @@ private:
 
 class URelCoord final
 {
-	friend URelCoord ToRelative(const UAbsCoord& Abs, const FScreenArea& Area) noexcept;
+	friend URelCoord ToRelative(const UAbsCoord& Abs, const FScreenSize& Size) noexcept;
 	friend class UCoord;
 
 public:
@@ -86,8 +86,8 @@ public:
 	UCoord& operator-=(const UCoord& U) noexcept;
 
 public:
-	UAbsCoord GetAsAbsolute(const FScreenArea& Area) const noexcept;
-	URelCoord GetAsRelative(const FScreenArea& Area) const noexcept;
+	UAbsCoord GetAsAbsolute(const FScreenSize& Size) const noexcept;
+	URelCoord GetAsRelative(const FScreenSize& Size) const noexcept;
 
 private:
 	UAbsCoord Abs{};
@@ -99,8 +99,8 @@ inline UCoord operator+(URelCoord Rel, const UCoord& Coord) noexcept { return Co
 inline UCoord operator-(UAbsCoord Abs, const UCoord& Coord) noexcept { return UCoord{ Abs } - Coord; }
 inline UCoord operator-(URelCoord Rel, const UCoord& Coord) noexcept { return UCoord{ Rel } - Coord; }
 
-inline UAbsCoord ToAbsolute(const UCoord& Coord, const FScreenArea& Area) noexcept { return Coord.GetAsAbsolute(Area); }
-inline URelCoord ToRelative(const UCoord& Coord, const FScreenArea& Area) noexcept { return Coord.GetAsRelative(Area); }
+inline UAbsCoord ToAbsolute(const UCoord& Coord, const FScreenSize& Size) noexcept { return Coord.GetAsAbsolute(Size); }
+inline URelCoord ToRelative(const UCoord& Coord, const FScreenSize& Size) noexcept { return Coord.GetAsRelative(Size); }
 
 struct URect final
 {
