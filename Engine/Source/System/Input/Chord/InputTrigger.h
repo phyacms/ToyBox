@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "SwitchState.h"
-#include "InputCode.h"
+#include "System/Input/Code/SwitchState.h"
+#include "System/Input/Code/InputCode.h"
+#include "System/Input/Code/MouseWheel.h"
 
 struct FInputCodeTrigger
 {
@@ -15,15 +16,7 @@ struct FInputCodeTrigger
 	inline bool IsValid() const noexcept { return InputFunctions::IsValidInputCode(InputCode) && Event != ESwitchEvent::Idle; }
 };
 
-enum class EMouseWheelTrigger : std::size_t
-{
-	RollUp,
-	RollDown,
-};
-
-using FMouseWheelTriggers = std::vector<EMouseWheelTrigger>;
-
-using FInputTrigger = std::variant<FInputCodeTrigger, EMouseWheelTrigger>;
+using FInputTrigger = std::variant<FInputCodeTrigger, EMouseWheel>;
 
 namespace InputFunctions
 {

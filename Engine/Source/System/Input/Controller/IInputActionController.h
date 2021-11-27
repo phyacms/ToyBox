@@ -3,7 +3,7 @@
 #pragma once
 
 #include "IInputController.h"
-#include "InputAction.h"
+#include "System/Input/Chord/InputAction.h"
 
 // @TODO: Modify to bind/unbind actions dynamically.
 class IInputActionController
@@ -29,7 +29,7 @@ private:
 
 	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const override final;
 	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const override final;
-	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheelTrigger dWheel) const override final;
+	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheel Wheel) const override final;
 
 	bool DispatchInputAction(const FInputContext& Context, const FInputTrigger& Trigger) const;
 

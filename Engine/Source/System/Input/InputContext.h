@@ -4,9 +4,10 @@
 
 #include "Type/Object.h"
 #include "System/Window/SystemWindow.h"
-#include "IInputActionController.h"
+#include "Controller/IInputController.h"
 
 class FInput;
+class IInputActionController;
 
 class FInputContext final
 	: public TObject<FInputContext>
@@ -41,7 +42,7 @@ public:
 private:
 	bool SetKeyboardKeyState(EKeyboardKey Key, ESwitchState State);
 	bool SetMouseButtonState(EMouseButton Button, ESwitchState State);
-	bool ConsumeMouseWheelMove(const FMouseWheelTriggers& WheelMove);
+	bool ConsumeMouseWheelMove(const FMouseWheelDelta& WheelDelta);
 	void SetMouseCursorLocation(const FScreenLocation& CursorLocation);
 
 private:

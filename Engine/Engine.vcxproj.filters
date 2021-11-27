@@ -55,6 +55,21 @@
     <Filter Include="Source\Player\HUD">
       <UniqueIdentifier>{ca123d2c-1ff4-43e4-b2c6-5e0556af1eac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Type\Byte">
+      <UniqueIdentifier>{afb2bb90-5a70-46a2-901d-c0830446697d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Type\Delegate">
+      <UniqueIdentifier>{c02ca50b-6c35-4eba-85c8-65d0a17b82ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Input\Controller">
+      <UniqueIdentifier>{7b825d9c-5089-489b-894a-abbf3164daaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Input\Code">
+      <UniqueIdentifier>{c4750c16-0df8-4fdb-9a85-a007ecc5c854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Input\Chord">
+      <UniqueIdentifier>{c7925c6b-ddc6-4aef-852f-ca81a1fd6224}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -88,22 +103,13 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h">
       <Filter>Source\Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\Delegate.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Type\Object.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
     <ClInclude Include="Source\Type\UniqueId.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\MulticastDelegate.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Type\TimePoint.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\EventDispatcher.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\IApplicationEntry.h">
@@ -133,15 +139,6 @@
     <ClInclude Include="Source\Type\TypeTraits.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\Byte.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\ByteBuffer.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\ByteStream.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Log\Log.h">
       <Filter>Source\Log</Filter>
     </ClInclude>
@@ -149,27 +146,6 @@
       <Filter>Source\System\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\Input\InputContext.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\MouseButton.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\KeyboardKey.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\SwitchState.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\InputCode.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\InputChord.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\InputAction.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Input\InputTrigger.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\Math\Matrix.h">
@@ -229,17 +205,59 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.h">
       <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Input\IInputController.h">
-      <Filter>Source\System\Input</Filter>
+    <ClInclude Include="Source\Type\Delegate\Delegate.h">
+      <Filter>Source\Type\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Input\IInputActionController.h">
-      <Filter>Source\System\Input</Filter>
+    <ClInclude Include="Source\Type\Delegate\DelegateHandle.h">
+      <Filter>Source\Type\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\DelegateHandle.h">
-      <Filter>Source\Type</Filter>
+    <ClInclude Include="Source\Type\Delegate\EventDispatcher.h">
+      <Filter>Source\Type\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\IMulticastDelegate.h">
-      <Filter>Source\Type</Filter>
+    <ClInclude Include="Source\Type\Delegate\IMulticastDelegate.h">
+      <Filter>Source\Type\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Delegate\MulticastDelegate.h">
+      <Filter>Source\Type\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Byte\ByteStream.h">
+      <Filter>Source\Type\Byte</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Byte\Byte.h">
+      <Filter>Source\Type\Byte</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Byte\ByteBuffer.h">
+      <Filter>Source\Type\Byte</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Controller\IInputActionController.h">
+      <Filter>Source\System\Input\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Controller\IInputController.h">
+      <Filter>Source\System\Input\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Code\MouseButton.h">
+      <Filter>Source\System\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Code\SwitchState.h">
+      <Filter>Source\System\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Code\InputCode.h">
+      <Filter>Source\System\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Code\KeyboardKey.h">
+      <Filter>Source\System\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Code\MouseWheel.h">
+      <Filter>Source\System\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Chord\InputChord.h">
+      <Filter>Source\System\Input\Chord</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Chord\InputTrigger.h">
+      <Filter>Source\System\Input\Chord</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\Chord\InputAction.h">
+      <Filter>Source\System\Input\Chord</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -273,12 +291,6 @@
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp">
       <Filter>Source\System\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Type\ByteBuffer.cpp">
-      <Filter>Source\Type</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Type\ByteStream.cpp">
-      <Filter>Source\Type</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Type\String.cpp">
       <Filter>Source\Type</Filter>
     </ClCompile>
@@ -289,15 +301,6 @@
       <Filter>Source\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Input\InputContext.cpp">
-      <Filter>Source\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Input\InputCode.cpp">
-      <Filter>Source\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Input\InputChord.cpp">
-      <Filter>Source\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Input\InputTrigger.cpp">
       <Filter>Source\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\Type\Color.cpp">
@@ -333,17 +336,32 @@
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Input\IInputActionController.cpp">
-      <Filter>Source\System\Input</Filter>
+    <ClCompile Include="Source\Type\Delegate\DelegateHandle.cpp">
+      <Filter>Source\Type\Delegate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Input\IInputController.cpp">
-      <Filter>Source\System\Input</Filter>
+    <ClCompile Include="Source\Type\Delegate\IMulticastDelegate.cpp">
+      <Filter>Source\Type\Delegate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Type\DelegateHandle.cpp">
-      <Filter>Source\Type</Filter>
+    <ClCompile Include="Source\Type\Byte\ByteBuffer.cpp">
+      <Filter>Source\Type\Byte</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Type\IMulticastDelegate.cpp">
-      <Filter>Source\Type</Filter>
+    <ClCompile Include="Source\Type\Byte\ByteStream.cpp">
+      <Filter>Source\Type\Byte</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\Controller\IInputController.cpp">
+      <Filter>Source\System\Input\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\Controller\IInputActionController.cpp">
+      <Filter>Source\System\Input\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\Code\InputCode.cpp">
+      <Filter>Source\System\Input\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\Chord\InputChord.cpp">
+      <Filter>Source\System\Input\Chord</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\Chord\InputTrigger.cpp">
+      <Filter>Source\System\Input\Chord</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

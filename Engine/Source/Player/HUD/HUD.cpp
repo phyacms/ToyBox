@@ -115,7 +115,7 @@ bool FHUD::DispatchMouseButtonEvent(
 
 bool FHUD::DispatchMouseWheelMoveEvent(
 	const FInputContext& Context,
-	EMouseWheelTrigger dWheel) const
+	EMouseWheel Wheel) const
 {
 	return false;
 }

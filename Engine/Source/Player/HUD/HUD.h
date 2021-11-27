@@ -3,9 +3,9 @@
 #pragma once
 
 #include "Type/TimePoint.h"
-#include "Type/DelegateHandle.h"
+#include "Type/Delegate/DelegateHandle.h"
 #include "System/Window/ScreenSpace.h"
-#include "System/Input/IInputController.h"
+#include "System/Input/Controller/IInputController.h"
 #include "UISpace.h"
 
 class FInputContext;
@@ -50,7 +50,7 @@ private:
 
 	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const override final;
 	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const override final;
-	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheelTrigger dWheel) const override final;
+	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheel Wheel) const override final;
 
 private:
 	AObject<FInputContext> Input;

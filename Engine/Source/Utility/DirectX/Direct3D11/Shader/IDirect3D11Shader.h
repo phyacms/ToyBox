@@ -4,7 +4,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Type/Delegate.h"
+#include "Type/Delegate/Delegate.h"
 #include "Utility/DirectX/Direct3D11/Direct3D11.h"
 
 class IDirect3D11ShaderConstantBuffer;

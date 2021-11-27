@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Engine.h"
-#include "Object.h"
 #include "DelegateHandle.h"
+#include "Type/Object.h"
 
 class IMulticastDelegate
 	: public TObject<IMulticastDelegate>

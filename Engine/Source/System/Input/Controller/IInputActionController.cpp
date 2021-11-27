@@ -2,7 +2,7 @@
 
 #include "Engine.h"
 #include "IInputActionController.h"
-#include "InputContext.h"
+#include "System/Input/InputContext.h"
 
 bool IInputActionController::DispatchKeyboardKeyEvent(
 	const FInputContext& Context,
@@ -30,9 +30,9 @@ bool IInputActionController::DispatchMouseButtonEvent(
 
 bool IInputActionController::DispatchMouseWheelMoveEvent(
 	const FInputContext& Context,
-	EMouseWheelTrigger dWheel) const
+	EMouseWheel Wheel) const
 {
-	return DispatchInputAction(Context, dWheel);
+	return DispatchInputAction(Context, Wheel);
 }
 
 bool IInputActionController::DispatchInputAction(const FInputContext& Context, const FInputTrigger& Trigger) const

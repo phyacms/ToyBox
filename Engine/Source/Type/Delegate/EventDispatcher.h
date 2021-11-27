@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/MulticastDelegate.h"
+#include "Type/Delegate/MulticastDelegate.h"
 
 template<typename T>
 class TEventDispatchPolicy;

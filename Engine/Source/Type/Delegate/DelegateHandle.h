@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Engine.h"
-#include "Object.h"
 #include "Delegate.h"
+#include "Type/Object.h"
 
 class ADelegateHandle;
 class IMulticastDelegate;

@@ -5,8 +5,8 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "System/Input/SwitchState.h"
-#include "System/Input/InputTrigger.h"
+#include "System/Input/Code/SwitchState.h"
+#include "System/Input/Code/MouseWheel.h"
 
 std::size_t WindowsPlatform::FWndProc::RegisterCount{};
 
@@ -342,14 +342,14 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(U
 			{
 				while (WheelDelta++ != 0)
 				{
-					WheelMove.WheelDelta.emplace_back(EMouseWheelTrigger::RollDown);
+					WheelMove.WheelDelta.emplace_back(EMouseWheel::RollDown);
 				}
 			}
 			else if (WheelDelta > 0)
 			{
 				while (WheelDelta-- != 0)
 				{
-					WheelMove.WheelDelta.emplace_back(EMouseWheelTrigger::RollUp);
+					WheelMove.WheelDelta.emplace_back(EMouseWheel::RollUp);
 				}
 			}
 

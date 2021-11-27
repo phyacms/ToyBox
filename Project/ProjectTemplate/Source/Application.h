@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <Type/DelegateHandle.h>
+#include <Type/Delegate/DelegateHandle.h>
 #include <Application/IApplication.h>
-#include <System/Input/IInputActionController.h>
+#include <System/Input/Controller/IInputActionController.h>
 
 class FSystemWindow;
 class FInputContext;

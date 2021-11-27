@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Math/Normals.h"
-#include "ByteBuffer.h"
+#include "Byte/ByteBuffer.h"
 
 enum class EColorByteOrder : std::size_t { ARGB, RGBA };
 

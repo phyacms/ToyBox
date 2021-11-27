@@ -4,9 +4,9 @@
 
 #include "Type/Object.h"
 #include "Type/TimePoint.h"
-#include "Type/Delegate.h"
-#include "Type/MulticastDelegate.h"
 #include "Type/Color.h"
+#include "Type/Delegate/Delegate.h"
+#include "Type/Delegate/MulticastDelegate.h"
 #include "System/Window/SystemWindow.h"
 #include "IGraphicsRenderer.h"
 #include "ISurface2D.h"

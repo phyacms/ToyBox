@@ -4,11 +4,11 @@
 
 #include "Type/Object.h"
 #include "Type/String.h"
-#include "Type/EventDispatcher.h"
+#include "Type/Delegate/EventDispatcher.h"
+#include "System/Input/Code/KeyboardKey.h"
+#include "System/Input/Code/MouseButton.h"
+#include "System/Input/Code/MouseWheel.h"
 #include "ScreenSpace.h"
-#include "System/Input/KeyboardKey.h"
-#include "System/Input/MouseButton.h"
-#include "System/Input/InputTrigger.h"
 
 class ISystemWindowProcedure;
 
@@ -29,7 +29,7 @@ namespace SystemWindowEventTypes
 	struct FOnResized final { FScreenSize ClientAreaSize{}; };
 	struct FOnKeyboardKey final { EKeyboardKey Key{}; ESwitchState State{}; };
 	struct FOnMouseButton final { EMouseButton Button{}; ESwitchState State{}; };
-	struct FOnMouseWheel final { FMouseWheelTriggers WheelDelta{}; };
+	struct FOnMouseWheel final { FMouseWheelDelta WheelDelta{}; };
 	struct FOnMouseMove final { FScreenLocation CursorLocation{}; };
 
 	struct Null final {};

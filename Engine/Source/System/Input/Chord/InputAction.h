@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/Delegate.h"
 #include "Type/Container.h"
+#include "Type/Delegate/Delegate.h"
 #include "InputChord.h"
 
 class FInputContext;

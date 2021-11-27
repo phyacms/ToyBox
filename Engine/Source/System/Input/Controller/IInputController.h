@@ -4,7 +4,7 @@
 
 #include "Type/Object.h"
 #include "Type/UniqueId.h"
-#include "InputTrigger.h"
+#include "System/Input/Chord/InputTrigger.h"
 
 class FInputContext;
 
@@ -23,7 +23,7 @@ public:
 public:
 	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const = 0;
 	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const = 0;
-	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheelTrigger dWheel) const = 0;
+	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheel Wheel) const = 0;
 };
 
 class AInputControllerBinding final

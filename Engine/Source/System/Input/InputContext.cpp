@@ -2,7 +2,7 @@
 
 #include "Engine.h"
 #include "InputContext.h"
-#include "IInputController.h"
+#include "Controller/IInputActionController.h"
 
 FInputContext::FInputContext(
 	FInput& Input,
@@ -22,13 +22,16 @@ FInputContext::FInputContext(
 		using namespace SystemWindowEventTypes;
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnKeyboardKey.AddDynamic(
-			[this](const FOnKeyboardKey& EventArgs)->bool { return SetKeyboardKeyState(EventArgs.Key, EventArgs.State); });
+			[this](const FOnKeyboardKey& EventArgs)->bool {
+				return SetKeyboardKeyState(EventArgs.Key, EventArgs.State); });
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseButton.AddDynamic(
-			[this](const FOnMouseButton& EventArgs)->bool { return SetMouseButtonState(EventArgs.Button, EventArgs.State); });
+			[this](const FOnMouseButton& EventArgs)->bool {
+				return SetMouseButtonState(EventArgs.Button, EventArgs.State); });
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseWheel.AddDynamic(
-			[this](const FOnMouseWheel& EventArgs)->bool { return ConsumeMouseWheelMove(EventArgs.WheelDelta); });
+			[this](const FOnMouseWheel& EventArgs)->bool {
+				return ConsumeMouseWheelMove(EventArgs.WheelDelta); });
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseMove.AddDynamic(
 			[this](const FOnMouseMove& EventArgs)->bool {
@@ -39,6 +42,8 @@ FInputContext::FInputContext(
 
 FInputContext::~FInputContext() noexcept
 {
+	Controllers.clear();
+	KeyboardMouseEvents.Clear();
 	InputWindow.Release();
 }
 
@@ -138,16 +143,16 @@ bool FInputContext::SetMouseButtonState(EMouseButton Button, ESwitchState State)
 	return false;
 }
 
-bool FInputContext::ConsumeMouseWheelMove(const FMouseWheelTriggers& WheelMove)
+bool FInputContext::ConsumeMouseWheelMove(const FMouseWheelDelta& WheelDelta)
 {
 	for (auto& [Id, Controller] : Controllers)
 	{
 		bool bHandled{};
-		for (auto dWheel : WheelMove)
+		for (auto Wheel : WheelDelta)
 		{
 			bHandled |=
 				Controller.IsValid()
-				&& Controller->DispatchMouseWheelMoveEvent(*this, dWheel);
+				&& Controller->DispatchMouseWheelMoveEvent(*this, Wheel);
 		}
 		if (bHandled)
 		{

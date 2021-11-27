@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ByteBuffer.h"
+#include "Byte/ByteBuffer.h"
 #include "TypeTraits.h"
 
 enum class EStringLength : std::size_t { CodePoint, CodeUnit };
