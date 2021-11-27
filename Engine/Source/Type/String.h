@@ -54,8 +54,11 @@ public:
 	friend inline bool operator==(const FString& Lhs, const FString& Rhs) noexcept = default;
 	friend inline bool operator!=(const FString& Lhs, const FString& Rhs) noexcept = default;
 
-	inline FString& operator+=(const FString& Other) { Str.append(Other.Str); return *this; }
-	inline FString& operator+=(FString&& Other) { return operator+=(Other); }
+	inline FString operator+(const FString& Other) const { return Concatenate(Other); }
+	inline FString operator+(FString&& Other) const { return Concatenate(std::move(Other)); }
+
+	inline FString& operator+=(const FString& Other) { return Append(Other); }
+	inline FString& operator+=(FString&& Other) { return Append(std::move(Other)); }
 
 public:
 	inline bool IsEmpty() const noexcept { return Str.empty(); }
@@ -73,6 +76,11 @@ public:
 	}
 	inline std::size_t GetCharacterCount() const noexcept { return Length<EStringLength::CodePoint>(); }
 	inline std::size_t GetByteSize() const noexcept { return Length<EStringLength::CodeUnit>(); }
+
+	inline FString Concatenate(const FString& Other) const { return FString{ *this }.Append(Other); }
+	inline FString Concatenate(FString&& Other) const { return FString{ *this }.Append(std::move(Other)); }
+	inline FString& Append(const FString& Other) { Str.append(Other.Str); return *this; }
+	inline FString& Append(FString&& Other) { Str.append(std::move(Other.Str)); return *this; }
 
 	inline const StringType& GetStr() const& noexcept { return Str; }
 	inline StringType GetStr() const&& noexcept { return Str; }
