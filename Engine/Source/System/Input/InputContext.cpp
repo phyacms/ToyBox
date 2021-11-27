@@ -14,7 +14,7 @@ FInputContext::FInputContext(
 	, KeyboardKeyStates{}
 	, MouseButtonStates{}
 	, MouseCursorLocation{}
-	, Issuer{}
+	, ControllerIdIssuer{}
 	, Controllers{}
 {
 	if (this->InputWindow.IsValid())
@@ -22,59 +22,18 @@ FInputContext::FInputContext(
 		using namespace SystemWindowEventTypes;
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnKeyboardKey.AddDynamic(
-			[this](const FOnKeyboardKey& EventArgs)->bool
-			{
-				if (InputFunctions::IsValidKey(EventArgs.Key))
-				{
-					const auto Index{ InputFunctions::ToIndex(EventArgs.Key) };
-					const auto Event{ ::ToSwitchEvent(GetKeyboardKeyState(EventArgs.Key), EventArgs.State) };
-					KeyboardKeyStates[Index] = EventArgs.State;
-					if (Event != ESwitchEvent::Idle)
-					{
-						KeyboardKeyStates[Index] = EventArgs.State;
-						return DispatchInputAction(FInputCodeTrigger{ .InputCode{ EventArgs.Key }, .Event{ Event } });
-					}
-				}
-				return false;
-			});
+			[this](const FOnKeyboardKey& EventArgs)->bool { return SetKeyboardKeyState(EventArgs.Key, EventArgs.State); });
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseButton.AddDynamic(
-			[this](const FOnMouseButton& EventArgs)->bool
-			{
-				if (InputFunctions::IsValidButton(EventArgs.Button))
-				{
-					const auto Index{ InputFunctions::ToIndex(EventArgs.Button) };
-					const auto Event{ ::ToSwitchEvent(GetMouseButtonState(EventArgs.Button), EventArgs.State) };
-					MouseButtonStates[Index] = EventArgs.State;
-					if (Event != ESwitchEvent::Idle)
-					{
-						return DispatchInputAction(FInputCodeTrigger{
-							.InputCode{ EventArgs.Button },
-							.Event{ Event } });
-					}
-				}
-				return false;
-			});
+			[this](const FOnMouseButton& EventArgs)->bool { return SetMouseButtonState(EventArgs.Button, EventArgs.State); });
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseWheel.AddDynamic(
-			[this](const FOnMouseWheel& EventArgs)->bool
-			{
-				for (auto WheelMove : EventArgs.WheelDelta)
-				{
-					if (DispatchInputAction(WheelMove))
-					{
-						return true;
-					}
-				}
-				return false;
-			});
+			[this](const FOnMouseWheel& EventArgs)->bool { return ConsumeMouseWheelMove(EventArgs.WheelDelta); });
 
 		KeyboardMouseEvents += this->InputWindow->Events.OnMouseMove.AddDynamic(
-			[this](const FOnMouseMove& EventArgs)->bool
-			{
-				MouseCursorLocation = EventArgs.CursorLocation;
-				return false;
-			});
+			[this](const FOnMouseMove& EventArgs)->bool {
+				SetMouseCursorLocation(EventArgs.CursorLocation);
+				return false; });
 	}
 }
 
@@ -102,24 +61,25 @@ ESwitchState FInputContext::GetMouseButtonState(EMouseButton Button) const noexc
 		: ESwitchState::Up;
 }
 
-AInputController FInputContext::BindInputController(AObject<IInputController>&& Controller)
+AInputControllerBinding FInputContext::BindInputController(AObject<IInputController>&& Controller)
 {
-	if (Controller.IsValid())
+	if (!Controller.IsValid())
 	{
-		Controller->BindStatics();
-
-		AUniqueId Issued{ Issuer.Issue() };
-		Controllers.emplace_front(
-			std::make_pair(
-				Issued.GetHash(),
-				std::move(Controller)));
-		return Issued;
+		return {};
 	}
 
-	return {};
+	AUniqueId Issued{ ControllerIdIssuer.Issue() };
+	Controllers.emplace_front(std::make_pair(Issued.GetHash(), std::move(Controller)));
+	return { *this, std::move(Issued) };
 }
 
-void FInputContext::UnbindInputController(AInputController& Handle) noexcept
+AInputControllerBinding FInputContext::BindInputController(IInputActionController& ActionController)
+{
+	ActionController.BindStatics();
+	return BindInputController(AObject<IInputController>{ ActionController });
+}
+
+void FInputContext::UnbindInputController(AInputControllerBinding& Handle) noexcept
 {
 	if (auto Index{ Handle.GetHash() };
 		Handle.IsValid() && Index != FUniqueId::InvalidId)
@@ -134,39 +94,70 @@ void FInputContext::UnbindInputController(AInputController& Handle) noexcept
 	}
 }
 
-bool FInputContext::DispatchInputAction(const FInputTrigger& Trigger)
+bool FInputContext::SetKeyboardKeyState(EKeyboardKey Key, ESwitchState State)
 {
-	for (const auto& [Id, Controller] : Controllers)
+	if (InputFunctions::IsValidKey(Key))
 	{
-		const auto& Action{ std::find_if(
-			std::execution::par_unseq,
-			Controller->cbegin(),
-			Controller->cend(),
-			[this, &Trigger](const FInputAction& Action)->bool
+		const auto Index{ InputFunctions::ToIndex(Key) };
+		const auto Event{ ::ToSwitchEvent(GetKeyboardKeyState(Key), State) };
+		KeyboardKeyStates[Index] = State;
+		if (Event != ESwitchEvent::Idle)
+		{
+			for (auto& [Id, Controller] : Controllers)
 			{
-				if (Action.Chord.GetTrigger() == Trigger)
+				if (Controller.IsValid()
+					&& Controller->DispatchKeyboardKeyEvent(*this, Key, Event))
 				{
-					const auto& Modifiers{ Action.Chord.GetModifiers().InputCodes };
-					return std::transform_reduce(
-						std::execution::par_unseq,
-						std::cbegin(Modifiers),
-						std::cend(Modifiers),
-						true,
-						std::logical_and{},
-						[this](const FInputCode& Modifier)->bool
-						{
-							return std::visit(stdhelp::overloaded{
-								[this](EKeyboardKey Key)->bool { return IsKeyboardKeyDown(Key); },
-								[this](EMouseButton Button)->bool { return IsMouseButtonDown(Button); }, },
-								Modifier); });
+					return true;
 				}
-				return false;
-			}) };
-		if (Action != Controller->cend()
-			&& Action->Callback.Execute(*this))
+			}
+		}
+	}
+	return false;
+}
+
+bool FInputContext::SetMouseButtonState(EMouseButton Button, ESwitchState State)
+{
+	if (InputFunctions::IsValidButton(Button))
+	{
+		const auto Index{ InputFunctions::ToIndex(Button) };
+		const auto Event{ ::ToSwitchEvent(GetMouseButtonState(Button), State) };
+		MouseButtonStates[Index] = State;
+		if (Event != ESwitchEvent::Idle)
+		{
+			for (auto& [Id, Controller] : Controllers)
+			{
+				if (Controller.IsValid()
+					&& Controller->DispatchMouseButtonEvent(*this, Button, Event))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool FInputContext::ConsumeMouseWheelMove(const FMouseWheelTriggers& WheelMove)
+{
+	for (auto& [Id, Controller] : Controllers)
+	{
+		bool bHandled{};
+		for (auto dWheel : WheelMove)
+		{
+			bHandled |=
+				Controller.IsValid()
+				&& Controller->DispatchMouseWheelMoveEvent(*this, dWheel);
+		}
+		if (bHandled)
 		{
 			return true;
 		}
 	}
 	return false;
+}
+
+void FInputContext::SetMouseCursorLocation(const FScreenLocation& CursorLocation)
+{
+	MouseCursorLocation = CursorLocation;
 }

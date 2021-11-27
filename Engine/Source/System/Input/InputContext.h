@@ -4,22 +4,13 @@
 
 #include "Type/Object.h"
 #include "System/Window/SystemWindow.h"
-#include "IInputController.h"
+#include "IInputActionController.h"
 
 class FInput;
-class IInputController;
-class FInputContext;
 
 class FInputContext final
 	: public TObject<FInputContext>
 {
-private:
-	struct FMouseMovement final { FScreenLocation CursorLocation{}; };
-
-	using FInputEvent = std::variant<
-		FInputTrigger,
-		FMouseMovement>;
-
 public:
 	FInputContext(
 		FInput& Input,
@@ -43,11 +34,15 @@ public:
 	inline bool IsMouseButtonUp(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Up; }
 	inline bool IsMouseButtonDown(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Down; }
 
-	[[nodiscard]] AInputController BindInputController(AObject<IInputController>&& Controller);
-	void UnbindInputController(AInputController& Handle) noexcept;
+	[[nodiscard]] AInputControllerBinding BindInputController(AObject<IInputController>&& Controller);
+	[[nodiscard]] AInputControllerBinding BindInputController(IInputActionController& ActionController);
+	void UnbindInputController(AInputControllerBinding& Handle) noexcept;
 
 private:
-	bool DispatchInputAction(const FInputTrigger& Trigger);
+	bool SetKeyboardKeyState(EKeyboardKey Key, ESwitchState State);
+	bool SetMouseButtonState(EMouseButton Button, ESwitchState State);
+	bool ConsumeMouseWheelMove(const FMouseWheelTriggers& WheelMove);
+	void SetMouseCursorLocation(const FScreenLocation& CursorLocation);
 
 private:
 	FInput* Input;
@@ -58,6 +53,6 @@ private:
 	FMouseButtonStates MouseButtonStates;
 	FScreenLocation MouseCursorLocation;
 
-	FUniqueIdIssuer Issuer;
+	FUniqueIdIssuer ControllerIdIssuer;
 	std::list<std::pair<std::size_t, AObject<IInputController>>> Controllers;
 };

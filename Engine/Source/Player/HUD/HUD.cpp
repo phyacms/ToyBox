@@ -2,14 +2,19 @@
 
 #include "Engine.h"
 #include "HUD.h"
+#include "System/Input/InputContext.h"
+#include "System/Graphics/IGraphicsContext.h"
+
+const URect FHUD::UIRect{
+	.TopLeft{ URelCoord{ 0, 0 } },
+	.BottomRight{ URelCoord{ 1, 1 } } };
 
 FHUD::FHUD(
 	AObject<FInputContext>&& Input,
 	AObject<IGraphicsContext>&& Graphics,
 	float MinimumAspectRatio,
 	float MaximumAspectRatio)
-	: IInputController()
-	, Input{ std::move(Input) }
+	: Input{ std::move(Input) }
 	, Graphics{ std::move(Graphics) }
 	, ViewportArea{ this->Graphics->GetViewportArea() }
 	, DH_OnViewportAreaChanged{}
@@ -85,12 +90,32 @@ void FHUD::UpdateUIArea() noexcept
 	}
 }
 
-void FHUD::BindInputActions(FInputActionBindings& Actions)
+UCoord FHUD::GetMouseCursorLocation() const noexcept
 {
+	return UAbsCoord{
+		FScreenLocation()
+		+ (Input->GetMouseCursorLocation() - UIArea.Location) };
 }
 
-UCoord FHUD::GetMouseCursorLocation(const FInputContext& Context) const noexcept
+bool FHUD::DispatchKeyboardKeyEvent(
+	const FInputContext& Context,
+	EKeyboardKey Key,
+	ESwitchEvent Event) const
 {
-	return UAbsCoord{ FScreenLocation()
-		+ (Context.GetMouseCursorLocation() - UIArea.Location) };
+	return false;
+}
+
+bool FHUD::DispatchMouseButtonEvent(
+	const FInputContext& Context,
+	EMouseButton Button,
+	ESwitchEvent Event) const
+{
+	return false;
+}
+
+bool FHUD::DispatchMouseWheelMoveEvent(
+	const FInputContext& Context,
+	EMouseWheelTrigger dWheel) const
+{
+	return false;
 }

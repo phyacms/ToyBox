@@ -5,7 +5,7 @@
 #include <Type/UniqueId.h>
 #include <Type/MulticastDelegate.h>
 #include <Application/IApplication.h>
-#include <System/Input/IInputController.h>
+#include <System/Input/IInputActionController.h>
 
 class FSystemWindow;
 class FInputContext;
@@ -14,7 +14,7 @@ class FHUD;
 
 class FApplication final
 	: public IApplication
-	, public IInputController
+	, public IInputActionController
 {
 public:
 	explicit FApplication(FSystem& System);
@@ -37,6 +37,5 @@ private:
 	std::unique_ptr<FHUD> HUD;
 
 	ADelegateHandle DH_OnClosed;
-	AInputController IC_Application;
-	AInputController IC_HUD;
+	AInputControllerBinding IC_Application;
 };

@@ -108,6 +108,7 @@
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
     <ClInclude Include="Source\System\Graphics\ISurface2D.h" />
+    <ClInclude Include="Source\System\Input\IInputActionController.h" />
     <ClInclude Include="Source\System\Input\IInputController.h" />
     <ClInclude Include="Source\System\Input\Input.h" />
     <ClInclude Include="Source\System\Input\InputAction.h" />
@@ -157,6 +158,8 @@
     <ClCompile Include="Source\Player\HUD\UISpace.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
+    <ClCompile Include="Source\System\Input\IInputActionController.cpp" />
+    <ClCompile Include="Source\System\Input\IInputController.cpp" />
     <ClCompile Include="Source\System\Input\Input.cpp" />
     <ClCompile Include="Source\System\Input\InputChord.cpp" />
     <ClCompile Include="Source\System\Input\InputCode.cpp" />

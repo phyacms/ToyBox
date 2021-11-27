@@ -21,6 +21,8 @@ enum class EMouseWheelTrigger : std::size_t
 	RollDown,
 };
 
+using FMouseWheelTriggers = std::vector<EMouseWheelTrigger>;
+
 using FInputTrigger = std::variant<FInputCodeTrigger, EMouseWheelTrigger>;
 
 namespace InputFunctions

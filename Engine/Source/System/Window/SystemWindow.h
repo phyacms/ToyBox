@@ -29,7 +29,7 @@ namespace SystemWindowEventTypes
 	struct FOnResized final { FScreenSize ClientAreaSize{}; };
 	struct FOnKeyboardKey final { EKeyboardKey Key{}; ESwitchState State{}; };
 	struct FOnMouseButton final { EMouseButton Button{}; ESwitchState State{}; };
-	struct FOnMouseWheel final { std::vector<EMouseWheelTrigger> WheelDelta{}; };
+	struct FOnMouseWheel final { FMouseWheelTriggers WheelDelta{}; };
 	struct FOnMouseMove final { FScreenLocation CursorLocation{}; };
 
 	struct Null final {};

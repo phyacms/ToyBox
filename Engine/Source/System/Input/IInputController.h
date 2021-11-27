@@ -2,20 +2,17 @@
 
 #pragma once
 
-#include "Engine.h"
 #include "Type/Object.h"
 #include "Type/UniqueId.h"
-#include "InputAction.h"
+#include "InputTrigger.h"
 
-// @TODO: Modify to bind/unbind actions dynamically.
+class FInputContext;
+
 class IInputController
 	: public TObject<IInputController>
 {
-private:
-	struct FBindings;
-
 public:
-	IInputController() : TObject<IInputController>(*this), Actions{} {}
+	IInputController() : TObject<IInputController>(*this) {}
 	virtual ~IInputController() noexcept = default;
 
 	IInputController(const IInputController&) = delete;
@@ -24,32 +21,30 @@ public:
 	IInputController& operator=(IInputController&&) & noexcept = delete;
 
 public:
-	EnumerateConstIterators(Actions.second, ExposeConstIterators)
-
-public:
-	inline void BindStatics() {
-		std::call_once(
-			Actions.first,
-			[this]()->void { BindInputActions(Actions.second); }); }
-
-private:
-	virtual void BindInputActions(FInputActionBindings& Actions) = 0;
-
-private:
-	std::pair<std::once_flag, FInputActionBindings> Actions;
+	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const = 0;
+	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const = 0;
+	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheelTrigger dWheel) const = 0;
 };
 
-class AInputController final
+class AInputControllerBinding final
 {
-public:
-	AInputController() : Id{} {}
-	AInputController(AUniqueId&& UniqueId) : Id{ std::move(UniqueId) } {}
+	friend class FInputContext;
 
 public:
-	inline bool IsValid() const noexcept { return Id.IsValid(); }
-	inline std::size_t GetHash() const noexcept { return Id.GetHash(); }
-	inline void Release() noexcept { Id.Release(); }
+	AInputControllerBinding() : Context{}, Id{} {}
 
 private:
-	AUniqueId Id{};
+	AInputControllerBinding(
+		AObject<FInputContext>&& Context,
+		AUniqueId&& UniqueId)
+		: Id{ std::move(UniqueId) } {}
+
+public:
+	inline bool IsValid() const noexcept { return Context.IsValid() && Id.IsValid(); }
+	inline std::size_t GetHash() const noexcept { return Context.IsValid() ? Id.GetHash() : FUniqueId::InvalidId; }
+	void Release() noexcept;
+
+private:
+	AObject<FInputContext> Context;
+	AUniqueId Id;
 };

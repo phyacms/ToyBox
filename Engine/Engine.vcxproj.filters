@@ -169,9 +169,6 @@
     <ClInclude Include="Source\System\Input\InputAction.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Input\IInputController.h">
-      <Filter>Source\System\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\Input\InputTrigger.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
@@ -231,6 +228,12 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.h">
       <Filter>Source\Utility\DirectX\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\IInputController.h">
+      <Filter>Source\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Input\IInputActionController.h">
+      <Filter>Source\System\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -326,6 +329,12 @@
     </ClCompile>
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\IInputActionController.cpp">
+      <Filter>Source\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Input\IInputController.cpp">
+      <Filter>Source\System\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

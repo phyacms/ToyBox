@@ -3,10 +3,13 @@
 #pragma once
 
 #include "Type/TimePoint.h"
+#include "Type/MulticastDelegate.h"
 #include "System/Window/ScreenSpace.h"
-#include "System/Input/InputContext.h"
-#include "System/Graphics/IGraphicsContext.h"
+#include "System/Input/IInputController.h"
 #include "UISpace.h"
+
+class FInputContext;
+class IGraphicsContext;
 
 class FHUD final
 	: public IInputController
@@ -14,6 +17,9 @@ class FHUD final
 public:
 	inline static constexpr float DefaultMinimumAspectRatio{ 9.0f / 16.0f };
 	inline static constexpr float DefaultMaximumAspectRatio{ 48.0f / 9.0f };
+
+private:
+	static const URect UIRect;
 
 public:
 	FHUD(
@@ -40,8 +46,11 @@ public:
 private:
 	void UpdateUIArea() noexcept;
 
-	virtual void BindInputActions(FInputActionBindings& Actions) override final;
-	UCoord GetMouseCursorLocation(const FInputContext& Context) const noexcept;
+	UCoord GetMouseCursorLocation() const noexcept;
+
+	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const override final;
+	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const override final;
+	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheelTrigger dWheel) const override final;
 
 private:
 	AObject<FInputContext> Input;

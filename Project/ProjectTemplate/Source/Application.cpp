@@ -13,13 +13,13 @@
 
 FApplication::FApplication(FSystem& System)
 	: IApplication(System)
+	, IInputActionController()
 	, Window{}
 	, Input{}
 	, Graphics{}
 	, HUD{}
 	, DH_OnClosed{}
 	, IC_Application{}
-	, IC_HUD{}
 {
 }
 
@@ -68,7 +68,6 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 
 	Window->Present();
 	IC_Application = Input->BindInputController(*this);
-	IC_HUD = Input->BindInputController(*HUD);
 
 	return true;
 }
@@ -84,7 +83,6 @@ void FApplication::BindInputActions(FInputActionBindings& Actions)
 
 void FApplication::Terminate() noexcept
 {
-	IC_HUD.Release();
 	IC_Application.Release();
 	Graphics.reset();
 	Input.reset();
