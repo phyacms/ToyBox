@@ -259,6 +259,9 @@
     <ClInclude Include="Source\Type\Time.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Window\SystemWindowEvents.h">
+      <Filter>Source\System\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -362,6 +365,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\Input\Chord\InputTrigger.cpp">
       <Filter>Source\System\Input\Chord</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp">
+      <Filter>Source\System\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

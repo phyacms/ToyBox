@@ -48,9 +48,10 @@ private:
 
 	UCoord GetMouseCursorLocation() const noexcept;
 
-	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const override final;
-	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const override final;
-	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheel Wheel) const override final;
+	virtual bool DispatchInputAction(
+		const FInputContext& Context,
+		const FTimePoint& Time,
+		const FInputTrigger& Trigger) const override final;
 
 private:
 	AObject<FInputContext> Input;

@@ -2,8 +2,10 @@
 
 #pragma once
 
+#include "Type/Time.h"
 #include "Type/Object.h"
 #include "Type/UniqueId.h"
+#include "System/Window/ScreenSpace.h"
 #include "System/Input/Chord/InputTrigger.h"
 
 class FInputContext;
@@ -21,9 +23,14 @@ public:
 	IInputController& operator=(IInputController&&) & noexcept = delete;
 
 public:
-	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const = 0;
-	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const = 0;
-	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheel Wheel) const = 0;
+	virtual bool DispatchInputAction(
+		const FInputContext& Context,
+		const FTimePoint& Time,
+		const FInputTrigger& Trigger) const = 0;
+	virtual bool DispatchMouseMovement(
+		const FInputContext& Context,
+		const FTimePoint& Time,
+		const FScreenLocation::DiffType& Displacement) const { return false; };
 };
 
 class AInputControllerBinding final

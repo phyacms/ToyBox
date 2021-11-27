@@ -22,10 +22,12 @@ FHUD::FHUD(
 	, MaximumAspectRatio(MaximumAspectRatio)
 	, UIArea{}
 {
-	DH_OnViewportAreaChanged = this->Graphics->OnViewportAreaChanged.AddDynamic(
-		[this](const FScreenArea& ViewportArea)->void { this->ViewportArea = ViewportArea; UpdateUIArea(); });
+	auto SetViewportArea{
+		[this](const FScreenArea& ViewportArea)->void {
+			this->ViewportArea = ViewportArea; UpdateUIArea(); } };
 
-	UpdateUIArea();
+	SetViewportArea(Graphics.GetViewportArea());
+	DH_OnViewportAreaChanged = this->Graphics->OnViewportAreaChanged.AddDynamic(std::move(SetViewportArea));
 }
 
 FHUD::~FHUD() noexcept
@@ -97,25 +99,10 @@ UCoord FHUD::GetMouseCursorLocation() const noexcept
 		+ (Input->GetMouseCursorLocation() - UIArea.Location) };
 }
 
-bool FHUD::DispatchKeyboardKeyEvent(
+bool FHUD::DispatchInputAction(
 	const FInputContext& Context,
-	EKeyboardKey Key,
-	ESwitchEvent Event) const
-{
-	return false;
-}
-
-bool FHUD::DispatchMouseButtonEvent(
-	const FInputContext& Context,
-	EMouseButton Button,
-	ESwitchEvent Event) const
-{
-	return false;
-}
-
-bool FHUD::DispatchMouseWheelMoveEvent(
-	const FInputContext& Context,
-	EMouseWheel Wheel) const
+	const FTimePoint& Time,
+	const FInputTrigger& Trigger) const
 {
 	return false;
 }

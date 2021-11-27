@@ -185,8 +185,6 @@ LRESULT WindowsPlatform::FWndProc::DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wP
 
 LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
-	using namespace SystemWindowEventTypes;
-
 	static constexpr const FMessageHook DefaultHooks[]
 	{
 		&FWndProc::ProcKeyboardMessage,
@@ -233,8 +231,6 @@ LRESULT WindowsPlatform::FWndProc::ProcMessage(UINT uMsg, WPARAM wParam, LPARAM 
 
 WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
-	using namespace SystemWindowEventTypes;
-
 	auto& Window{ GetWindow() };
 
 	bool bPulse{ true };
@@ -271,11 +267,9 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 
 WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
-	using namespace SystemWindowEventTypes;
-
 	auto& Window{ GetWindow() };
 	auto ButtonState{ ESwitchState::Up };
-	std::stack<FEvent> Stack{};
+	std::stack<FSystemWindowEvent> Stack{};
 	switch (uMsg)
 	{
 		default:

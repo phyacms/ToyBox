@@ -27,11 +27,10 @@ public:
 private:
 	virtual void BindInputActions(FInputActionBindings& Actions) = 0;
 
-	virtual bool DispatchKeyboardKeyEvent(const FInputContext& Context, EKeyboardKey Key, ESwitchEvent Event) const override final;
-	virtual bool DispatchMouseButtonEvent(const FInputContext& Context, EMouseButton Button, ESwitchEvent Event) const override final;
-	virtual bool DispatchMouseWheelMoveEvent(const FInputContext& Context, EMouseWheel Wheel) const override final;
-
-	bool DispatchInputAction(const FInputContext& Context, const FInputTrigger& Trigger) const;
+	virtual bool DispatchInputAction(
+		const FInputContext& Context,
+		const FTimePoint& Time,
+		const FInputTrigger& Trigger) const override final;
 
 private:
 	std::pair<std::once_flag, FInputActionBindings> Actions;

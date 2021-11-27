@@ -11,3 +11,9 @@ using FTimePoint = FTimeClock::time_point;
 using FTimeRep = double;
 using FTimePeriod = std::milli;
 using FTimeDuration = std::chrono::duration<FTimeRep, FTimePeriod>;
+
+struct FTimeStamp
+{
+	FTimePoint Time;
+	FTimeStamp() : Time{ FTimeClock::now() } {}
+};

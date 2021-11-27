@@ -10,6 +10,10 @@
 class FInput;
 class IInputActionController;
 class FSystemWindow;
+struct FOnKeyboardKey;
+struct FOnMouseButton;
+struct FOnMouseWheel;
+struct FOnMouseMove;
 
 class FInputContext final
 	: public TObject<FInputContext>
@@ -42,10 +46,10 @@ public:
 	void UnbindInputController(AInputControllerBinding& Handle) noexcept;
 
 private:
-	bool SetKeyboardKeyState(EKeyboardKey Key, ESwitchState State);
-	bool SetMouseButtonState(EMouseButton Button, ESwitchState State);
-	bool ConsumeMouseWheelMove(const FMouseWheelDelta& WheelDelta);
-	void SetMouseCursorLocation(const FScreenLocation& CursorLocation);
+	bool SetKeyboardKeyState(const FOnKeyboardKey& EventArgs);
+	bool SetMouseButtonState(const FOnMouseButton& EventArgs);
+	bool ConsumeMouseWheel(const FOnMouseWheel& EventArgs);
+	bool ConsumeMouseMove(const FOnMouseMove& EventArgs);
 
 private:
 	FInput* Input;

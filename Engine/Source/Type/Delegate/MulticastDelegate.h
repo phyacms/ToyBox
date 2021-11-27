@@ -54,12 +54,16 @@ public:
 	inline R operator()(Ts... Params) const { return Broadcast(std::forward<Ts>(Params...)); }
 
 public:
-	[[nodiscard]] ADelegateHandle AddDynamic(CompatibleDelegateType Delegate) &
+	template<typename... Ts>
+	inline [[nodiscard]] ADelegateHandle AddDynamic(Ts&&... Params) &
 	{
 		ADelegateHandle Issued{ Issue() };
 		if (Issued.IsValid())
 		{
-			Executors.emplace_back(std::make_pair(Issued.GetIndex(), std::move(Delegate)));
+			Executors.emplace_back(
+				std::make_pair(
+					Issued.GetIndex(),
+					CompatibleDelegateType{ std::forward<Ts>(Params)... }));
 		}
 		return Issued;
 	}

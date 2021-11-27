@@ -4,37 +4,10 @@
 
 #include "Type/Object.h"
 #include "Type/String.h"
-#include "Type/Delegate/EventDispatcher.h"
-#include "System/Input/Code/KeyboardKey.h"
-#include "System/Input/Code/MouseButton.h"
-#include "System/Input/Code/MouseWheel.h"
 #include "ScreenSpace.h"
+#include "SystemWindowEvents.h"
 
 class ISystemWindowProcedure;
-
-#define EnumerateSystemWindowEvents(Enumerate)	\
-	Enumerate(OnClosed)							\
-	Enumerate(OnResized)						\
-	Enumerate(OnKeyboardKey)					\
-	Enumerate(OnMouseButton)					\
-	Enumerate(OnMouseWheel)						\
-	Enumerate(OnMouseMove)
-
-#define EmplaceEventVariant(Event) F##Event,
-#define DeclareEventDispatcher(Event) TEventDispatcher<bool(const SystemWindowEventTypes::F##Event&)> ##Event;
-
-namespace SystemWindowEventTypes
-{
-	struct FOnClosed final {};
-	struct FOnResized final { FScreenSize ClientAreaSize{}; };
-	struct FOnKeyboardKey final { EKeyboardKey Key{}; ESwitchState State{}; };
-	struct FOnMouseButton final { EMouseButton Button{}; ESwitchState State{}; };
-	struct FOnMouseWheel final { FMouseWheelDelta WheelDelta{}; };
-	struct FOnMouseMove final { FScreenLocation CursorLocation{}; };
-
-	struct Null final {};
-	using FEvent = std::variant<EnumerateSystemWindowEvents(EmplaceEventVariant) Null>;
-}
 
 class FSystemWindow final
 	: public TObject<FSystemWindow>
@@ -67,31 +40,5 @@ private:
 	FString Title;
 
 public:
-	class FSystemWindowEvents final
-	{
-	public:
-		FSystemWindowEvents();
-		~FSystemWindowEvents() noexcept = default;
-
-		FSystemWindowEvents(const FSystemWindowEvents&) = delete;
-		FSystemWindowEvents& operator=(const FSystemWindowEvents&) & = delete;
-		FSystemWindowEvents(FSystemWindowEvents&&) noexcept = delete;
-		FSystemWindowEvents& operator=(FSystemWindowEvents&&) & noexcept = delete;
-
-	public:
-		void Enqueue(SystemWindowEventTypes::FEvent&& Event);
-		void Process();
-
-	private:
-		std::array<std::queue<SystemWindowEventTypes::FEvent>, 2> Queues;
-		std::size_t CurrentIndex;
-		std::mutex Mutex;
-
-	public:
-		EnumerateSystemWindowEvents(DeclareEventDispatcher)
-	}
-	Events;
+	FSystemWindowEvents Events;
 };
-
-#undef EmplaceEventVariant
-#undef DeclareEventDispatcher

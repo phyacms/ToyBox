@@ -4,38 +4,10 @@
 #include "IInputActionController.h"
 #include "System/Input/InputContext.h"
 
-bool IInputActionController::DispatchKeyboardKeyEvent(
+bool IInputActionController::DispatchInputAction(
 	const FInputContext& Context,
-	EKeyboardKey Key,
-	ESwitchEvent Event) const
-{
-	return DispatchInputAction(
-		Context,
-		FInputCodeTrigger{
-			.InputCode{ Key },
-			.Event{ Event } });
-}
-
-bool IInputActionController::DispatchMouseButtonEvent(
-	const FInputContext& Context,
-	EMouseButton Button,
-	ESwitchEvent Event) const
-{
-	return DispatchInputAction(
-		Context,
-		FInputCodeTrigger{
-			.InputCode{ Button },
-			.Event{ Event } });
-}
-
-bool IInputActionController::DispatchMouseWheelMoveEvent(
-	const FInputContext& Context,
-	EMouseWheel Wheel) const
-{
-	return DispatchInputAction(Context, Wheel);
-}
-
-bool IInputActionController::DispatchInputAction(const FInputContext& Context, const FInputTrigger& Trigger) const
+	const FTimePoint& Time,
+	const FInputTrigger& Trigger) const
 {
 	const auto& cItBegin{ std::cbegin(Actions.second) };
 	const auto& cItEnd{ std::cend(Actions.second) };

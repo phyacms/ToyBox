@@ -17,8 +17,6 @@ IGraphicsContext::IGraphicsContext(
 {
 	if (this->OutputWindow.IsValid())
 	{
-		using namespace SystemWindowEventTypes;
-
 		DH_OnResized = this->OutputWindow->Events.OnResized.AddDynamic(
 			[this](const FOnResized& EventArgs)->bool {
 				ResizeBuffer(EventArgs.ClientAreaSize);

@@ -33,7 +33,7 @@ public:
 		typename T,
 		typename MemFnType,
 		typename = std::enable_if_t<!std::is_reference_v<T>>>
-	inline void Bind(T& ObjRef, MemFnType MemFn) { Stub = std::bind(MemFn, ObjRef); }
+	inline void Bind(T& ObjRef, MemFnType&& MemFn) { Stub = std::bind(MemFn, &ObjRef, std::placeholders::_1); }
 	inline void Unbind() noexcept { Stub = nullptr; }
 
 	inline bool IsBound() const noexcept { return static_cast<bool>(Stub); }

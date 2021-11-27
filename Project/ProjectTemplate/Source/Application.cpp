@@ -38,7 +38,7 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 	}
 
 	DH_OnClosed = Window->Events.OnClosed.AddDynamic(
-		[this](const SystemWindowEventTypes::FOnClosed&)->bool {
+		[this](const FOnClosed&)->bool {
 			GetSystem().RequestAppExit(EXIT_SUCCESS); return true; });
 
 	auto& SystemInput{ System.GetInput() };
