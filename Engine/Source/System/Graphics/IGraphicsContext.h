@@ -12,7 +12,7 @@
 #include "ISurface2D.h"
 
 class FSystemWindow;
-using FRenderCommand = TDelegate<void(const FTimeDuration&)>;
+using FRenderCommand = TDelegate<void(FTimeDuration)>;
 
 class IGraphicsContext
 	: public TObject<IGraphicsContext>
@@ -38,7 +38,7 @@ public:
 	inline void SetClearColor(FColor ClearColor) noexcept { this->ClearColor = std::move(ClearColor); }
 
 	void AddCommand(FRenderCommand&& Command);
-	void ExecuteCommands(const FTimeDuration& DeltaTime);
+	void ExecuteCommands(FTimeDuration DeltaTime);
 
 	virtual ISurface2D& GetSurface() noexcept = 0;
 

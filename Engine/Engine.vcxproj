@@ -103,6 +103,7 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h" />
     <ClInclude Include="Source\Player\HUD\HUD.h" />
     <ClInclude Include="Source\Player\HUD\UISpace.h" />
+    <ClInclude Include="Source\Player\HUD\Widget\IWidget.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
     <ClInclude Include="Source\System\Graphics\Graphics.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp" />
     <ClCompile Include="Source\Player\HUD\HUD.cpp" />
     <ClCompile Include="Source\Player\HUD\UISpace.cpp" />
+    <ClCompile Include="Source\Player\HUD\Widget\IWidget.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\Input\Chord\InputChord.cpp" />

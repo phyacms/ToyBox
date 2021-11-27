@@ -104,6 +104,19 @@ inline URelCoord ToRelative(const UCoord& Coord, const FScreenSize& Size) noexce
 
 struct URect final
 {
-	UCoord TopLeft{};
-	UCoord BottomRight{};
+	UCoord Location{};
+	UCoord Size{};
 };
+
+inline FScreenArea ToScreenSpace(const URect& Rect, const FScreenArea& Area)
+{
+	const auto& Offset{ Rect.Location.GetAsAbsolute(Area.Size).GetAsVector() };
+	const auto& Diagonal{ Rect.Size.GetAsAbsolute(Area.Size).GetAsVector() };
+	return {
+		.Location{ FScreenLocation{
+			Area.Location.X() + Offset.X(),
+			Area.Location.Y() + Offset.Y() } },
+		.Size{ FScreenSize{
+			Diagonal.X(),
+			Diagonal.Y() } } };
+}

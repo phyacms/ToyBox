@@ -25,11 +25,11 @@ public:
 public:
 	virtual bool DispatchInputAction(
 		const FInputContext& Context,
-		const FTimePoint& Time,
+		FTimePoint Time,
 		const FInputTrigger& Trigger) const = 0;
 	virtual bool DispatchMouseMovement(
 		const FInputContext& Context,
-		const FTimePoint& Time,
+		FTimePoint Time,
 		const FScreenLocation::DiffType& Displacement) const { return false; };
 };
 

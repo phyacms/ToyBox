@@ -70,6 +70,9 @@
     <Filter Include="Source\System\Input\Chord">
       <UniqueIdentifier>{c7925c6b-ddc6-4aef-852f-ca81a1fd6224}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Player\HUD\Widget">
+      <UniqueIdentifier>{c12f9132-87d2-4a39-bed3-113f0363700c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -262,6 +265,9 @@
     <ClInclude Include="Source\System\Window\SystemWindowEvents.h">
       <Filter>Source\System\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Player\HUD\Widget\IWidget.h">
+      <Filter>Source\Player\HUD\Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -368,6 +374,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp">
       <Filter>Source\System\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\HUD\Widget\IWidget.cpp">
+      <Filter>Source\Player\HUD\Widget</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

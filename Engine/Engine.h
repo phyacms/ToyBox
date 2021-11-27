@@ -46,8 +46,8 @@ namespace stdhelp
 }
 
 // Macros
-#define __USTR(X) u##X
-#define USTR(x) __USTR(x)
+#define UnicodeStringify(X) u##X
+#define USTR(x) UnicodeStringify(x)
 
 // Compiler Setting
 // @NOTE: https://devblogs.microsoft.com/cppblog/msvc-cpp20-and-the-std-cpp20-switch/

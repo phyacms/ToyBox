@@ -4,8 +4,8 @@
 
 #include "Engine.h"
 #include "Byte.h"
-#include "Object.h"
-#include "TypeTraits.h"
+#include "Type/Object.h"
+#include "Type/TypeTraits.h"
 
 class FByteBuffer final
 	: public TObject<FByteBuffer>

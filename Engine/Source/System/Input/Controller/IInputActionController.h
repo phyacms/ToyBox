@@ -29,7 +29,7 @@ private:
 
 	virtual bool DispatchInputAction(
 		const FInputContext& Context,
-		const FTimePoint& Time,
+		FTimePoint Time,
 		const FInputTrigger& Trigger) const override final;
 
 private:

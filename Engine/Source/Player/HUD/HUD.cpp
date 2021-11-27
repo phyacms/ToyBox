@@ -5,9 +5,11 @@
 #include "System/Input/InputContext.h"
 #include "System/Graphics/IGraphicsContext.h"
 
-const URect FHUD::UIRect{
-	.TopLeft{ URelCoord{ 0, 0 } },
-	.BottomRight{ URelCoord{ 1, 1 } } };
+const FString& FHUD::FRootWidget::GetWidgetName() const noexcept
+{
+	static const FString WidgetName{ USTR("Root") };
+	return WidgetName;
+}
 
 FHUD::FHUD(
 	FInputContext& Input,
@@ -21,10 +23,12 @@ FHUD::FHUD(
 	, MinimumAspectRatio(MinimumAspectRatio)
 	, MaximumAspectRatio(MaximumAspectRatio)
 	, UIArea{}
+	, Root{}
 {
 	auto SetViewportArea{
 		[this](const FScreenArea& ViewportArea)->void {
-			this->ViewportArea = ViewportArea; UpdateUIArea(); } };
+			this->ViewportArea = ViewportArea;
+			UpdateUIArea(); } };
 
 	SetViewportArea(Graphics.GetViewportArea());
 	DH_OnViewportAreaChanged = this->Graphics->OnViewportAreaChanged.AddDynamic(std::move(SetViewportArea));
@@ -58,15 +62,9 @@ void FHUD::SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) no
 
 void FHUD::Render()
 {
-	// @TODO: Render HUD.
-
-	// @TEST: Visualize UI area.
 	Graphics->AddCommand(
-		[this](const FTimeDuration& DeltaTime)->void {
-			Graphics->GetSurface().DrawRect(
-				UIArea, {
-					.Color{ ColorCodes::Green },
-					.Width{ 3.0f } }); });
+		[this](FTimeDuration DeltaTime)->void {
+			Root.Render(Graphics->GetSurface(), DeltaTime); });
 }
 
 void FHUD::UpdateUIArea() noexcept
@@ -90,6 +88,8 @@ void FHUD::UpdateUIArea() noexcept
 		Y = static_cast<FScreenLocation::ValueType>(Height - dH) / 2;
 		Height = dH;
 	}
+
+	Root.CalcAbsoluteArea(UIArea);
 }
 
 UCoord FHUD::GetMouseCursorLocation() const noexcept
@@ -101,7 +101,7 @@ UCoord FHUD::GetMouseCursorLocation() const noexcept
 
 bool FHUD::DispatchInputAction(
 	const FInputContext& Context,
-	const FTimePoint& Time,
+	FTimePoint Time,
 	const FInputTrigger& Trigger) const
 {
 	return false;

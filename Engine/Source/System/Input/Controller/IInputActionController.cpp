@@ -6,7 +6,7 @@
 
 bool IInputActionController::DispatchInputAction(
 	const FInputContext& Context,
-	const FTimePoint& Time,
+	FTimePoint Time,
 	const FInputTrigger& Trigger) const
 {
 	const auto& cItBegin{ std::cbegin(Actions.second) };

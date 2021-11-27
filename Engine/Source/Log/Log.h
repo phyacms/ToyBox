@@ -93,30 +93,29 @@ EnumerateLogLevel(DeclareLogLevel)
 #undef DeclareLogLevel
 #undef EnumerateLogLevel
 
-#ifndef NDEBUG
-#define __bDebugOut true
-#else
-#define __bDebugOut false
-#endif
-
-#define __BeginLog(bOutput, Category, Level)			\
+#define LogOutput(bOutput, Category, Level)				\
 if constexpr (bOutput) {								\
 	FLog::GetThreadLogger() << USTR("[")				\
 	<< FLog::GetThreadLogger().GetIdentifier()			\
 	<< USTR("][") << FLogCategory_##Category::GetStr()	\
 	<< USTR("][") << FLogLevel_##Level::GetStr() << USTR("] ")
 
-#define __DebugLog(Category, Level)   __BeginLog(__bDebugOut, Category, Level)
-#define __ReleaseLog(Category, Level) __BeginLog(true, Category, Level)
+#ifndef NDEBUG
+#define DEBUG_OUTPUT true
+#else
+#define DEBUG_OUTPUT false
+#endif
+#define PrintDebugLog(Category, Level)   LogOutput(DEBUG_OUTPUT, Category, Level)
+#define PrintReleaseLog(Category, Level) LogOutput(true, Category, Level)
 
-#define DebugVerbose(Category)   __DebugLog(Category, Verbose)
-#define DebugLog(Category)       __DebugLog(Category, Log)
-#define DebugWarning(Category)   __DebugLog(Category, Warning)
-#define DebugError(Category)     __DebugLog(Category, Error)
-#define ReleaseVerbose(Category) __ReleaseLog(Category, Verbose)
-#define ReleaseLog(Category)     __ReleaseLog(Category, Log)
-#define ReleaseWarning(Category) __ReleaseLog(Category, Warning)
-#define ReleaseError(Category)   __ReleaseLog(Category, Error)
+#define DebugVerbose(Category)   PrintDebugLog(Category, Verbose)
+#define DebugLog(Category)       PrintDebugLog(Category, Log)
+#define DebugWarning(Category)   PrintDebugLog(Category, Warning)
+#define DebugError(Category)     PrintDebugLog(Category, Error)
+#define ReleaseVerbose(Category) PrintReleaseLog(Category, Verbose)
+#define ReleaseLog(Category)     PrintReleaseLog(Category, Log)
+#define ReleaseWarning(Category) PrintReleaseLog(Category, Warning)
+#define ReleaseError(Category)   PrintReleaseLog(Category, Error)
 
 #define LogEndl FLog::GetEndl(); } int{} // @NOTE: Enforces semicolon at the end of statement.
 

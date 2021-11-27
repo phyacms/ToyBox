@@ -38,7 +38,7 @@ void IGraphicsContext::AddCommand(FRenderCommand&& Command)
 	CommandQueue.emplace(std::move(Command));
 }
 
-void IGraphicsContext::ExecuteCommands(const FTimeDuration& DeltaTime)
+void IGraphicsContext::ExecuteCommands(FTimeDuration DeltaTime)
 {
 	struct FScene final
 	{

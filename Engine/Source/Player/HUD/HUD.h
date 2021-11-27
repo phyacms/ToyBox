@@ -6,6 +6,7 @@
 #include "Type/Delegate/DelegateHandle.h"
 #include "System/Window/ScreenSpace.h"
 #include "System/Input/Controller/IInputController.h"
+#include "Widget/IWidget.h"
 #include "UISpace.h"
 
 class FInputContext;
@@ -14,12 +15,25 @@ class IGraphicsContext;
 class FHUD final
 	: public IInputController
 {
+private:
+	class FRootWidget final
+		: public IWidget
+	{
+	public:
+		FRootWidget() : IWidget() {}
+
+	public:
+		using IWidget::CalcAbsoluteArea;
+
+	private:
+		virtual const FString& GetWidgetName() const noexcept override final;
+		inline virtual bool IsValidImpl() const noexcept override final { return true; }
+		virtual void RenderImpl(ISurface2D& Surface, const FScreenArea& Rect, FTimeDuration DeltaTime) override final {}
+	};
+
 public:
 	inline static constexpr float DefaultMinimumAspectRatio{ 9.0f / 16.0f };
 	inline static constexpr float DefaultMaximumAspectRatio{ 48.0f / 9.0f };
-
-private:
-	static const URect UIRect;
 
 public:
 	FHUD(
@@ -36,10 +50,16 @@ public:
 
 public:
 	bool IsValid() const noexcept;
+	inline const FScreenArea& GetUIArea() const noexcept { return UIArea; }
 
 	void SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) noexcept;
 
-	inline const FScreenArea& GetUIArea() const noexcept { return UIArea; }
+	// @NOTE: Note that [[nodiscard]] attribute is NOT enforced here.
+	template<
+		typename T,
+		typename... Ts,
+		typename = std::enable_if_t<std::is_base_of_v<IWidget, T>>>
+	inline AWidget<T> CreateWidget(Ts&&... Params) { return Root.CreateChild<T>(std::forward<Ts>(Params)...); }
 
 	void Render();
 
@@ -50,7 +70,7 @@ private:
 
 	virtual bool DispatchInputAction(
 		const FInputContext& Context,
-		const FTimePoint& Time,
+		FTimePoint Time,
 		const FInputTrigger& Trigger) const override final;
 
 private:
@@ -63,4 +83,6 @@ private:
 	float MinimumAspectRatio;
 	float MaximumAspectRatio;
 	FScreenArea UIArea;
+
+	FRootWidget Root;
 };
