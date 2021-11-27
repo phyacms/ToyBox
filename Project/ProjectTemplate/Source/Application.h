@@ -2,8 +2,7 @@
 
 #pragma once
 
-#include <Type/UniqueId.h>
-#include <Type/MulticastDelegate.h>
+#include <Type/DelegateHandle.h>
 #include <Application/IApplication.h>
 #include <System/Input/IInputActionController.h>
 

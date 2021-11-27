@@ -3,88 +3,8 @@
 #pragma once
 
 #include "Engine.h"
-#include "Object.h"
 #include "Delegate.h"
-
-class ADelegateHandle;
-
-class IMulticastDelegate
-	: public TObject<IMulticastDelegate>
-{
-public:
-	IMulticastDelegate();
-	virtual ~IMulticastDelegate() noexcept = default;
-
-	IMulticastDelegate(const IMulticastDelegate&) = delete;
-	IMulticastDelegate& operator=(const IMulticastDelegate&) & = delete;
-	IMulticastDelegate(IMulticastDelegate&&) noexcept = delete;
-	IMulticastDelegate& operator=(IMulticastDelegate&&) & noexcept = delete;
-
-public:
-	virtual void RemoveDynamic(ADelegateHandle& Handle) & noexcept = 0;
-
-protected:
-	ADelegateHandle Issue();
-	std::size_t Revoke(ADelegateHandle& Handle) noexcept;
-
-private:
-	std::atomic<std::size_t> Counter;
-	std::unordered_set<std::size_t> Revoked;
-	std::mutex Mutex;
-};
-
-class ADelegateHandle final
-{
-	friend class IMulticastDelegate;
-
-public:
-	inline static constexpr auto InvalidHandle{ std::size_t{} };
-
-public:
-	ADelegateHandle() : Issuer{}, Index{ InvalidHandle } {}
-	~ADelegateHandle() noexcept { Release(); }
-
-	ADelegateHandle(const ADelegateHandle&) = delete;
-	ADelegateHandle& operator=(const ADelegateHandle&) & = delete;
-	ADelegateHandle(ADelegateHandle&& Other) noexcept;
-	ADelegateHandle& operator=(ADelegateHandle&& Other) & noexcept;
-
-	inline operator bool() const noexcept { return IsValid(); }
-
-private:
-	ADelegateHandle(AObject<IMulticastDelegate>&& Issuer, std::size_t Index) : Issuer{ std::move(Issuer) }, Index{ Index } {}
-
-public:
-	inline bool IsValid() const noexcept { return Issuer.IsValid() && Index != InvalidHandle; }
-	inline bool IsIssuedBy(IMulticastDelegate& Issuer) const noexcept { return this->Issuer.GetAddress() == &Issuer; }
-	inline std::size_t GetIndex() const noexcept { return Index; }
-
-	void Release() noexcept;
-
-private:
-	AObject<IMulticastDelegate> Issuer;
-	std::size_t Index;
-};
-
-class FDelegateHandles final
-{
-public:
-	FDelegateHandles() : Handles{} {}
-	~FDelegateHandles() noexcept = default;
-
-	FDelegateHandles(FDelegateHandles&&) noexcept = default;
-	FDelegateHandles& operator=(FDelegateHandles&&) & noexcept = default;
-	FDelegateHandles(const FDelegateHandles&) = delete;
-	FDelegateHandles& operator=(const FDelegateHandles&) & = delete;
-
-	FDelegateHandles& operator+=(ADelegateHandle&& Handle) &;
-
-public:
-	inline void Clear() noexcept { Handles.clear(); }
-
-private:
-	std::vector<ADelegateHandle> Handles;
-};
+#include "IMulticastDelegate.h"
 
 template<typename T>
 using TDelegateExecutor = std::pair<std::size_t, TDelegate<T>>;

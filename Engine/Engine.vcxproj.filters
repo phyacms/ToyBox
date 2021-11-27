@@ -235,6 +235,12 @@
     <ClInclude Include="Source\System\Input\IInputActionController.h">
       <Filter>Source\System\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\DelegateHandle.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\IMulticastDelegate.h">
+      <Filter>Source\Type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -256,9 +262,6 @@
       <Filter>Source\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Type\UniqueId.cpp">
-      <Filter>Source\Type</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Type\MulticastDelegate.cpp">
       <Filter>Source\Type</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IApplicationEntry.cpp">
@@ -335,6 +338,12 @@
     </ClCompile>
     <ClCompile Include="Source\System\Input\IInputController.cpp">
       <Filter>Source\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\DelegateHandle.cpp">
+      <Filter>Source\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\IMulticastDelegate.cpp">
+      <Filter>Source\Type</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

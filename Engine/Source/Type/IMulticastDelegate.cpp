@@ -1,7 +1,7 @@
 ﻿// Copyrights 2021 by phyacms. All Rights Reserved.
 
 #include "Engine.h"
-#include "MulticastDelegate.h"
+#include "IMulticastDelegate.h"
 
 IMulticastDelegate::IMulticastDelegate()
 	: TObject<IMulticastDelegate>(*this)
@@ -45,40 +45,4 @@ std::size_t IMulticastDelegate::Revoke(ADelegateHandle& Handle) noexcept
 		Handle.Index = ADelegateHandle::InvalidHandle;
 	}
 	return Index;
-}
-
-ADelegateHandle::ADelegateHandle(ADelegateHandle&& Other) noexcept
-	: Issuer{ std::move(Other.Issuer) }
-	, Index{ std::move(Other.Index) }
-{
-	Other.Release();
-}
-ADelegateHandle& ADelegateHandle::operator=(ADelegateHandle&& Other) & noexcept
-{
-	if (this != &Other)
-	{
-		Issuer = std::move(Other.Issuer);
-		Index = std::move(Other.Index);
-		Other.Release();
-	}
-	return *this;
-}
-
-void ADelegateHandle::Release() noexcept
-{
-	if (IsValid())
-	{
-		Issuer->RemoveDynamic(*this);
-	}
-	Issuer.Release();
-	Index = InvalidHandle;
-}
-
-FDelegateHandles& FDelegateHandles::operator+=(ADelegateHandle&& Handle) &
-{
-	if (Handle.IsValid())
-	{
-		Handles.emplace_back(std::move(Handle));
-	}
-	return *this;
 }

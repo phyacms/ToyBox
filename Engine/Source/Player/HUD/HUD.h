@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Type/TimePoint.h"
-#include "Type/MulticastDelegate.h"
+#include "Type/DelegateHandle.h"
 #include "System/Window/ScreenSpace.h"
 #include "System/Input/IInputController.h"
 #include "UISpace.h"

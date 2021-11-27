@@ -129,7 +129,9 @@
     <ClInclude Include="Source\Type\Color.h" />
     <ClInclude Include="Source\Type\Container.h" />
     <ClInclude Include="Source\Type\Delegate.h" />
+    <ClInclude Include="Source\Type\DelegateHandle.h" />
     <ClInclude Include="Source\Type\EventDispatcher.h" />
+    <ClInclude Include="Source\Type\IMulticastDelegate.h" />
     <ClInclude Include="Source\Type\MulticastDelegate.h" />
     <ClInclude Include="Source\Type\Object.h" />
     <ClInclude Include="Source\Type\String.h" />
@@ -171,7 +173,8 @@
     <ClCompile Include="Source\Type\ByteBuffer.cpp" />
     <ClCompile Include="Source\Type\ByteStream.cpp" />
     <ClCompile Include="Source\Type\Color.cpp" />
-    <ClCompile Include="Source\Type\MulticastDelegate.cpp" />
+    <ClCompile Include="Source\Type\DelegateHandle.cpp" />
+    <ClCompile Include="Source\Type\IMulticastDelegate.cpp" />
     <ClCompile Include="Source\Type\String.cpp" />
     <ClCompile Include="Source\Type\UniqueId.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.cpp" />
