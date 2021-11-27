@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Type/Object.h"
-#include "Type/TimePoint.h"
+#include "Type/Time.h"
 #include "Type/Color.h"
 #include "Type/Delegate/Delegate.h"
 #include "Type/Delegate/MulticastDelegate.h"

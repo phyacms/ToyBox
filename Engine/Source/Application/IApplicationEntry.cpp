@@ -55,10 +55,10 @@ void IApplicationEntry::BeginThreads()
 		{
 			FLog::GetThreadLogger().SetIdentifier(USTR("GameThread"));
 
-			auto TickTime{ System.PreciseNow() };
+			auto TickTime{ FTimeClock::now() };
 			while (!bAbortThreads)
 			{
-				const auto Now{ System.PreciseNow() };
+				const auto Now{ FTimeClock::now() };
 				const auto DeltaTime{ Now - TickTime };
 				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / System.GetMaximumTickRate() })
 				{
@@ -80,10 +80,10 @@ void IApplicationEntry::BeginThreads()
 		{
 			FLog::GetThreadLogger().SetIdentifier(USTR("RenderThread"));
 
-			auto FrameTime{ System.PreciseNow() };
+			auto FrameTime{ FTimeClock::now() };
 			while (!bAbortThreads)
 			{
-				const auto Now{ System.PreciseNow() };
+				const auto Now{ FTimeClock::now() };
 				const auto DeltaTime{ Now - FrameTime };
 				if (DeltaTime >= std::chrono::duration<double>{ 1.0 / System.GetMaximumFrameRate() })
 				{

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/TimePoint.h"
+#include "Type/Time.h"
 #include "System/CommandLineArgs.h"
 
 class FSystem;

@@ -109,9 +109,6 @@
     <ClInclude Include="Source\Type\UniqueId.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\TimePoint.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\IApplicationEntry.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
@@ -258,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\Input\Chord\InputAction.h">
       <Filter>Source\System\Input\Chord</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Time.h">
+      <Filter>Source\Type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

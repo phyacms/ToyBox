@@ -136,7 +136,7 @@
     <ClInclude Include="Source\Type\Delegate\MulticastDelegate.h" />
     <ClInclude Include="Source\Type\Object.h" />
     <ClInclude Include="Source\Type\String.h" />
-    <ClInclude Include="Source\Type\TimePoint.h" />
+    <ClInclude Include="Source\Type\Time.h" />
     <ClInclude Include="Source\Type\TypeTraits.h" />
     <ClInclude Include="Source\Type\UniqueId.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11PixelShaderConstantBuffer.h" />

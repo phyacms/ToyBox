@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Type/TimePoint.h"
+#include "Type/Time.h"
 #include "Type/Delegate/DelegateHandle.h"
 #include "System/Window/ScreenSpace.h"
 #include "System/Input/Controller/IInputController.h"
