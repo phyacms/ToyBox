@@ -23,8 +23,8 @@ private:
 
 public:
 	FHUD(
-		AObject<FInputContext>&& Input,
-		AObject<IGraphicsContext>&& Graphics,
+		FInputContext& Input,
+		IGraphicsContext& Graphics,
 		float MinimumAspectRatio = DefaultMinimumAspectRatio,
 		float MaximumAspectRatio = DefaultMaximumAspectRatio);
 	~FHUD() noexcept;

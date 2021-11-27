@@ -10,6 +10,13 @@ ADelegateHandle::ADelegateHandle(ADelegateHandle&& Other) noexcept
 {
 	Other.Release();
 }
+
+ADelegateHandle::ADelegateHandle(IMulticastDelegate& Issuer, std::size_t Index)
+	: Issuer{ Issuer }
+	, Index{ Index }
+{
+}
+
 ADelegateHandle& ADelegateHandle::operator=(ADelegateHandle&& Other) & noexcept
 {
 	if (this != &Other)

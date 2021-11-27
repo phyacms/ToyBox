@@ -10,12 +10,12 @@ const URect FHUD::UIRect{
 	.BottomRight{ URelCoord{ 1, 1 } } };
 
 FHUD::FHUD(
-	AObject<FInputContext>&& Input,
-	AObject<IGraphicsContext>&& Graphics,
+	FInputContext& Input,
+	IGraphicsContext& Graphics,
 	float MinimumAspectRatio,
 	float MaximumAspectRatio)
-	: Input{ std::move(Input) }
-	, Graphics{ std::move(Graphics) }
+	: Input{ Input }
+	, Graphics{ Graphics }
 	, ViewportArea{ this->Graphics->GetViewportArea() }
 	, DH_OnViewportAreaChanged{}
 	, MinimumAspectRatio(MinimumAspectRatio)

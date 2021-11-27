@@ -2,14 +2,15 @@
 
 #include "Engine.h"
 #include "IGraphicsContext.h"
+#include "System/Window/SystemWindow.h"
 
 IGraphicsContext::IGraphicsContext(
-	AObject<IGraphicsRenderer>&& Renderer,
-	AObject<FSystemWindow>&& OutputWindow,
+	IGraphicsRenderer& Renderer,
+	FSystemWindow& OutputWindow,
 	FColor ClearColor)
 	: TObject<IGraphicsContext>(*this)
-	, Renderer{ std::move(Renderer) }
-	, OutputWindow{ std::move(OutputWindow) }
+	, Renderer{ Renderer }
+	, OutputWindow{ OutputWindow }
 	, DH_OnResized{}
 	, ClearColor{ ClearColor }
 	, OnViewportAreaChanged{}

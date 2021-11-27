@@ -35,7 +35,7 @@ public:
 
 private:
 	AInputControllerBinding(
-		AObject<FInputContext>&& Context,
+		FInputContext& Context,
 		AUniqueId&& UniqueId)
 		: Id{ std::move(UniqueId) } {}
 

@@ -61,7 +61,7 @@ public:
 	AUniqueId& operator=(AUniqueId&& Other) & noexcept;
 
 private:
-	AUniqueId(AObject<FUniqueIdIssuer>&& Issuer, FUniqueId&& Issued);
+	AUniqueId(FUniqueIdIssuer& Issuer, FUniqueId&& Issued);
 
 public:
 	inline operator bool() const noexcept { return IsValid(); }

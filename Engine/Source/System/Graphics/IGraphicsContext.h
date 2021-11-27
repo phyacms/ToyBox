@@ -7,10 +7,11 @@
 #include "Type/Color.h"
 #include "Type/Delegate/Delegate.h"
 #include "Type/Delegate/MulticastDelegate.h"
-#include "System/Window/SystemWindow.h"
+#include "System/Window/ScreenSpace.h"
 #include "IGraphicsRenderer.h"
 #include "ISurface2D.h"
 
+class FSystemWindow;
 using FRenderCommand = TDelegate<void(const FTimeDuration&)>;
 
 class IGraphicsContext
@@ -18,8 +19,8 @@ class IGraphicsContext
 {
 public:
 	IGraphicsContext(
-		AObject<IGraphicsRenderer>&& Renderer,
-		AObject<FSystemWindow>&& OutputWindow,
+		IGraphicsRenderer& Renderer,
+		FSystemWindow& OutputWindow,
 		FColor ClearColor = ColorCodes::CornflowerBlue);
 	virtual ~IGraphicsContext() noexcept;
 

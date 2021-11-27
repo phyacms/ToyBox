@@ -3,11 +3,13 @@
 #pragma once
 
 #include "Type/Object.h"
-#include "System/Window/SystemWindow.h"
+#include "Type/Delegate/DelegateHandle.h"
+#include "System/Window/ScreenSpace.h"
 #include "Controller/IInputController.h"
 
 class FInput;
 class IInputActionController;
+class FSystemWindow;
 
 class FInputContext final
 	: public TObject<FInputContext>
@@ -15,7 +17,7 @@ class FInputContext final
 public:
 	FInputContext(
 		FInput& Input,
-		AObject<FSystemWindow>&& InputWindow);
+		FSystemWindow& InputWindow);
 	virtual ~FInputContext() noexcept;
 
 	FInputContext(FInputContext&&) noexcept = delete;
@@ -35,7 +37,7 @@ public:
 	inline bool IsMouseButtonUp(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Up; }
 	inline bool IsMouseButtonDown(EMouseButton Button) const noexcept { return GetMouseButtonState(Button) == ESwitchState::Down; }
 
-	[[nodiscard]] AInputControllerBinding BindInputController(AObject<IInputController>&& Controller);
+	[[nodiscard]] AInputControllerBinding BindInputController(IInputController& Controller);
 	[[nodiscard]] AInputControllerBinding BindInputController(IInputActionController& ActionController);
 	void UnbindInputController(AInputControllerBinding& Handle) noexcept;
 

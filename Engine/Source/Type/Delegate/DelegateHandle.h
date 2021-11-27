@@ -25,14 +25,11 @@ public:
 	ADelegateHandle(ADelegateHandle&& Other) noexcept;
 	ADelegateHandle& operator=(ADelegateHandle&& Other) & noexcept;
 
-	inline operator bool() const noexcept { return IsValid(); }
-
 private:
-	ADelegateHandle(
-		AObject<IMulticastDelegate>&& Issuer,
-		std::size_t Index)
-		: Issuer{ std::move(Issuer) }
-		, Index{ Index } {}
+	ADelegateHandle(IMulticastDelegate& Issuer, std::size_t Index);
+
+public:
+	inline operator bool() const noexcept { return IsValid(); }
 
 public:
 	inline bool IsValid() const noexcept { return Issuer.IsValid() && Index != InvalidHandle; }

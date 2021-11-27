@@ -2,14 +2,15 @@
 
 #include "Engine.h"
 #include "InputContext.h"
+#include "System/Window/SystemWindow.h"
 #include "Controller/IInputActionController.h"
 
 FInputContext::FInputContext(
 	FInput& Input,
-	AObject<FSystemWindow>&& InputWindow)
+	FSystemWindow& InputWindow)
 	: TObject<FInputContext>(*this)
 	, Input{ &Input }
-	, InputWindow{ std::move(InputWindow) }
+	, InputWindow{ InputWindow }
 	, KeyboardMouseEvents{}
 	, KeyboardKeyStates{}
 	, MouseButtonStates{}
@@ -66,22 +67,17 @@ ESwitchState FInputContext::GetMouseButtonState(EMouseButton Button) const noexc
 		: ESwitchState::Up;
 }
 
-AInputControllerBinding FInputContext::BindInputController(AObject<IInputController>&& Controller)
+AInputControllerBinding FInputContext::BindInputController(IInputController& Controller)
 {
-	if (!Controller.IsValid())
-	{
-		return {};
-	}
-
 	AUniqueId Issued{ ControllerIdIssuer.Issue() };
-	Controllers.emplace_front(std::make_pair(Issued.GetHash(), std::move(Controller)));
+	Controllers.emplace_front(std::make_pair(Issued.GetHash(), AObject<IInputController>{ Controller }));
 	return { *this, std::move(Issued) };
 }
 
 AInputControllerBinding FInputContext::BindInputController(IInputActionController& ActionController)
 {
 	ActionController.BindStatics();
-	return BindInputController(AObject<IInputController>{ ActionController });
+	return BindInputController(reinterpret_cast<IInputController&>(ActionController));
 }
 
 void FInputContext::UnbindInputController(AInputControllerBinding& Handle) noexcept

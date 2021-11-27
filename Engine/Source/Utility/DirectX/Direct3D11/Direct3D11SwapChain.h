@@ -17,7 +17,7 @@ class FDirect3D11SwapChain final
 public:
 	FDirect3D11SwapChain(
 		FDirect3D11Renderer& Renderer,
-		AObject<FSystemWindow>&& OutputWindow);
+		FSystemWindow& OutputWindow);
 	virtual ~FDirect3D11SwapChain() noexcept;
 
 	FDirect3D11SwapChain(FDirect3D11SwapChain&&) noexcept = default;
