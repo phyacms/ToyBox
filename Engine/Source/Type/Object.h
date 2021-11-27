@@ -42,6 +42,7 @@ class AConstObject final
 public:
 	AConstObject() : Object{} {}
 	AConstObject(const T& Object) : Object{ const_cast<T&>(Object) } {}
+	AConstObject(AObject<T> Object) : Object{ std::move(Object) } {}
 	~AConstObject() noexcept = default;
 
 	AConstObject(const AConstObject&) = default;
