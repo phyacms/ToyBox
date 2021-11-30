@@ -14,6 +14,24 @@ class IDirect3D11Shader
 public:
 	inline static constexpr auto InvalidIndex{ static_cast<std::size_t>(-1) };
 
+	class FConstantBufferProxy final
+	{
+		friend class IDirect3D11Shader;
+
+	public:
+		FConstantBufferProxy() : Buffer{} {}
+
+	private:
+		FConstantBufferProxy(IDirect3D11ShaderConstantBuffer& Buffer) : Buffer{ &Buffer } {}
+
+	public:
+		inline bool IsValid() const noexcept { return Buffer != nullptr; }
+		bool Update(ID3D11DeviceContext& Context, const void* SrcData);
+
+	private:
+		IDirect3D11ShaderConstantBuffer* Buffer;
+	};
+
 public:
 	IDirect3D11Shader();
 	virtual ~IDirect3D11Shader() noexcept;
@@ -73,10 +91,9 @@ public:
 	inline const D3D11_SHADER_DESC& GetShaderDescriptions() const& noexcept { return ShaderDesc; }
 	inline D3D11_SHADER_DESC GetShaderDescriptions() const&& noexcept { return ShaderDesc; }
 
-	using ConstantBufferRef = std::optional<std::reference_wrapper<IDirect3D11ShaderConstantBuffer>>;
-	ConstantBufferRef QueryConstantBuffer(std::size_t SlotIndex) const& noexcept;
-	inline ConstantBufferRef QueryConstantBuffer(std::string_view Name) const& noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
 	std::size_t QueryConstantBufferIndex(std::string_view Name) const noexcept;
+	FConstantBufferProxy QueryConstantBuffer(std::size_t SlotIndex) const& noexcept;
+	inline FConstantBufferProxy QueryConstantBuffer(std::string_view Name) const& noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
 
 private:
 	virtual bool InitializeImpl(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept = 0;

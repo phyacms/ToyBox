@@ -35,7 +35,7 @@ IDirect3D11ShaderConstantBuffer& IDirect3D11ShaderConstantBuffer::Update(ID3D11D
 			: Context{ &Context }
 			, Resource{ &Resource }
 			, MappedSubRes{}
-			, bMapped(SUCCEEDED(Context.Map(&Resource, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &MappedSubRes))) {}
+			, bMapped{ SUCCEEDED(Context.Map(&Resource, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &MappedSubRes)) } {}
 		~FMappedSubResource() noexcept { if (bMapped) { Context->Unmap(Resource, 0); } }
 		void Map(const void* SrcData, std::size_t ByteWidth) { if (bMapped) { std::memcpy(MappedSubRes.pData, SrcData, ByteWidth); } }
 	};

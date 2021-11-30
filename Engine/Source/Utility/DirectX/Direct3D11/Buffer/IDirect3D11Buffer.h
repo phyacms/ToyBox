@@ -30,6 +30,7 @@ public:
 
 protected:
 	inline ID3D11Buffer& GetBuffer() const noexcept { return *Buffer.Get(); }
+	inline ID3D11Buffer* const* GetAddressOf() const noexcept { return Buffer.GetAddressOf(); }
 
 private:
 	virtual void BindResourceImpl(ID3D11DeviceContext& Context) const noexcept = 0;

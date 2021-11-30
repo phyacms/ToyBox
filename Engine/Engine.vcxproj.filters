@@ -70,6 +70,9 @@
     <Filter Include="Source\Player\HUD\Widget">
       <UniqueIdentifier>{c12f9132-87d2-4a39-bed3-113f0363700c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System\Graphics\Data">
+      <UniqueIdentifier>{1526cfdd-b9fc-4965-94ad-f64d7dd06075}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -253,6 +256,15 @@
     <ClInclude Include="Source\Type\Byte.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11VertexBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11IndexBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Data\DynamicVertex.h">
+      <Filter>Source\System\Graphics\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -356,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="Source\Type\Byte.cpp">
       <Filter>Source\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Data\DynamicVertex.cpp">
+      <Filter>Source\System\Graphics\Data</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

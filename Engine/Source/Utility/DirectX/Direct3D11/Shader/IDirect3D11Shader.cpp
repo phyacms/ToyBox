@@ -7,6 +7,16 @@
 
 #include "Utility/DirectX/Direct3D11/Buffer/IDirect3D11ShaderConstantBuffer.h"
 
+bool IDirect3D11Shader::FConstantBufferProxy::Update(ID3D11DeviceContext& Context, const void* SrcData)
+{
+	if (IsValid())
+	{
+		Buffer->Update(Context, SrcData);
+		return true;
+	}
+	return false;
+}
+
 IDirect3D11Shader::IDirect3D11Shader()
 	: Reflector{}
 	, ShaderDesc{}
@@ -118,12 +128,6 @@ void IDirect3D11Shader::BindResource(ID3D11DeviceContext& Context) const noexcep
 	}
 }
 
-IDirect3D11Shader::ConstantBufferRef IDirect3D11Shader::QueryConstantBuffer(std::size_t SlotIndex) const& noexcept
-{
-	if (ConstBuf.Objects.contains(SlotIndex)) { return std::ref(*ConstBuf.Objects.at(SlotIndex)); }
-	else { return std::nullopt; }
-}
-
 std::size_t IDirect3D11Shader::QueryConstantBufferIndex(std::string_view Name) const noexcept
 {
 	auto cIt{ std::find_if(
@@ -134,6 +138,13 @@ std::size_t IDirect3D11Shader::QueryConstantBufferIndex(std::string_view Name) c
 	return cIt != std::cend(ConstBuf.BufDescs)
 		? cIt - std::cbegin(ConstBuf.BufDescs)
 		: InvalidIndex;
+}
+
+IDirect3D11Shader::FConstantBufferProxy IDirect3D11Shader::QueryConstantBuffer(std::size_t SlotIndex) const& noexcept
+{
+	return ConstBuf.Objects.contains(SlotIndex)
+		? *ConstBuf.Objects.at(SlotIndex)
+		: FConstantBufferProxy{};
 }
 
 #endif

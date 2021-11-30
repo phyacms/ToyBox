@@ -13,6 +13,7 @@ IDirect3D11Buffer::IDirect3D11Buffer(
 	const void* InitialSrcData,
 	UINT ElementCount,
 	UINT ElementSize)
+	: Buffer{}
 {
 	D3D11_BUFFER_DESC Desc
 	{
@@ -25,7 +26,7 @@ IDirect3D11Buffer::IDirect3D11Buffer(
 	};
 	D3D11_SUBRESOURCE_DATA SubRes
 	{
-		.pSysMem{ &InitialSrcData },
+		.pSysMem{ InitialSrcData },
 		.SysMemPitch{},
 		.SysMemSlicePitch{}
 	};

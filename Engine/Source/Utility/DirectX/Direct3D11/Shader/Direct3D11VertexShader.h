@@ -5,6 +5,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include "IDirect3D11Shader.h"
+#include "System/Graphics/Data/DynamicVertex.h"
 
 class FDirect3D11VertexShader final
 	: public IDirect3D11Shader
@@ -24,13 +25,12 @@ private:
 	bool CreateInputLayout(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
 
 public:
-	inline UINT GetVertexStride() const noexcept { return VertexStride; }
+	inline const FVertexDesc& GetVertexDescription() const noexcept { return VertexDesc; }
 
 private:
+	FVertexDesc VertexDesc;
 	TComPtr<ID3D11VertexShader> VertexShader;
 	TComPtr<ID3D11InputLayout> InputLayout;
-	std::vector<D3D11_INPUT_ELEMENT_DESC> ElementDescs;
-	UINT VertexStride;
 };
 
 #endif

@@ -23,8 +23,7 @@ public:
 private:
 	inline virtual void BindResourceImpl(ID3D11DeviceContext& Context) const noexcept override final
 	{
-		const auto ConstBufAddr{ &GetBuffer() };
-		Context.VSSetConstantBuffers(GetDesiredSlot(), 1, &ConstBufAddr);
+		Context.VSSetConstantBuffers(GetDesiredSlot(), 1, GetAddressOf());
 	}
 };
 

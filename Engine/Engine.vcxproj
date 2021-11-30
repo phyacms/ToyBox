@@ -105,6 +105,7 @@
     <ClInclude Include="Source\Player\HUD\UISpace.h" />
     <ClInclude Include="Source\Player\HUD\Widget\IWidget.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
+    <ClInclude Include="Source\System\Graphics\Data\DynamicVertex.h" />
     <ClInclude Include="Source\System\Graphics\Graphics.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
@@ -138,7 +139,9 @@
     <ClInclude Include="Source\Type\Time.h" />
     <ClInclude Include="Source\Type\TypeTraits.h" />
     <ClInclude Include="Source\Type\UniqueId.h" />
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11IndexBuffer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11PixelShaderConstantBuffer.h" />
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11VertexBuffer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11VertexShaderConstantBuffer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.h" />
@@ -158,6 +161,7 @@
     <ClCompile Include="Source\Player\HUD\HUD.cpp" />
     <ClCompile Include="Source\Player\HUD\UISpace.cpp" />
     <ClCompile Include="Source\Player\HUD\Widget\IWidget.cpp" />
+    <ClCompile Include="Source\System\Graphics\Data\DynamicVertex.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\Input\Chord\InputChord.cpp" />

@@ -9,10 +9,9 @@
 
 FDirect3D11VertexShader::FDirect3D11VertexShader(ID3D11Device& Device, ID3DBlob& CompiledVertexShaderObject)
 	: IDirect3D11Shader()
+	, VertexDesc{}
 	, VertexShader{}
 	, InputLayout{}
-	, ElementDescs{}
-	, VertexStride{}
 {
 	if (!Initialize<FDirect3D11VertexShaderConstantBuffer>(Device, CompiledVertexShaderObject))
 	{
@@ -30,8 +29,6 @@ void FDirect3D11VertexShader::TerminateImpl() noexcept
 {
 	VertexShader.Reset();
 	InputLayout.Reset();
-	ElementDescs.clear();
-	VertexStride = {};
 }
 
 bool FDirect3D11VertexShader::IsValidImpl() const noexcept
@@ -81,7 +78,7 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 		}
 	}
 
-	static constexpr auto ParseInputElementSize{ [](BYTE Mask)->UINT
+	static constexpr auto ParseInputElementSize{ [](BYTE Mask)->std::size_t
 	{
 		if (false) {}
 		else if (Mask & 0b1000) { return 4; }
@@ -127,7 +124,7 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 			return Formats[SizeIndex][TypeIndex];
 		} };
 
-	ElementDescs.resize(InputParamCount);
+	std::vector<D3D11_INPUT_ELEMENT_DESC> ElementDescs(InputParamCount);
 	std::transform(
 		std::execution::par_unseq,
 		std::cbegin(ParamDescs),
@@ -147,13 +144,6 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 			};
 		}
 	);
-	VertexStride = std::transform_reduce(
-		std::execution::par_unseq,
-		std::cbegin(ParamDescs),
-		std::cend(ParamDescs),
-		UINT{},
-		std::plus(),
-		[](const D3D11_SIGNATURE_PARAMETER_DESC& SigParam)->UINT { return ParseInputElementSize(SigParam.Mask) * 4; });
 
 	if (FAILED(Device.CreateInputLayout(
 		ElementDescs.data(),
@@ -163,6 +153,15 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 		&InputLayout)))
 	{
 		return false;
+	}
+
+	std::size_t OffsetPos{};
+	for (std::size_t Index{}; Index != ElementDescs.size(); ++Index)
+	{
+		OffsetPos = VertexDesc.AddElementDesc(
+			ElementDescs[Index].SemanticName,
+			ElementDescs[Index].SemanticIndex,
+			{ .ByteSize{ ParseInputElementSize(ParamDescs[Index].Mask) * 4 }, .OffsetPos{ OffsetPos } });
 	}
 
 	return true;
