@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Math/Normals.h"
-#include "Byte/ByteBuffer.h"
+#include "Byte.h"
 
 enum class EColorByteOrder : std::size_t { ARGB, RGBA };
 
@@ -61,8 +61,8 @@ public:
 	inline const float* GetPtr() const noexcept { return Norms.GetPtr(); }
 
 	// @NOTE: Serialization/Deserialization is performed via conversion from/to ARGB color code.
-	virtual bool Deserialize(const FByteBuffer& Bytes) override final;
-	virtual [[nodiscard]] FByteBuffer Serialize() const override final;
+	virtual bool Deserialize(const FBytes& Bytes) override final;
+	virtual [[nodiscard]] FBytes Serialize() const override final;
 
 private:
 	UNorms Norms;

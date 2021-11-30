@@ -4,7 +4,7 @@
 #include "String.h"
 #include "Platform/Platform.h"
 
-bool FString::Deserialize(const FByteBuffer& Bytes)
+bool FString::Deserialize(const FBytes& Bytes)
 {
 	std::vector<char8_t> Chars(Bytes.GetByteSize());
 	std::transform(
@@ -26,9 +26,9 @@ bool FString::Deserialize(const FByteBuffer& Bytes)
 	}
 }
 
-FByteBuffer FString::Serialize() const
+FBytes FString::Serialize() const
 {
-	FByteBuffer Bytes{};
+	FBytes Bytes{};
 	if (const auto& UTF8Str{ PlatformFunctions::StringToUTF8(*this) };
 		UTF8Str.has_value())
 	{

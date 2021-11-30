@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Byte/ByteBuffer.h"
+#include "Byte.h"
 #include "TypeTraits.h"
 
 enum class EStringLength : std::size_t { CodePoint, CodeUnit };
@@ -87,8 +87,8 @@ public:
 	inline const CodeUnit* GetPtr() const& noexcept { return GetStr().c_str(); }
 
 	// @NOTE: Serialization/Deserialization is performed via UTF-8 encoding/decoding.
-	virtual bool Deserialize(const FByteBuffer& Bytes) override final;
-	virtual [[nodiscard]] FByteBuffer Serialize() const override final;
+	virtual bool Deserialize(const FBytes& Bytes) override final;
+	virtual [[nodiscard]] FBytes Serialize() const override final;
 
 private:
 	StringType Str;

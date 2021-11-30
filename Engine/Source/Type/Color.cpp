@@ -82,7 +82,7 @@ FColor::UNorms FColor::GetAsNormals(EColorByteOrder ByteOrder) const noexcept
 	return Norms;
 }
 
-bool FColor::Deserialize(const FByteBuffer& Bytes)
+bool FColor::Deserialize(const FBytes& Bytes)
 {
 	Set(FColorCode{
 		.Code{ Bytes.ReadAs<decltype(FColorCode::Code)>(0) },
@@ -90,10 +90,10 @@ bool FColor::Deserialize(const FByteBuffer& Bytes)
 	return true;
 }
 
-FByteBuffer FColor::Serialize() const
+FBytes FColor::Serialize() const
 {
-	FByteBuffer Buffer{};
-	Buffer.Reserve(sizeof(FColorCode::Code));
-	Buffer.Append(GetAsColorCode(EColorByteOrder::ARGB).Code);
-	return Buffer;
+	FBytes Bytes{};
+	Bytes.Reserve(sizeof(FColorCode::Code));
+	Bytes.Append(GetAsColorCode(EColorByteOrder::ARGB).Code);
+	return Bytes;
 }

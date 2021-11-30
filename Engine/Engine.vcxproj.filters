@@ -55,9 +55,6 @@
     <Filter Include="Source\Player\HUD">
       <UniqueIdentifier>{ca123d2c-1ff4-43e4-b2c6-5e0556af1eac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Type\Byte">
-      <UniqueIdentifier>{afb2bb90-5a70-46a2-901d-c0830446697d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Type\Delegate">
       <UniqueIdentifier>{c02ca50b-6c35-4eba-85c8-65d0a17b82ed}</UniqueIdentifier>
     </Filter>
@@ -220,15 +217,6 @@
     <ClInclude Include="Source\Type\Delegate\MulticastDelegate.h">
       <Filter>Source\Type\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\Byte\ByteStream.h">
-      <Filter>Source\Type\Byte</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\Byte\Byte.h">
-      <Filter>Source\Type\Byte</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\Byte\ByteBuffer.h">
-      <Filter>Source\Type\Byte</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\Input\Controller\IInputActionController.h">
       <Filter>Source\System\Input\Controller</Filter>
     </ClInclude>
@@ -267,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="Source\Player\HUD\Widget\IWidget.h">
       <Filter>Source\Player\HUD\Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Byte.h">
+      <Filter>Source\Type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -351,12 +342,6 @@
     <ClCompile Include="Source\Type\Delegate\IMulticastDelegate.cpp">
       <Filter>Source\Type\Delegate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Type\Byte\ByteBuffer.cpp">
-      <Filter>Source\Type\Byte</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Type\Byte\ByteStream.cpp">
-      <Filter>Source\Type\Byte</Filter>
-    </ClCompile>
     <ClCompile Include="Source\System\Input\Controller\IInputController.cpp">
       <Filter>Source\System\Input\Controller</Filter>
     </ClCompile>
@@ -377,6 +362,9 @@
     </ClCompile>
     <ClCompile Include="Source\Player\HUD\Widget\IWidget.cpp">
       <Filter>Source\Player\HUD\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\Byte.cpp">
+      <Filter>Source\Type</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

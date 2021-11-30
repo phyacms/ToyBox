@@ -126,9 +126,7 @@
     <ClInclude Include="Source\System\Window\ScreenSpace.h" />
     <ClInclude Include="Source\System\Window\SystemWindow.h" />
     <ClInclude Include="Source\System\Window\SystemWindowEvents.h" />
-    <ClInclude Include="Source\Type\Byte\Byte.h" />
-    <ClInclude Include="Source\Type\Byte\ByteBuffer.h" />
-    <ClInclude Include="Source\Type\Byte\ByteStream.h" />
+    <ClInclude Include="Source\Type\Byte.h" />
     <ClInclude Include="Source\Type\Color.h" />
     <ClInclude Include="Source\Type\Container.h" />
     <ClInclude Include="Source\Type\Delegate\Delegate.h" />
@@ -175,8 +173,7 @@
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp" />
-    <ClCompile Include="Source\Type\Byte\ByteBuffer.cpp" />
-    <ClCompile Include="Source\Type\Byte\ByteStream.cpp" />
+    <ClCompile Include="Source\Type\Byte.cpp" />
     <ClCompile Include="Source\Type\Color.cpp" />
     <ClCompile Include="Source\Type\Delegate\DelegateHandle.cpp" />
     <ClCompile Include="Source\Type\Delegate\IMulticastDelegate.cpp" />
