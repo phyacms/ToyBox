@@ -28,7 +28,7 @@ private:
 	private:
 		virtual const FString& GetWidgetName() const noexcept override final;
 		inline virtual bool IsValidImpl() const noexcept override final { return true; }
-		virtual void RenderImpl(ISurface2D& Surface, const FScreenArea& Rect, FTimeDuration DeltaTime) override final {}
+		virtual void RenderImpl(IGraphicsContext& Context, const FScreenArea& Rect, FTimeDuration DeltaTime) override final {}
 	};
 
 public:
@@ -61,7 +61,7 @@ public:
 		typename = std::enable_if_t<std::is_base_of_v<IWidget, T>>>
 	inline AWidget<T> CreateWidget(Ts&&... Params) { return Root.CreateChild<T>(std::forward<Ts>(Params)...); }
 
-	void Render();
+	void Render(FTimeDuration DeltaTime);
 
 private:
 	void UpdateUIArea() noexcept;

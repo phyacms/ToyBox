@@ -9,25 +9,43 @@
 #include "Type/Delegate/MulticastDelegate.h"
 #include "System/Window/ScreenSpace.h"
 #include "IGraphicsRenderer.h"
-#include "ISurface2D.h"
 
 class FSystemWindow;
-using FRenderCommand = TDelegate<void(FTimeDuration)>;
 
 class IGraphicsContext
 	: public TObject<IGraphicsContext>
 {
+private:
+	class FScene final
+	{
+		friend class IGraphicsContext;
+
+	private:
+		FScene(const IGraphicsContext& Context) : Context{ &Context } { Context.BeginScene(Context.ClearColor); }
+
+	public:
+		~FScene() noexcept { Context->EndScene(); }
+
+		FScene(const FScene&) = delete;
+		FScene& operator=(const FScene&) & = delete;
+		FScene(FScene&&) noexcept = delete;
+		FScene& operator=(FScene&&) & noexcept = delete;
+
+	private:
+		const IGraphicsContext* Context;
+	};
+
 public:
 	IGraphicsContext(
 		IGraphicsRenderer& Renderer,
 		FSystemWindow& OutputWindow,
 		FColor ClearColor = ColorCodes::CornflowerBlue);
+	IGraphicsContext(IGraphicsContext&&) noexcept = default;
+	IGraphicsContext& operator=(IGraphicsContext&&) & noexcept = default;
 	virtual ~IGraphicsContext() noexcept;
 
 	IGraphicsContext(const IGraphicsContext&) = delete;
 	IGraphicsContext& operator=(const IGraphicsContext&) & = delete;
-	IGraphicsContext(IGraphicsContext&&) noexcept = default;
-	IGraphicsContext& operator=(IGraphicsContext&&) & noexcept = default;
 
 public:
 	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
@@ -37,10 +55,10 @@ public:
 
 	inline void SetClearColor(FColor ClearColor) noexcept { this->ClearColor = std::move(ClearColor); }
 
-	void AddCommand(FRenderCommand&& Command);
-	void ExecuteCommands(FTimeDuration DeltaTime);
+	inline [[nodiscard]] FScene CreateScene() const noexcept { return FScene{ *this }; }
 
-	virtual ISurface2D& GetSurface() noexcept = 0;
+	virtual void DrawLine(const FScreenLocation& Begin, const FScreenLocation& End, const FColor& Color = {}, float Width = 1.0f) = 0;
+	virtual void DrawRect(const FScreenArea& Rect, const FColor& Color = {}, float Width = 1.0f) = 0;
 
 protected:
 	inline FSystemWindow& GetOutputWindow() const noexcept { return *OutputWindow.GetAddress(); }
@@ -52,15 +70,11 @@ private:
 	virtual void BeginScene(const FColor& ClearColor) const = 0;
 	virtual void EndScene() const = 0;
 
-	void ClearRenderCommands() noexcept { CommandQueue = {}; }
-
 private:
 	AObject<IGraphicsRenderer> Renderer;
 	AObject<FSystemWindow> OutputWindow;
 	ADelegateHandle DH_OnResized;
 	FColor ClearColor;
-
-	std::queue<FRenderCommand> CommandQueue;
 
 public:
 	using FOnViewportAreaChanged = TMulticastDelegate<void(const FScreenArea&)>;

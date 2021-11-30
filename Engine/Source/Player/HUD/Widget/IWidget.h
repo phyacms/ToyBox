@@ -12,7 +12,7 @@ class FHUD;
 class IWidget;
 template<typename T>
 class AWidget;
-class ISurface2D;
+class IGraphicsContext;
 
 class IWidget
 	: public TObject<IWidget>
@@ -101,13 +101,13 @@ public:
 	inline void ToggleVisibility() noexcept { SetVisibility(!bVisible); }
 	inline bool IsVisible() const noexcept { return bVisible; }
 
-	void Render(ISurface2D& Surface, FTimeDuration DeltaTime);
+	void Render(IGraphicsContext& Context, FTimeDuration DeltaTime);
 
 private:
 	virtual const FString& GetWidgetName() const noexcept = 0;
 	virtual bool IsValidImpl() const noexcept = 0;
 	virtual void RenderImpl(
-		ISurface2D& Surface,
+		IGraphicsContext& Context,
 		const FScreenArea& Rect,
 		FTimeDuration DeltaTime) = 0;
 

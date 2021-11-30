@@ -27,31 +27,7 @@ IGraphicsContext::IGraphicsContext(
 
 IGraphicsContext::~IGraphicsContext() noexcept
 {
-	ClearRenderCommands();
 	DH_OnResized.Release();
 	OutputWindow.Release();
 	Renderer.Release();
-}
-
-void IGraphicsContext::AddCommand(FRenderCommand&& Command)
-{
-	CommandQueue.emplace(std::move(Command));
-}
-
-void IGraphicsContext::ExecuteCommands(FTimeDuration DeltaTime)
-{
-	struct FScene final
-	{
-		const IGraphicsContext* Context{};
-		FScene(const IGraphicsContext& Context)
-			: Context{ &Context } { Context.BeginScene(Context.ClearColor); }
-		~FScene() noexcept { Context->EndScene(); }
-	}
-	Scene{ *this };
-
-	while (!CommandQueue.empty())
-	{
-		CommandQueue.front().Execute(DeltaTime);
-		CommandQueue.pop();
-	}
 }

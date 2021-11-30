@@ -26,6 +26,7 @@ private:
 
 public:
 	virtual bool IsValid() const noexcept override final;
+
 	virtual [[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) & override final;
 
 	inline IDXGIFactory1& GetFactory() const& noexcept { return *Factory.Get(); }

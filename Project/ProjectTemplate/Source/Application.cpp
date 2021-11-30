@@ -97,7 +97,7 @@ void FApplication::Tick(FTimeDuration DeltaTime)
 
 void FApplication::Render(FTimeDuration DeltaTime)
 {
-	HUD->Render();
+	auto Scene{ Graphics->CreateScene() };
 
-	Graphics->ExecuteCommands(DeltaTime);
+	HUD->Render(DeltaTime);
 }

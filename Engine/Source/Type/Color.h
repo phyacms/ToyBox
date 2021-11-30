@@ -39,8 +39,8 @@ private:
 	static UNorms::VectorType ConvertByteOrder(UNorms::VectorType Norms, EColorByteOrder From, EColorByteOrder To);
 
 public:
-	FColor();
-	FColor(FColorCode ColorCode);
+	FColor() : FColor(ColorCodes::Black) {}
+	FColor(FColorCode ColorCode) : Norms{} { Set(std::move(ColorCode)); }
 	FColor(const FColor&) = default;
 	FColor& operator=(const FColor&) & = default;
 	FColor(FColor&&) noexcept = default;

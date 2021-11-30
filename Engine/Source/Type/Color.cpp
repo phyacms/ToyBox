@@ -37,25 +37,14 @@ FColor::UNorms::VectorType FColor::ConvertByteOrder(
 	return Norms;
 }
 
-FColor::FColor()
-	: Norms{}
-{
-}
-
-FColor::FColor(FColorCode ColorCode)
-	: FColor()
-{
-	Set(std::move(ColorCode));
-}
-
 void FColor::Set(FColorCode ColorCode) noexcept
 {
 	const auto& Bytes{ ::ToByteArray<decltype(FColorCode::Code), std::endian::big>(ColorCode.Code) };
 	Norms.Set<Byte>(Bytes, 0, 255);
-	auto Vector{ Norms.GetAsVector() };
-
-
-	Norms.Set<float>(ConvertByteOrder(Vector, ColorCode.ByteOrder, DefaultByteOrder));
+	Norms.Set<float>(ConvertByteOrder(
+		Norms.GetAsVector(),
+		ColorCode.ByteOrder,
+		DefaultByteOrder));
 }
 
 FColorCode FColor::GetAsColorCode(EColorByteOrder ByteOrder) const noexcept

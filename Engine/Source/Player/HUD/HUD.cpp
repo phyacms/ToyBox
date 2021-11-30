@@ -60,11 +60,9 @@ void FHUD::SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) no
 	UpdateUIArea();
 }
 
-void FHUD::Render()
+void FHUD::Render(FTimeDuration DeltaTime)
 {
-	Graphics->AddCommand(
-		[this](FTimeDuration DeltaTime)->void {
-			Root.Render(Graphics->GetSurface(), DeltaTime); });
+	Root.Render(*Graphics.GetAddress(), DeltaTime);
 }
 
 void FHUD::UpdateUIArea() noexcept

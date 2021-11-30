@@ -55,16 +55,16 @@ bool IWidget::IsValid() const noexcept
 		&& IsValidImpl();
 }
 
-void IWidget::Render(ISurface2D& Surface, FTimeDuration DeltaTime)
+void IWidget::Render(IGraphicsContext& Context, FTimeDuration DeltaTime)
 {
 	if (IsVisible())
 	{
-		RenderImpl(Surface, Dimension.CachedAbsoluteArea, DeltaTime);
+		RenderImpl(Context, Dimension.CachedAbsoluteArea, DeltaTime);
 		std::for_each(
 			std::execution::seq,
 			std::cbegin(Children.Widgets),
 			std::cend(Children.Widgets),
-			[&Surface, &DeltaTime](const auto& Pair)->void { Pair.second->Render(Surface, DeltaTime); });
+			[&Context, &DeltaTime](const auto& Pair)->void { Pair.second->Render(Context, DeltaTime); });
 	}
 }
 

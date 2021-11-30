@@ -22,7 +22,7 @@ FDirect3D11SwapChain::FDirect3D11SwapChain(
 	, BlendState{}
 	, Viewport{}
 	, ScissorRect{}
-	, D2DRT{}
+	, D2D{}
 {
 	if (!Initialize())
 	{
@@ -44,6 +44,7 @@ bool FDirect3D11SwapChain::Initialize() noexcept
 void FDirect3D11SwapChain::Terminate() noexcept
 {
 	DestroyResources();
+	D2D.Brushes.clear();
 	SwapChain.Reset();
 }
 
@@ -117,7 +118,7 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 	if (FAILED(Device.CreateRenderTargetView(
 		BackBuffer.Get(),
 		nullptr,
-		RenderTargetView.GetAddressOf())))
+		&RenderTargetView)))
 	{
 		return false;
 	}
@@ -227,7 +228,20 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 		return false;
 	}
 
-	if (!D2DRT.Initialize(Renderer.GetD2D1Factory(), *Surface.Get()))
+	const D2D1_RENDER_TARGET_PROPERTIES& Properties = D2D1::RenderTargetProperties(
+		D2D1_RENDER_TARGET_TYPE::D2D1_RENDER_TARGET_TYPE_DEFAULT,
+		D2D1::PixelFormat(
+			DXGI_FORMAT::DXGI_FORMAT_UNKNOWN,
+			D2D1_ALPHA_MODE::D2D1_ALPHA_MODE_PREMULTIPLIED),
+		96.0f,
+		96.0f,
+		D2D1_RENDER_TARGET_USAGE::D2D1_RENDER_TARGET_USAGE_NONE,
+		D2D1_FEATURE_LEVEL::D2D1_FEATURE_LEVEL_DEFAULT);
+
+	if (FAILED(Renderer.GetD2D1Factory().CreateDxgiSurfaceRenderTarget(
+		Surface.Get(),
+		&Properties,
+		&D2D.RenderTarget)))
 	{
 		return false;
 	}
@@ -245,7 +259,7 @@ void FDirect3D11SwapChain::DestroyResources() noexcept
 	BlendState.Reset();
 	Viewport = {};
 	ScissorRect = {};
-	D2DRT.Terminate();
+	D2D.RenderTarget.Reset();
 }
 
 bool FDirect3D11SwapChain::IsValidImpl() const noexcept
@@ -258,7 +272,7 @@ bool FDirect3D11SwapChain::IsValidImpl() const noexcept
 		|| !DepthStencilView
 		|| !RasterizerState
 		|| !BlendState
-		|| !D2DRT.IsValid());
+		|| !D2D.RenderTarget);
 }
 
 void FDirect3D11SwapChain::ResizeBuffer(const FScreenSize& ClientAreaSize)
@@ -303,12 +317,12 @@ void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 	Context.OMSetBlendState(BlendState.Get(), BlendFactor, SampleMask);
 	Context.OMSetDepthStencilState(DepthStencilState.Get(), 1);
 
-	D2DRT.GetRenderTarget().BeginDraw();
+	D2D.RenderTarget->BeginDraw();
 }
 
 void FDirect3D11SwapChain::EndScene() const
 {
-	D2DRT.GetRenderTarget().EndDraw();
+	D2D.RenderTarget->EndDraw();
 	SwapChain->Present(0, PresentFlags);
 }
 
@@ -317,6 +331,51 @@ FScreenArea FDirect3D11SwapChain::GetViewportArea() const noexcept
 	return {
 		.Location{ FScreenLocation{ Viewport.TopLeftX, Viewport.TopLeftY } },
 		.Size{ FScreenSize{ Viewport.Width, Viewport.Height } } };
+}
+
+ID2D1SolidColorBrush& FDirect3D11SwapChain::GetD2DBrush(const FColor& Color)
+{
+	const auto& Index{ Color.GetAsColorCode(EColorByteOrder::ARGB).Code };
+	if (D2D.Brushes.find(Index) == std::cend(D2D.Brushes))
+	{
+		const auto& [cIt, bEmplaced] = D2D.Brushes.emplace(Index, decltype(D2D.Brushes)::mapped_type{});
+		if (!bEmplaced)
+		{
+			throw std::runtime_error{ __FUNCTION__ "(): Failed to emplace new element in std::unordered_map." };
+		}
+
+		if (FAILED(D2D.RenderTarget->CreateSolidColorBrush(Direct2D1::ToColor(Color), &D2D.Brushes.at(Index))))
+		{
+			throw std::runtime_error{ __FUNCTION__ "(): Failed to create solid color brush." };
+		}
+	}
+	return *D2D.Brushes.at(Index).Get();
+}
+
+void FDirect3D11SwapChain::DrawLine(
+	const FScreenLocation& Begin,
+	const FScreenLocation& End,
+	const FColor& Color,
+	float Width)
+{
+	D2D.RenderTarget->DrawLine(
+		Direct2D1::ToPoint(Begin),
+		Direct2D1::ToPoint(End),
+		&GetD2DBrush(Color),
+		Width,
+		nullptr);
+}
+
+void FDirect3D11SwapChain::DrawRect(
+	const FScreenArea& Rect,
+	const FColor& Color,
+	float Width)
+{
+	D2D.RenderTarget->DrawRectangle(
+		Direct2D1::ToRect(Rect),
+		&GetD2DBrush(Color),
+		Width,
+		nullptr);
 }
 
 #endif

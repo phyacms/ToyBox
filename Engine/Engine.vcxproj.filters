@@ -196,12 +196,6 @@
     <ClInclude Include="Source\Player\HUD\UISpace.h">
       <Filter>Source\Player\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Graphics\ISurface2D.h">
-      <Filter>Source\System\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.h">
-      <Filter>Source\Utility\DirectX\Direct3D11</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Type\Delegate\Delegate.h">
       <Filter>Source\Type\Delegate</Filter>
     </ClInclude>
@@ -332,9 +326,6 @@
     </ClCompile>
     <ClCompile Include="Source\Player\HUD\UISpace.cpp">
       <Filter>Source\Player\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct2D1RenderTarget.cpp">
-      <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClCompile>
     <ClCompile Include="Source\Type\Delegate\DelegateHandle.cpp">
       <Filter>Source\Type\Delegate</Filter>
