@@ -166,3 +166,5 @@ private:
 	const FVertexDesc* Desc;
 	FBytes Bytes;
 };
+
+using FIndexData = std::vector<std::uint32_t>;

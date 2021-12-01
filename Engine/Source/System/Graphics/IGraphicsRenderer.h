@@ -25,6 +25,7 @@ public:
 
 public:
 	virtual bool IsValid() const noexcept = 0;
+
 	virtual [[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) & = 0;
 
 protected:

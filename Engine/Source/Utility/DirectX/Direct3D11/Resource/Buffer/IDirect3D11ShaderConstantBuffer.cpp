@@ -6,12 +6,13 @@
 #ifdef PLATFORM_WINDOWS
 
 IDirect3D11ShaderConstantBuffer::IDirect3D11ShaderConstantBuffer(
-	ID3D11Device& Device,
+	FDirect3D11Renderer& Renderer,
 	UINT DesiredSlot,
 	UINT ByteWidth,
 	const void* InitialSrcData)
-	: IDirect3D11Buffer(
-		Device,
+	: IDynamicBuffer()
+	, FDirect3D11Buffer(
+		Renderer,
 		D3D11_BIND_FLAG::D3D11_BIND_CONSTANT_BUFFER,
 		D3D11_USAGE::D3D11_USAGE_DYNAMIC,
 		D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE,
@@ -23,7 +24,7 @@ IDirect3D11ShaderConstantBuffer::IDirect3D11ShaderConstantBuffer(
 {
 }
 
-IDirect3D11ShaderConstantBuffer& IDirect3D11ShaderConstantBuffer::Update(ID3D11DeviceContext& Context, const void* SrcData)
+bool IDirect3D11ShaderConstantBuffer::UpdateBufferImpl(ID3D11DeviceContext& Context, const void* SrcData)
 {
 	struct FMappedSubResource final
 	{
@@ -37,10 +38,17 @@ IDirect3D11ShaderConstantBuffer& IDirect3D11ShaderConstantBuffer::Update(ID3D11D
 			, MappedSubRes{}
 			, bMapped{ SUCCEEDED(Context.Map(&Resource, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &MappedSubRes)) } {}
 		~FMappedSubResource() noexcept { if (bMapped) { Context->Unmap(Resource, 0); } }
-		void Map(const void* SrcData, std::size_t ByteWidth) { if (bMapped) { std::memcpy(MappedSubRes.pData, SrcData, ByteWidth); } }
+		inline bool Map(const void* SrcData, std::size_t ByteSize)
+		{
+			if (bMapped)
+			{
+				std::memcpy(MappedSubRes.pData, SrcData, ByteSize);
+				return true;
+			}
+			return false;
+		}
 	};
-	FMappedSubResource(Context, GetBuffer()).Map(SrcData, ByteWidth);
-	return *this;
+	return FMappedSubResource(Context, GetBuffer()).Map(SrcData, GetByteSize());
 }
 
 #endif

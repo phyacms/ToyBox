@@ -13,11 +13,11 @@ class FDirect3D11VertexShaderConstantBuffer final
 {
 public:
 	FDirect3D11VertexShaderConstantBuffer(
-		ID3D11Device& Device,
+		FDirect3D11Renderer& Renderer,
 		UINT DesiredSlot,
 		UINT ByteWidth,
 		const void* InitialSrcData = nullptr)
-		: IDirect3D11ShaderConstantBuffer(Device, DesiredSlot, ByteWidth, InitialSrcData) {}
+		: IDirect3D11ShaderConstantBuffer(Renderer, DesiredSlot, ByteWidth, InitialSrcData) {}
 	virtual ~FDirect3D11VertexShaderConstantBuffer() noexcept = default;
 
 private:

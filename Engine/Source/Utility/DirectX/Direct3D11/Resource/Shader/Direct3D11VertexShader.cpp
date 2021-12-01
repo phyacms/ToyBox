@@ -5,22 +5,28 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Utility/DirectX/Direct3D11/Buffer/Direct3D11VertexShaderConstantBuffer.h"
+#include "Utility/DirectX/Direct3D11/Direct3D11Renderer.h"
+#include "Utility/DirectX/Direct3D11/Resource/Buffer/Direct3D11VertexShaderConstantBuffer.h"
 
-FDirect3D11VertexShader::FDirect3D11VertexShader(ID3D11Device& Device, ID3DBlob& CompiledVertexShaderObject)
-	: IDirect3D11Shader()
+FDirect3D11VertexShader::FDirect3D11VertexShader(
+	FDirect3D11Renderer& Renderer,
+	ID3DBlob& CompiledVertexShaderObject)
+	: IVertexShader()
+	, FDirect3D11ShaderReflection()
+	, Renderer{ &Renderer }
 	, VertexDesc{}
 	, VertexShader{}
 	, InputLayout{}
 {
-	if (!Initialize<FDirect3D11VertexShaderConstantBuffer>(Device, CompiledVertexShaderObject))
+	if (!Initialize<FDirect3D11VertexShaderConstantBuffer>(Renderer, CompiledVertexShaderObject))
 	{
 		Terminate();
 	}
 }
 
-bool FDirect3D11VertexShader::InitializeImpl(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
+bool FDirect3D11VertexShader::InitializeImpl(FDirect3D11Renderer& Renderer, ID3DBlob& ByteCode) noexcept
 {
+	auto& Device{ Renderer.GetDevice() };
 	return CreateVertexShader(Device, ByteCode)
 		&& CreateInputLayout(Device, ByteCode);
 }
@@ -165,6 +171,11 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 	}
 
 	return true;
+}
+
+bool FDirect3D11VertexShader::BindResource() const noexcept
+{
+	return FDirect3D11ShaderReflection::BindResource(Renderer->GetDeviceContext());
 }
 
 #endif

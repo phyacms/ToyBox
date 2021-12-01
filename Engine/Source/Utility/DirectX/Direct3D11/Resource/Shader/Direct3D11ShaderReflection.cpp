@@ -1,34 +1,24 @@
 ﻿// Copyrights 2021 by phyacms. All Rights Reserved.
 
 #include "Engine.h"
-#include "IDirect3D11Shader.h"
+#include "Direct3D11ShaderReflection.h"
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Utility/DirectX/Direct3D11/Buffer/IDirect3D11ShaderConstantBuffer.h"
+#include "Utility/DirectX/Direct3D11/Resource/Buffer/IDirect3D11ShaderConstantBuffer.h"
 
-bool IDirect3D11Shader::FConstantBufferProxy::Update(ID3D11DeviceContext& Context, const void* SrcData)
-{
-	if (IsValid())
-	{
-		Buffer->Update(Context, SrcData);
-		return true;
-	}
-	return false;
-}
-
-IDirect3D11Shader::IDirect3D11Shader()
+FDirect3D11ShaderReflection::FDirect3D11ShaderReflection()
 	: Reflector{}
 	, ShaderDesc{}
 	, ConstBuf{}
 {
 }
 
-IDirect3D11Shader::~IDirect3D11Shader() noexcept
+FDirect3D11ShaderReflection::~FDirect3D11ShaderReflection() noexcept
 {
 }
 
-void IDirect3D11Shader::Terminate() noexcept
+void FDirect3D11ShaderReflection::Terminate() noexcept
 {
 	ConstBuf.BufDescs.clear();
 	ConstBuf.InputBindDescs.clear();
@@ -37,7 +27,7 @@ void IDirect3D11Shader::Terminate() noexcept
 	Reflector.Reset();
 }
 
-bool IDirect3D11Shader::CreateReflection(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
+bool FDirect3D11ShaderReflection::CreateReflection(ID3DBlob& ByteCode) noexcept
 {
 	if (FAILED(::D3DReflect(
 		ByteCode.GetBufferPointer(),
@@ -56,7 +46,7 @@ bool IDirect3D11Shader::CreateReflection(ID3D11Device& Device, ID3DBlob& ByteCod
 	return true;
 }
 
-bool IDirect3D11Shader::ReflectConstantBuffer() noexcept
+bool FDirect3D11ShaderReflection::ReflectConstantBuffer() noexcept
 {
 	static constexpr auto CheckResults{
 		[](const auto& hResults)->bool {
@@ -108,14 +98,14 @@ bool IDirect3D11Shader::ReflectConstantBuffer() noexcept
 	return true;
 }
 
-bool IDirect3D11Shader::AddConstantBuffer(std::unique_ptr<IDirect3D11ShaderConstantBuffer>&& Created) noexcept
+bool FDirect3D11ShaderReflection::AddConstantBuffer(std::unique_ptr<IDirect3D11ShaderConstantBuffer>&& Created) noexcept
 {
 	auto SlotIndex{ Created->GetDesiredSlot() };
 	const auto& [cIt, bEmplaced] = ConstBuf.Objects.emplace(SlotIndex, std::move(Created));
 	return bEmplaced;
 }
 
-void IDirect3D11Shader::BindResource(ID3D11DeviceContext& Context) const noexcept
+bool FDirect3D11ShaderReflection::BindResource(ID3D11DeviceContext& Context) const noexcept
 {
 	if (IsValid())
 	{
@@ -124,11 +114,13 @@ void IDirect3D11Shader::BindResource(ID3D11DeviceContext& Context) const noexcep
 			std::execution::seq,
 			std::cbegin(ConstBuf.Objects),
 			std::cend(ConstBuf.Objects),
-			[&Context](const auto& Pair)->void { Pair.second->BindResource(Context); });
+			[&Context](const auto& Pair)->void { Pair.second->BindResource(); });
+		return true;
 	}
+	return false;
 }
 
-std::size_t IDirect3D11Shader::QueryConstantBufferIndex(std::string_view Name) const noexcept
+std::size_t FDirect3D11ShaderReflection::QueryConstantBufferIndex(std::string_view Name) const noexcept
 {
 	auto cIt{ std::find_if(
 		std::execution::par_unseq,
@@ -140,11 +132,11 @@ std::size_t IDirect3D11Shader::QueryConstantBufferIndex(std::string_view Name) c
 		: InvalidIndex;
 }
 
-IDirect3D11Shader::FConstantBufferProxy IDirect3D11Shader::QueryConstantBuffer(std::size_t SlotIndex) const& noexcept
+FDynamicBuffer FDirect3D11ShaderReflection::QueryConstantBuffer(std::size_t SlotIndex) const& noexcept
 {
 	return ConstBuf.Objects.contains(SlotIndex)
 		? *ConstBuf.Objects.at(SlotIndex)
-		: FConstantBufferProxy{};
+		: FDynamicBuffer{};
 }
 
 #endif

@@ -43,12 +43,6 @@
     <Filter Include="Source\Utility\DirectX\Direct3D11">
       <UniqueIdentifier>{964678ff-fc07-4858-bd6f-c622c720867e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Utility\DirectX\Direct3D11\Buffer">
-      <UniqueIdentifier>{2a4e2b73-d8e8-4d4b-982f-cc0890c8b5d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Utility\DirectX\Direct3D11\Shader">
-      <UniqueIdentifier>{b64122a5-8be9-48da-9869-35f773148b88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Player">
       <UniqueIdentifier>{ed9808c9-8db2-4a8d-8478-d18ea47cd877}</UniqueIdentifier>
     </Filter>
@@ -72,6 +66,24 @@
     </Filter>
     <Filter Include="Source\System\Graphics\Data">
       <UniqueIdentifier>{1526cfdd-b9fc-4965-94ad-f64d7dd06075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Graphics\Resource">
+      <UniqueIdentifier>{b5635575-44bb-4197-a477-fe1c57c008ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Graphics\Resource\Buffer">
+      <UniqueIdentifier>{07c4e3aa-68c1-430a-8ec3-8b80a27cef34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\System\Graphics\Resource\Shader">
+      <UniqueIdentifier>{e8da6a78-fd39-4856-b7b8-3f59e093e417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utility\DirectX\Direct3D11\Resource">
+      <UniqueIdentifier>{09cea7db-f22e-4889-a771-f44d4bdab1d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utility\DirectX\Direct3D11\Resource\Shader">
+      <UniqueIdentifier>{b64122a5-8be9-48da-9869-35f773148b88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer">
+      <UniqueIdentifier>{2a4e2b73-d8e8-4d4b-982f-cc0890c8b5d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -163,27 +175,6 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11SwapChain.h">
       <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Shader\IDirect3D11Shader.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Shader\Direct3D11PixelShader.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Shader\Direct3D11VertexShader.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11PixelShaderConstantBuffer.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11VertexShaderConstantBuffer.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Type\Container.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
@@ -256,14 +247,59 @@
     <ClInclude Include="Source\Type\Byte.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11VertexBuffer.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Buffer\Direct3D11IndexBuffer.h">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\Graphics\Data\DynamicVertex.h">
       <Filter>Source\System\Graphics\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\IGraphicsResource.h">
+      <Filter>Source\System\Graphics\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Buffer\IIndexBuffer.h">
+      <Filter>Source\System\Graphics\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Buffer\IVertexBuffer.h">
+      <Filter>Source\System\Graphics\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Buffer\IBuffer.h">
+      <Filter>Source\System\Graphics\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Buffer\IDynamicBuffer.h">
+      <Filter>Source\System\Graphics\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Shader\IShader.h">
+      <Filter>Source\System\Graphics\Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Shader\IVertexShader.h">
+      <Filter>Source\System\Graphics\Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Shader\IPixelShader.h">
+      <Filter>Source\System\Graphics\Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11PixelShaderConstantBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11VertexBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11VertexShaderConstantBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\IDirect3D11ShaderConstantBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11Buffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11IndexBuffer.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11PixelShader.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11ShaderReflection.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -318,21 +354,6 @@
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Shader\Direct3D11PixelShader.cpp">
-      <Filter>Source\Utility\DirectX\Direct3D11\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Shader\Direct3D11VertexShader.cpp">
-      <Filter>Source\Utility\DirectX\Direct3D11\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Shader\IDirect3D11Shader.cpp">
-      <Filter>Source\Utility\DirectX\Direct3D11\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11Buffer.cpp">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Buffer\IDirect3D11ShaderConstantBuffer.cpp">
-      <Filter>Source\Utility\DirectX\Direct3D11\Buffer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player\HUD\HUD.cpp">
       <Filter>Source\Player\HUD</Filter>
     </ClCompile>
@@ -371,6 +392,21 @@
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\Data\DynamicVertex.cpp">
       <Filter>Source\System\Graphics\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11Buffer.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\IDirect3D11ShaderConstantBuffer.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11PixelShader.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11ShaderReflection.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

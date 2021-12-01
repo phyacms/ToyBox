@@ -4,61 +4,44 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Type/Delegate/Delegate.h"
+#include "System/Graphics/Resource/Buffer/IDynamicBuffer.h"
 #include "Utility/DirectX/Direct3D11/Direct3D11.h"
 
+class FDirect3D11Renderer;
 class IDirect3D11ShaderConstantBuffer;
 
-class IDirect3D11Shader
+class FDirect3D11ShaderReflection
 {
 public:
 	inline static constexpr auto InvalidIndex{ static_cast<std::size_t>(-1) };
 
-	class FConstantBufferProxy final
-	{
-		friend class IDirect3D11Shader;
-
-	public:
-		FConstantBufferProxy() : Buffer{} {}
-
-	private:
-		FConstantBufferProxy(IDirect3D11ShaderConstantBuffer& Buffer) : Buffer{ &Buffer } {}
-
-	public:
-		inline bool IsValid() const noexcept { return Buffer != nullptr; }
-		bool Update(ID3D11DeviceContext& Context, const void* SrcData);
-
-	private:
-		IDirect3D11ShaderConstantBuffer* Buffer;
-	};
-
 public:
-	IDirect3D11Shader();
-	virtual ~IDirect3D11Shader() noexcept;
+	FDirect3D11ShaderReflection();
+	virtual ~FDirect3D11ShaderReflection() noexcept;
 
-	IDirect3D11Shader(const IDirect3D11Shader&) = delete;
-	IDirect3D11Shader& operator=(const IDirect3D11Shader&) & = delete;
-	IDirect3D11Shader(IDirect3D11Shader&&) noexcept = delete;
-	IDirect3D11Shader& operator=(IDirect3D11Shader&&) & noexcept = delete;
+	FDirect3D11ShaderReflection(const FDirect3D11ShaderReflection&) = delete;
+	FDirect3D11ShaderReflection& operator=(const FDirect3D11ShaderReflection&) & = delete;
+	FDirect3D11ShaderReflection(FDirect3D11ShaderReflection&&) noexcept = delete;
+	FDirect3D11ShaderReflection& operator=(FDirect3D11ShaderReflection&&) & noexcept = delete;
 
 protected:
 	template<typename ConstBufT>
-	inline bool Initialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
+	inline bool Initialize(FDirect3D11Renderer& Renderer, ID3DBlob& ByteCode) noexcept
 	{
-		return CreateReflection(Device, ByteCode)
-			&& InitializeImpl(Device, ByteCode)
-			&& CreateConstantBuffers<ConstBufT>(Device);
+		return CreateReflection(ByteCode)
+			&& InitializeImpl(Renderer, ByteCode)
+			&& CreateConstantBuffers<ConstBufT>(Renderer);
 	}
 	void Terminate() noexcept;
 
 	inline bool IsReflected() const noexcept { return Reflector != nullptr; }
 
 private:
-	bool CreateReflection(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
+	bool CreateReflection(ID3DBlob& ByteCode) noexcept;
 	template<
 		typename T,
 		typename = std::enable_if_t<std::is_base_of_v<IDirect3D11ShaderConstantBuffer, T>>>
-	inline bool CreateConstantBuffers(ID3D11Device& Device) noexcept
+	inline bool CreateConstantBuffers(FDirect3D11Renderer& Renderer) noexcept
 	{
 		if (!ReflectConstantBuffer())
 		{
@@ -68,7 +51,7 @@ private:
 		for (std::size_t BufIndex{}; BufIndex != ConstBuf.BufDescs.size(); ++BufIndex)
 		{
 			if (!AddConstantBuffer(std::make_unique<T>(
-				Device,
+				Renderer,
 				ConstBuf.InputBindDescs[BufIndex].BindPoint,
 				ConstBuf.BufDescs[BufIndex].Size,
 				nullptr)))
@@ -85,18 +68,18 @@ private:
 
 public:
 	inline bool IsValid() const noexcept { return IsReflected() && IsValidImpl(); }
-	void BindResource(ID3D11DeviceContext& Context) const noexcept;
+	bool BindResource(ID3D11DeviceContext& Context) const noexcept;
 
 	inline ID3D11ShaderReflection& GetShaderReflector() const& noexcept { return *Reflector.Get(); }
 	inline const D3D11_SHADER_DESC& GetShaderDescriptions() const& noexcept { return ShaderDesc; }
 	inline D3D11_SHADER_DESC GetShaderDescriptions() const&& noexcept { return ShaderDesc; }
 
 	std::size_t QueryConstantBufferIndex(std::string_view Name) const noexcept;
-	FConstantBufferProxy QueryConstantBuffer(std::size_t SlotIndex) const& noexcept;
-	inline FConstantBufferProxy QueryConstantBuffer(std::string_view Name) const& noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
+	FDynamicBuffer QueryConstantBuffer(std::size_t SlotIndex) const& noexcept;
+	inline FDynamicBuffer QueryConstantBuffer(std::string_view Name) const& noexcept { return QueryConstantBuffer(QueryConstantBufferIndex(Name)); }
 
 private:
-	virtual bool InitializeImpl(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept = 0;
+	virtual bool InitializeImpl(FDirect3D11Renderer& Renderer, ID3DBlob& ByteCode) noexcept = 0;
 	virtual void TerminateImpl() noexcept = 0;
 
 	virtual bool IsValidImpl() const noexcept = 0;

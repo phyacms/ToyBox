@@ -1,19 +1,23 @@
 ﻿// Copyrights 2021 by phyacms. All Rights Reserved.
 
 #include "Engine.h"
-#include "IDirect3D11Buffer.h"
+#include "Direct3D11Buffer.h"
 
 #ifdef PLATFORM_WINDOWS
 
-IDirect3D11Buffer::IDirect3D11Buffer(
-	ID3D11Device& Device,
+#include "Utility/DirectX/Direct3D11/Direct3D11Renderer.h"
+
+FDirect3D11Buffer::FDirect3D11Buffer(
+	FDirect3D11Renderer& Renderer,
 	UINT BindFlags,
 	D3D11_USAGE Usage,
 	UINT CPUAccessFlags,
 	const void* InitialSrcData,
 	UINT ElementCount,
 	UINT ElementSize)
-	: Buffer{}
+	: Renderer{ &Renderer }
+	, Buffer{}
+	, bDynamic{ (CPUAccessFlags & D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE) != 0 }
 {
 	D3D11_BUFFER_DESC Desc
 	{
@@ -30,7 +34,7 @@ IDirect3D11Buffer::IDirect3D11Buffer(
 		.SysMemPitch{},
 		.SysMemSlicePitch{}
 	};
-	if (FAILED(Device.CreateBuffer(
+	if (FAILED(Renderer.GetDevice().CreateBuffer(
 		&Desc,
 		InitialSrcData != nullptr
 			? &SubRes
@@ -39,6 +43,23 @@ IDirect3D11Buffer::IDirect3D11Buffer(
 	{
 		Buffer.Reset();
 	}
+}
+
+bool FDirect3D11Buffer::BindResource() const noexcept
+{
+	if (IsValid())
+	{
+		BindResourceImpl(Renderer->GetDeviceContext());
+		return true;
+	}
+	return false;
+}
+
+bool FDirect3D11Buffer::UpdateBuffer(const void* SrcData)
+{
+	return (IsValid() && IsDynamic())
+		? UpdateBufferImpl(Renderer->GetDeviceContext(), SrcData)
+		: false;
 }
 
 #endif
