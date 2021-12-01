@@ -233,7 +233,6 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 {
 	auto& Window{ GetWindow() };
 
-	bool bPulse{ true };
 	auto KeyState{ ESwitchState::Up };
 	switch (uMsg)
 	{
@@ -247,18 +246,14 @@ WindowsPlatform::FWndProc::FResult WindowsPlatform::FWndProc::ProcKeyboardMessag
 		case WM_KEYDOWN:
 		case WM_SYSKEYDOWN:
 			KeyState = ESwitchState::Down;
-			bPulse = !(lParam & (1 << 30));
 			[[fallthrough]];
 		case WM_KEYUP:
 		case WM_SYSKEYUP:
 		{
-			if (bPulse)
+			if (auto Key{ WindowsPlatform::TranslateKeyboardKey(LOWORD(wParam)) };
+				InputFunctions::IsValidKey(Key))
 			{
-				if (auto Key{ WindowsPlatform::TranslateKeyboardKey(LOWORD(wParam)) };
-					InputFunctions::IsValidKey(Key))
-				{
-					Window.Events.Enqueue(FOnKeyboardKey{ .Key{ Key }, .State{ KeyState } });
-				}
+				Window.Events.Enqueue(FOnKeyboardKey{ .Key{ Key }, .State{ KeyState } });
 			}
 		}
 		return { true, 0 };

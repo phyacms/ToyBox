@@ -12,6 +12,9 @@ class IDirect3D11ShaderConstantBuffer
 	, private FDirect3D11Buffer
 {
 public:
+	inline static constexpr auto ByteSizeLimit{ D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT };
+
+public:
 	IDirect3D11ShaderConstantBuffer(
 		FDirect3D11Renderer& Renderer,
 		UINT DesiredSlot,

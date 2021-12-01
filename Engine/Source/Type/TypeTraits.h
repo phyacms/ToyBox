@@ -6,35 +6,64 @@
 
 namespace TypeTraits
 {
+	// Checks T matches one of given types Ts.
 	template<typename T, typename... Ts>
-	struct IsAnyTypeOf : public std::conditional_t<
-		std::disjunction_v<std::is_same<T, Ts>...>,
-		std::true_type,
-		std::false_type> {};
+	struct IsOf final
+	{
+		inline static constexpr auto Value{
+			std::disjunction_v<std::is_same<T, Ts>...> };
+	};
 	template<typename T, typename... Ts>
-	inline constexpr auto bIsAnyTypeOf{ IsAnyTypeOf<T, Ts...>::value };
+	inline constexpr auto bIsOf{ IsOf<T, Ts...>::Value };
 
+	// Checks whether every type of given Ts is distinct from any others.
+	// https://stackoverflow.com/questions/18986560
+	template<typename... Ts>
+	struct IsUnique;
+	template<>
+	struct IsUnique<> final { inline static constexpr auto Value{ true }; };
 	template<typename T, typename... Ts>
-	struct IsAllTypeOf : public std::conditional_t<
-		std::conjunction_v<std::is_same<T, Ts>...>,
-		std::true_type,
-		std::false_type> {};
-	template<typename T, typename... Ts>
-	inline constexpr auto bIsAllTypeOf{ IsAllTypeOf<T, Ts...>::value };
+	struct IsUnique<T, Ts...> final
+	{
+		inline static constexpr auto Value{
+			IsUnique<Ts...>::Value
+			&& !bIsOf<T, Ts...> };
+	};
+	template<typename... Ts>
+	inline constexpr auto bIsUnique{ IsUnique<Ts...>::Value };
 
-	inline constexpr auto bIsLittleEndian{ std::endian::native == std::endian::little };
-	inline constexpr auto bIsBigEndian{ std::endian::native == std::endian::big };
-	inline constexpr auto bIsMixedEndian{ !bIsLittleEndian && !bIsBigEndian };
+	// Retrieves the index of a uniquely-existing type in the given tuple of Ts.
+	// If type T is NOT an uniquely-existing type, the retrieved value is equal to std::size_t(-1).
+	// c.f.) std::get<T>()
+	namespace Tuple
+	{
+		struct InvalidIndex final { inline static constexpr auto Value{ static_cast<std::size_t>(-1) }; };
+		inline constexpr auto InvalidIndexValue{ InvalidIndex::Value };
+	}
 
+	template<typename T, typename Tuple>
+	struct IndexOf;
 	template<typename T>
-	struct IsTriviallySerializable : public std::conditional_t<
-		bIsAnyTypeOf<T,
-			char8_t, char16_t, char32_t,
-			std::int8_t, std::int16_t, std::int32_t, std::int64_t,
-			std::uint8_t, std::uint16_t, std::uint32_t, std::uint64_t>,
-		std::true_type,
-		std::false_type> {};
-
-	template<typename T>
-	inline constexpr auto bIsTriviallySerializable{ IsTriviallySerializable<T>::value };
+	struct IndexOf<T, std::tuple<>> final
+	{
+		inline static constexpr auto Value{ Tuple::InvalidIndexValue };
+	};
+	template<typename T, typename... Ts>
+	struct IndexOf<T, std::tuple<T, Ts...>> final
+	{
+		inline static constexpr auto Value{
+			IndexOf<T, std::tuple<Ts...>>::Value == Tuple::InvalidIndexValue
+				? 0
+				: Tuple::InvalidIndexValue };
+	};
+	template<typename T, typename T1, typename... Ts>
+	struct IndexOf<T, std::tuple<T1, Ts...>> final
+	{
+		inline static constexpr auto Value{
+			IndexOf<T, std::tuple<Ts...>>::Value != Tuple::InvalidIndexValue
+				? (1 + IndexOf<T, std::tuple<Ts...>>::Value)
+				: Tuple::InvalidIndexValue };
+	};
+	template<typename T, typename... Ts>
+	inline constexpr auto IndexValueOf{ IndexOf<T, Ts...>::Value };
 }
