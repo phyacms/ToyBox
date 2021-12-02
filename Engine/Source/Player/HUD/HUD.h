@@ -38,6 +38,7 @@ public:
 	FHUD(
 		FInputContext& Input,
 		IGraphicsContext& Graphics,
+		URect Viewport = URect::Default,
 		float MinimumAspectRatio = DefaultMinimumAspectRatio,
 		float MaximumAspectRatio = DefaultMaximumAspectRatio);
 	~FHUD() noexcept;
@@ -49,7 +50,7 @@ public:
 
 public:
 	bool IsValid() const noexcept;
-	inline const FScreenArea& GetUIArea() const noexcept { return UIArea; }
+	inline const FScreenArea& GetArea() const noexcept { return Area; }
 
 	void SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) noexcept;
 
@@ -63,7 +64,7 @@ public:
 	void Render(FTimeDuration DeltaTime);
 
 private:
-	void UpdateUIArea() noexcept;
+	void UpdateArea() noexcept;
 
 	UCoord GetMouseCursorLocation() const noexcept;
 
@@ -76,12 +77,13 @@ private:
 	AObject<FInputContext> Input;
 	AObject<IGraphicsContext> Graphics;
 
-	FScreenArea ViewportArea{};
-	ADelegateHandle DH_OnViewportAreaChanged;
+	URect Viewport;
+	FScreenSize OutputWindowSize;
+	ADelegateHandle DH_OnOutputWindowSizeChanged;
 
 	float MinimumAspectRatio;
 	float MaximumAspectRatio;
-	FScreenArea UIArea;
+	FScreenArea Area;
 
 	FRootWidget Root;
 };

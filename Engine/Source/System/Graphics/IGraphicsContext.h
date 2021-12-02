@@ -21,7 +21,8 @@ private:
 		friend class IGraphicsContext;
 
 	private:
-		FScene(const IGraphicsContext& Context) : Context{ &Context } { Context.BeginScene(Context.ClearColor); }
+		FScene(const IGraphicsContext& Context)
+			: Context{ &Context } { Context.BeginScene(Context.ClearColor); }
 
 	public:
 		~FScene() noexcept { Context->EndScene(); }
@@ -49,7 +50,7 @@ public:
 
 public:
 	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
-	virtual FScreenArea GetViewportArea() const noexcept = 0;
+	FScreenSize GetOutputWindowSize() const noexcept;
 
 	inline void SetClearColor(FColor ClearColor) noexcept { this->ClearColor = std::move(ClearColor); }
 	inline const FColor& GetClearColor() const noexcept { return ClearColor; }
@@ -75,6 +76,6 @@ private:
 	FColor ClearColor;
 
 public:
-	using FOnViewportAreaChanged = TMulticastDelegate<void(const FScreenArea&)>;
-	FOnViewportAreaChanged OnViewportAreaChanged;
+	using FOnOutputWindowSizeChanged = TMulticastDelegate<void(const FScreenSize&)>;
+	FOnOutputWindowSizeChanged OnOutputWindowSizeChanged;
 };

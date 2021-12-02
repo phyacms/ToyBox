@@ -13,14 +13,14 @@ IGraphicsContext::IGraphicsContext(
 	, OutputWindow{ OutputWindow }
 	, DH_OnResized{}
 	, ClearColor{ ClearColor }
-	, OnViewportAreaChanged{}
+	, OnOutputWindowSizeChanged{}
 {
 	if (this->OutputWindow.IsValid())
 	{
 		DH_OnResized = this->OutputWindow->Events.OnResized.AddDynamic(
 			[this](const FOnResized& EventArgs)->bool {
 				ResizeBuffer(EventArgs.ClientAreaSize);
-				OnViewportAreaChanged.Broadcast(GetViewportArea());
+				OnOutputWindowSizeChanged.Broadcast(GetOutputWindowSize());
 				return false; });
 	}
 }
@@ -30,4 +30,9 @@ IGraphicsContext::~IGraphicsContext() noexcept
 	DH_OnResized.Release();
 	OutputWindow.Release();
 	Renderer.Release();
+}
+
+FScreenSize IGraphicsContext::GetOutputWindowSize() const noexcept
+{
+	return GetOutputWindow().GetClientArea().Size;
 }

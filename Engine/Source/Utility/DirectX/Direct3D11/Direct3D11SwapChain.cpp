@@ -326,13 +326,6 @@ void FDirect3D11SwapChain::EndScene() const
 	SwapChain->Present(0, PresentFlags);
 }
 
-FScreenArea FDirect3D11SwapChain::GetViewportArea() const noexcept
-{
-	return {
-		.Location{ FScreenLocation{ Viewport.TopLeftX, Viewport.TopLeftY } },
-		.Size{ FScreenSize{ Viewport.Width, Viewport.Height } } };
-}
-
 ID2D1SolidColorBrush& FDirect3D11SwapChain::GetD2DBrush(const FColor& Color)
 {
 	const auto& Index{ Color.GetAsColorCode(EColorByteOrder::ARGB).Code };

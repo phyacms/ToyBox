@@ -37,8 +37,6 @@ private:
 	virtual void EndScene() const override final;
 
 public:
-	virtual FScreenArea GetViewportArea() const noexcept override final;
-
 	inline FDirect3D11Renderer& GetRenderer() const noexcept { return *Renderer; }
 	inline IDXGISwapChain& GetSwapChain() const& noexcept { return *SwapChain.Get(); }
 

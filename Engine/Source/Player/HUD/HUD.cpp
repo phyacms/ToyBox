@@ -14,29 +14,30 @@ const FString& FHUD::FRootWidget::GetWidgetName() const noexcept
 FHUD::FHUD(
 	FInputContext& Input,
 	IGraphicsContext& Graphics,
+	URect Viewport,
 	float MinimumAspectRatio,
 	float MaximumAspectRatio)
 	: Input{ Input }
 	, Graphics{ Graphics }
-	, ViewportArea{ this->Graphics->GetViewportArea() }
-	, DH_OnViewportAreaChanged{}
+	, Viewport{ std::move(Viewport) }
+	, OutputWindowSize{ Graphics.GetOutputWindowSize() }
+	, DH_OnOutputWindowSizeChanged{}
 	, MinimumAspectRatio(MinimumAspectRatio)
 	, MaximumAspectRatio(MaximumAspectRatio)
-	, UIArea{}
+	, Area{}
 	, Root{}
 {
-	auto SetViewportArea{
-		[this](const FScreenArea& ViewportArea)->void {
-			this->ViewportArea = ViewportArea;
-			UpdateUIArea(); } };
+	DH_OnOutputWindowSizeChanged = this->Graphics->OnOutputWindowSizeChanged.AddDynamic(
+		[this](const FScreenSize& OutputWindowSize)->void {
+			this->OutputWindowSize = OutputWindowSize;
+			UpdateArea(); });
 
-	SetViewportArea(Graphics.GetViewportArea());
-	DH_OnViewportAreaChanged = this->Graphics->OnViewportAreaChanged.AddDynamic(std::move(SetViewportArea));
+	UpdateArea();
 }
 
 FHUD::~FHUD() noexcept
 {
-	DH_OnViewportAreaChanged.Release();
+	DH_OnOutputWindowSizeChanged.Release();
 	Input.Release();
 	Graphics.Release();
 }
@@ -57,7 +58,7 @@ void FHUD::SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) no
 	this->MinimumAspectRatio = MinimumAspectRatio;
 	this->MaximumAspectRatio = MaximumAspectRatio;
 
-	UpdateUIArea();
+	UpdateArea();
 }
 
 void FHUD::Render(FTimeDuration DeltaTime)
@@ -65,36 +66,36 @@ void FHUD::Render(FTimeDuration DeltaTime)
 	Root.Render(*Graphics.GetAddress(), DeltaTime);
 }
 
-void FHUD::UpdateUIArea() noexcept
+void FHUD::UpdateArea() noexcept
 {
-	UIArea = ViewportArea;
-	auto& X{ UIArea.Location.X() };
-	auto& Y{ UIArea.Location.Y() };
-	auto& Width{ UIArea.Size.X() };
-	auto& Height{ UIArea.Size.Y() };
+	Area = ::ToScreenSpace(Viewport, { .Location{}, .Size{ OutputWindowSize } });
+	auto& X{ Area.Location.X() };
+	auto& Y{ Area.Location.Y() };
+	auto& Width{ Area.Size.X() };
+	auto& Height{ Area.Size.Y() };
 
 	const auto AspectRatio{ Width / static_cast<float>(Height) };
 	if (AspectRatio > MaximumAspectRatio)
 	{
 		const auto dW{ static_cast<FScreenSize::ValueType>(Height * MaximumAspectRatio) };
-		X = static_cast<FScreenLocation::ValueType>(Width - dW) / 2;
+		X += static_cast<FScreenLocation::ValueType>(Width - dW) / 2;
 		Width = dW;
 	}
 	else if (AspectRatio < MinimumAspectRatio)
 	{
 		const auto dH{ static_cast<FScreenSize::ValueType>(Width / MinimumAspectRatio) };
-		Y = static_cast<FScreenLocation::ValueType>(Height - dH) / 2;
+		Y += static_cast<FScreenLocation::ValueType>(Height - dH) / 2;
 		Height = dH;
 	}
 
-	Root.CalcAbsoluteArea(UIArea);
+	Root.CalcAbsoluteArea(Area);
 }
 
 UCoord FHUD::GetMouseCursorLocation() const noexcept
 {
 	return UAbsCoord{
 		FScreenLocation()
-		+ (Input->GetMouseCursorLocation() - UIArea.Location) };
+		+ (Input->GetMouseCursorLocation() - Area.Location) };
 }
 
 bool FHUD::DispatchInputAction(
