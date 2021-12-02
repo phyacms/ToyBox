@@ -108,6 +108,7 @@
     <ClInclude Include="Source\Player\HUD\Widget\IWidget.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
     <ClInclude Include="Source\System\Graphics\Data\DynamicVertex.h" />
+    <ClInclude Include="Source\System\Graphics\Data\Projection.h" />
     <ClInclude Include="Source\System\Graphics\Graphics.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsContext.h" />
     <ClInclude Include="Source\System\Graphics\IGraphicsRenderer.h" />
@@ -146,7 +147,7 @@
     <ClInclude Include="Source\Type\Object.h" />
     <ClInclude Include="Source\Type\ScreenSpace\AbsCoord.h" />
     <ClInclude Include="Source\Type\ScreenSpace\Coord.h" />
-    <ClInclude Include="Source\Type\ScreenSpace\Rect.h" />
+    <ClInclude Include="Source\Type\ScreenSpace\Dim.h" />
     <ClInclude Include="Source\Type\ScreenSpace\RelCoord.h" />
     <ClInclude Include="Source\Type\ScreenSpace\ScreenArea.h" />
     <ClInclude Include="Source\Type\ScreenSpace\ScreenLocation.h" />
@@ -196,8 +197,9 @@
     <ClCompile Include="Source\Type\Delegate\IMulticastDelegate.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\AbsCoord.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\Coord.cpp" />
-    <ClCompile Include="Source\Type\ScreenSpace\Rect.cpp" />
+    <ClCompile Include="Source\Type\ScreenSpace\Dim.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\RelCoord.cpp" />
+    <ClCompile Include="Source\Type\ScreenSpace\ScreenArea.cpp" />
     <ClCompile Include="Source\Type\String.cpp" />
     <ClCompile Include="Source\Type\UniqueId.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.cpp" />

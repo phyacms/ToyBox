@@ -6,7 +6,7 @@
 #include "Type/Object.h"
 #include "Type/String.h"
 #include "Type/UniqueId.h"
-#include "Type/ScreenSpace/Rect.h"
+#include "Type/ScreenSpace/Dim.h"
 
 class FHUD;
 class IWidget;
@@ -37,17 +37,17 @@ private:
 	IWidget(
 		IWidget* Parent,
 		AUniqueId&& UniqueId,
-		URect Rect,
+		UDim Dimension,
 		bool bVisible);
 
 	// Special constructor for widget root class, instantiated by HUD.
-	IWidget() : IWidget(nullptr, {}, URect::Default, true) {}
+	IWidget() : IWidget(nullptr, {}, UDim::Default, true) {}
 
 protected:
 	// Constructor for derived classes.
 	IWidget(
-		IWidget& Parent, AUniqueId&& UniqueId, URect Rect, bool bVisible)
-		: IWidget(&Parent, std::move(UniqueId), std::move(Rect), bVisible) {}
+		IWidget& Parent, AUniqueId&& UniqueId, UDim Dimension, bool bVisible)
+		: IWidget(&Parent, std::move(UniqueId), std::move(Dimension), bVisible) {}
 
 public:
 	virtual ~IWidget() noexcept;
@@ -98,6 +98,8 @@ public:
 	inline void ToggleVisibility() noexcept { SetVisibility(!bVisible); }
 	inline bool IsVisible() const noexcept { return bVisible; }
 
+	void CalcAbsoluteArea(const FScreenArea& Base);
+
 	void Render(IGraphicsContext& Context, FTimeDuration DeltaTime);
 
 private:
@@ -105,21 +107,14 @@ private:
 	virtual bool IsValidImpl() const noexcept = 0;
 	virtual void RenderImpl(
 		IGraphicsContext& Context,
-		const FScreenArea& Rect,
+		const FScreenArea& Base,
 		FTimeDuration DeltaTime) = 0;
-
-	void CalcAbsoluteArea(const FScreenArea& Base);
 
 private:
 	AUniqueId UniqueId;
 	IWidget* Parent;
 	FChildren Children;
-	struct
-	{
-		URect Rect{ URect::Default };
-		FScreenArea CachedAbsoluteArea{};
-	}
-	Dimension;
+	FDim Dimension;
 	bool bVisible;
 };
 

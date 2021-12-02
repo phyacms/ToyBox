@@ -22,20 +22,14 @@ void IWidget::FChildren::Clear() noexcept
 	Widgets.clear();
 }
 
-IWidget::IWidget(IWidget* Parent, AUniqueId&& UniqueId, URect Rect, bool bVisible)
+IWidget::IWidget(IWidget* Parent, AUniqueId&& UniqueId, UDim Dimension, bool bVisible)
 	: TObject<IWidget>(*this)
 	, UniqueId{ std::move(UniqueId) }
 	, Parent{ Parent }
 	, Children{}
-	, Dimension{
-		.Rect{ std::move(Rect) },
-		.CachedAbsoluteArea{} }
+	, Dimension{ std::move(Dimension) }
 	, bVisible{ bVisible }
 {
-	if (!IsRoot())
-	{
-		CalcAbsoluteArea(Parent->Dimension.CachedAbsoluteArea);
-	}
 }
 
 IWidget::~IWidget() noexcept
@@ -51,25 +45,25 @@ bool IWidget::IsValid() const noexcept
 		&& IsValidImpl();
 }
 
+void IWidget::CalcAbsoluteArea(const FScreenArea& Base)
+{
+	Dimension.UpdateArea(Base);
+	std::for_each(
+		std::execution::par_unseq,
+		std::cbegin(Children.Widgets),
+		std::cend(Children.Widgets),
+		[this](const auto& Pair)->void { Pair.second->CalcAbsoluteArea(Dimension.GetArea()); });
+}
+
 void IWidget::Render(IGraphicsContext& Context, FTimeDuration DeltaTime)
 {
 	if (IsVisible())
 	{
-		RenderImpl(Context, Dimension.CachedAbsoluteArea, DeltaTime);
+		RenderImpl(Context, Dimension.GetArea(), DeltaTime);
 		std::for_each(
 			std::execution::seq,
 			std::cbegin(Children.Widgets),
 			std::cend(Children.Widgets),
 			[&Context, &DeltaTime](const auto& Pair)->void { Pair.second->Render(Context, DeltaTime); });
 	}
-}
-
-void IWidget::CalcAbsoluteArea(const FScreenArea& Base)
-{
-	Dimension.CachedAbsoluteArea = ::ToScreenSpace(Dimension.Rect, Base);
-	std::for_each(
-		std::execution::par_unseq,
-		std::cbegin(Children.Widgets),
-		std::cend(Children.Widgets),
-		[this](const auto& Pair)->void { Pair.second->CalcAbsoluteArea(Dimension.CachedAbsoluteArea); });
 }

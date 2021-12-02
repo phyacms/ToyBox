@@ -204,23 +204,6 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 		return false;
 	}
 
-	// Viewport setup.
-	Viewport = {
-		.TopLeftX{},
-		.TopLeftY{},
-		.Width{ static_cast<FLOAT>(SwapChainDesc.BufferDesc.Width) },
-		.Height{ static_cast<FLOAT>(SwapChainDesc.BufferDesc.Height) },
-		.MinDepth{},
-		.MaxDepth{ 1.0f },
-	};
-
-	// Scissor rect setup.
-	ScissorRect = {
-		.left{},
-		.top{},
-		.right{ static_cast<LONG>(SwapChainDesc.BufferDesc.Width) },
-		.bottom{ static_cast<LONG>(SwapChainDesc.BufferDesc.Height) } };
-
 	// Interoperable Direct2D render target.
 	TComPtr<IDXGISurface> Surface{};
 	if (FAILED(SwapChain->GetBuffer(0, IID_PPV_ARGS(&Surface))))
@@ -296,14 +279,67 @@ void FDirect3D11SwapChain::ResizeBuffer(const FScreenSize& ClientAreaSize)
 	}
 }
 
-void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
+void FDirect3D11SwapChain::UpdateViewport(const FScreenArea& ViewportArea)
+{
+	Viewport = {
+		.TopLeftX{ ViewportArea.Location.X<FLOAT>() },
+		.TopLeftY{ ViewportArea.Location.Y<FLOAT>() },
+		.Width{ ViewportArea.Size.X<FLOAT>() },
+		.Height{ ViewportArea.Size.Y<FLOAT>() },
+		.MinDepth{ 0.0f },
+		.MaxDepth{ 1.0f },
+	};
+
+	ScissorRect = {
+		.left{ static_cast<LONG>(std::floor(Viewport.TopLeftX)) },
+		.top{ static_cast<LONG>(std::floor(Viewport.TopLeftY)) },
+		.right{ static_cast<LONG>(std::ceil(Viewport.TopLeftX + Viewport.Width)) },
+		.bottom{ static_cast<LONG>(std::ceil(Viewport.TopLeftY + Viewport.Height)) } };
+}
+
+void FDirect3D11SwapChain::UpdateProjection(const FProjection& Projection)
+{
+	const auto& ViewportArea{ GetViewportArea() };
+	if (ViewportArea.Size.IsZero())
+	{
+		CachedProjectionMatrix = Affine::Matrix4x4f::GetIdentity();
+	}
+	else
+	{
+		static_assert(sizeof(Affine::Matrix4x4f) == sizeof(DirectX::XMMATRIX));
+		const auto& Proj{
+			DirectX::XMMatrixTranspose(
+				std::visit(stdhelp::overloaded{
+				[&ViewportArea](const FOrthographicProjection& Orthographics)->DirectX::XMMATRIX
+				{
+					const auto& Area{ ::ToScreenArea(Orthographics.Dimension, {.Location{}, .Size{ ViewportArea.Size } }) };
+					return DirectX::XMMatrixOrthographicLH(
+						Area.Size.X<float>(),
+						Area.Size.Y<float>(),
+						Orthographics.Near,
+						Orthographics.Far);
+				},
+				[&ViewportArea](const FPerspectiveProjectionFoV& Perspective)->DirectX::XMMATRIX
+				{
+					return DirectX::XMMatrixPerspectiveFovLH(
+						Perspective.FieldOfViewY,
+						ViewportArea.Size.X<float>() / ViewportArea.Size.Y<float>(),
+						Perspective.Near,
+						Perspective.Far);
+				}, },
+				Projection)) };
+		std::memcpy(&CachedProjectionMatrix, &Proj, sizeof(Affine::Matrix4x4f));
+	}
+}
+
+void FDirect3D11SwapChain::BeginScene(const FColor& BackgroundColor, const FColor& ClearColor) const
 {
 	static constexpr FLOAT BlendFactor[4]{};
 	static constexpr UINT SampleMask{ 0xFFFFFFFF };
 
 	auto& Context = GetRenderer().GetDeviceContext();
 
-	Context.ClearRenderTargetView(RenderTargetView.Get(), ClearColor.GetPtr());
+	Context.ClearRenderTargetView(RenderTargetView.Get(), BackgroundColor.GetPtr());
 	Context.ClearDepthStencilView(
 		DepthStencilView.Get(),
 		D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL,
@@ -318,6 +354,10 @@ void FDirect3D11SwapChain::BeginScene(const FColor& ClearColor) const
 	Context.OMSetDepthStencilState(DepthStencilState.Get(), 1);
 
 	D2D.RenderTarget->BeginDraw();
+	D2D.RenderTarget->FillRectangle(
+		Direct2D1::ToRect(GetViewportArea()),
+		&GetD2DBrush(ClearColor));
+	FlushD2D();
 }
 
 void FDirect3D11SwapChain::EndScene() const
@@ -326,7 +366,13 @@ void FDirect3D11SwapChain::EndScene() const
 	SwapChain->Present(0, PresentFlags);
 }
 
-ID2D1SolidColorBrush& FDirect3D11SwapChain::GetD2DBrush(const FColor& Color)
+void FDirect3D11SwapChain::FlushD2D() const
+{
+	D2D.RenderTarget->EndDraw();
+	D2D.RenderTarget->BeginDraw();
+}
+
+ID2D1SolidColorBrush& FDirect3D11SwapChain::GetD2DBrush(const FColor& Color) const
 {
 	const auto& Index{ Color.GetAsColorCode(EColorByteOrder::ARGB).Code };
 	if (D2D.Brushes.find(Index) == std::cend(D2D.Brushes))

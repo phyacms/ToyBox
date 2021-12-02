@@ -319,7 +319,7 @@
     <ClInclude Include="Source\Type\ScreenSpace\Coord.h">
       <Filter>Source\Type\ScreenSpace</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\ScreenSpace\Rect.h">
+    <ClInclude Include="Source\Type\ScreenSpace\Dim.h">
       <Filter>Source\Type\ScreenSpace</Filter>
     </ClInclude>
     <ClInclude Include="Source\Type\ScreenSpace\RelCoord.h">
@@ -327,6 +327,9 @@
     </ClInclude>
     <ClInclude Include="Source\Type\ScreenSpace\ScreenArea.h">
       <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Data\Projection.h">
+      <Filter>Source\System\Graphics\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -438,10 +441,13 @@
     <ClCompile Include="Source\Type\ScreenSpace\Coord.cpp">
       <Filter>Source\Type\ScreenSpace</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Type\ScreenSpace\Rect.cpp">
+    <ClCompile Include="Source\Type\ScreenSpace\Dim.cpp">
       <Filter>Source\Type\ScreenSpace</Filter>
     </ClCompile>
     <ClCompile Include="Source\Type\ScreenSpace\RelCoord.cpp">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\ScreenSpace\ScreenArea.cpp">
       <Filter>Source\Type\ScreenSpace</Filter>
     </ClCompile>
   </ItemGroup>

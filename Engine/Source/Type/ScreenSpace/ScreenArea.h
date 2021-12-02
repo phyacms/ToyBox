@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "Engine.h"
 #include "ScreenLocation.h"
 #include "ScreenSize.h"
 
@@ -10,4 +9,7 @@ struct FScreenArea final
 {
 	FScreenLocation Location{};
 	FScreenSize Size{};
+
+	FScreenArea GetInnerAreaOf(float MinimumAspectRatio, float MaximumAspectRatio) const noexcept;
+	inline FScreenArea GetInnerAreaOf(float AspectRatio) const noexcept { return GetInnerAreaOf(AspectRatio, AspectRatio); }
 };

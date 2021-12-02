@@ -35,21 +35,31 @@ public:
 
 	friend inline bool operator==(const TVector& Lhs, const TVector& Rhs) noexcept
 	{
+		using IsEqualTo = std::conditional_t<
+			std::is_floating_point_v<T>,
+			Math::TIsEqualTo<ValueType>,
+			std::equal_to<ValueType>>;
+
 		return std::equal(
 			std::execution::par_unseq,
 			std::cbegin(Lhs.Components),
 			std::cend(Lhs.Components),
 			std::cbegin(Rhs.Components),
-			Math::TIsEqualTo<ValueType>{});
+			IsEqualTo{});
 	}
 	friend inline bool operator!=(const TVector& Lhs, const TVector& Rhs) noexcept
 	{
+		using IsNotEqualTo = std::conditional_t<
+			std::is_floating_point_v<T>,
+			Math::TIsNotEqualTo<ValueType>,
+			std::not_equal_to<ValueType>>;
+
 		return std::equal(
 			std::execution::par_unseq,
 			std::cbegin(Lhs.Components),
 			std::cend(Lhs.Components),
 			std::cbegin(Rhs.Components),
-			Math::TIsNotEqualTo<ValueType>{});
+			IsNotEqualTo{});
 	}
 
 	inline TVector operator+() const { return *this; }
@@ -204,6 +214,8 @@ public:
 			[](const ValueType& Value)->T { return static_cast<T>(Value); });
 		return V;
 	}
+
+	inline ValueType* GetPtr() noexcept { return Components.data(); }
 	inline const ValueType* GetPtr() const noexcept { return Components.data(); }
 
 private:

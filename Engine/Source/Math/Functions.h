@@ -7,22 +7,22 @@
 
 namespace Math
 {
-	// Equality comparison
-	template<
-		typename T,
-		typename = std::enable_if_t<std::is_floating_point_v<std::remove_cvref_t<T>>>>
+	// Floating-point type equality comparison
+	template<typename T>
 	class TIsEqualTo
 	{
+		static_assert(std::is_floating_point_v<T>);
+
 	public:
 		TIsEqualTo(T ErrorLimit = T())
 			: ErrorLimit{}
 		{
-			if constexpr (std::is_same_v<std::remove_cvref_t<T>, float>)
+			if constexpr (std::is_same_v<T, float>)
 			{
 				constexpr T MinimumErrorLimit{ 1e-6f };
 				if (ErrorLimit < MinimumErrorLimit) { ErrorLimit = MinimumErrorLimit; }
 			}
-			else if constexpr (std::is_same_v<std::remove_cvref_t<T>, float>)
+			else if constexpr (std::is_same_v<T, float>)
 			{
 				constexpr T MinimumErrorLimit{ 1e-15 };
 				if (ErrorLimit < MinimumErrorLimit) { ErrorLimit = MinimumErrorLimit; }
@@ -48,8 +48,9 @@ namespace Math
 	inline bool IsEqualTo(const T& Lhs, const T& Rhs, T ErrorLimit = T()) noexcept { return TIsEqualTo<T>{ ErrorLimit }(Lhs, Rhs); }
 
 	template<typename T>
-	inline bool IsNotEqualTo(const T& Lhs, const T& Rhs) noexcept { return TIsNotEqualTo<T>(Lhs, Rhs); }
+	inline bool IsNotEqualTo(const T& Lhs, const T& Rhs, T ErrorLimit = T()) noexcept { return TIsNotEqualTo<T>{ ErrorLimit }(Lhs, Rhs); }
 
+	// Angle unit conversion
 	class FConvertAngleUnit final
 	{
 	public:

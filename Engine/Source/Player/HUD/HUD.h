@@ -4,7 +4,7 @@
 
 #include "Type/Time.h"
 #include "Type/Delegate/DelegateHandle.h"
-#include "Type/ScreenSpace/Coord.h"
+#include "Type/ScreenSpace/Dim.h"
 #include "System/Input/Controller/IInputController.h"
 #include "Widget/IWidget.h"
 
@@ -27,20 +27,14 @@ private:
 	private:
 		virtual const FString& GetWidgetName() const noexcept override final;
 		inline virtual bool IsValidImpl() const noexcept override final { return true; }
-		virtual void RenderImpl(IGraphicsContext& Context, const FScreenArea& Rect, FTimeDuration DeltaTime) override final {}
+		virtual void RenderImpl(IGraphicsContext&, const FScreenArea&, FTimeDuration) override final {}
 	};
-
-public:
-	inline static constexpr float DefaultMinimumAspectRatio{ 9.0f / 16.0f };
-	inline static constexpr float DefaultMaximumAspectRatio{ 48.0f / 9.0f };
 
 public:
 	FHUD(
 		FInputContext& Input,
 		IGraphicsContext& Graphics,
-		URect Viewport = URect::Default,
-		float MinimumAspectRatio = DefaultMinimumAspectRatio,
-		float MaximumAspectRatio = DefaultMaximumAspectRatio);
+		FAspectRatio AspectRatio = {});
 	~FHUD() noexcept;
 
 	FHUD(const FHUD&) = delete;
@@ -50,16 +44,26 @@ public:
 
 public:
 	bool IsValid() const noexcept;
-	inline const FScreenArea& GetArea() const noexcept { return Area; }
 
-	void SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) noexcept;
+	void SetDimension(UDim Dimension) noexcept;
+	inline void SetAspectRatio(float AspectRatio) noexcept { SetAspectRatio(AspectRatio, AspectRatio); }
+	inline void SetAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio) noexcept { Area.SetAspectRatio(MinimumAspectRatio, MaximumAspectRatio); UpdateArea(); }
+	inline const FScreenArea& GetArea() const noexcept { return Area.GetArea(); }
 
 	// @NOTE: Note that [[nodiscard]] attribute is NOT enforced here.
 	template<
 		typename T,
 		typename... Ts,
 		typename = std::enable_if_t<std::is_base_of_v<IWidget, T>>>
-	inline AWidget<T> CreateWidget(Ts&&... Params) { return Root.CreateChild<T>(std::forward<Ts>(Params)...); }
+	inline AWidget<T> CreateWidget(Ts&&... Params)
+	{
+		auto Widget{ Widgets.CreateChild<T>(std::forward<Ts>(Params)...) };
+		if (Widget.IsValid())
+		{
+			Widget->CalcAbsoluteArea(GetArea());
+		}
+		return Widget;
+	}
 
 	void Render(FTimeDuration DeltaTime);
 
@@ -77,13 +81,8 @@ private:
 	AObject<FInputContext> Input;
 	AObject<IGraphicsContext> Graphics;
 
-	URect Viewport;
-	FScreenSize OutputWindowSize;
-	ADelegateHandle DH_OnOutputWindowSizeChanged;
+	FAspectRatio Area;
+	ADelegateHandle DH_OnViewportChanged;
 
-	float MinimumAspectRatio;
-	float MaximumAspectRatio;
-	FScreenArea Area;
-
-	FRootWidget Root;
+	FRootWidget Widgets;
 };

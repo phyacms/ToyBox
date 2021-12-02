@@ -5,6 +5,7 @@
 #include "ScreenLocation.h"
 #include "ScreenSize.h"
 
+using UVector = TVector<float, 2>;
 class URelCoord;
 
 class UAbsCoord final
@@ -13,14 +14,11 @@ class UAbsCoord final
 	friend class UCoord;
 
 public:
-	using VectorType = TVector<float, 2>;
-
-public:
 	UAbsCoord(const FScreenLocation& Coord = {});
 	template<
 		typename... Parameters,
-		typename = std::enable_if_t<sizeof...(Parameters) == VectorType::Dimension>>
-		explicit UAbsCoord(Parameters&&... Params) : Coord{ static_cast<VectorType::ValueType>(Params)... } {}
+		typename = std::enable_if_t<sizeof...(Parameters) == UVector::Dimension>>
+		explicit UAbsCoord(Parameters&&... Params) : Coord{ static_cast<UVector::ValueType>(Params)... } {}
 	UAbsCoord(const UAbsCoord&) = default;
 	UAbsCoord& operator=(const UAbsCoord&) & = default;
 	UAbsCoord(UAbsCoord&&) noexcept = default;
@@ -28,11 +26,11 @@ public:
 	~UAbsCoord() noexcept = default;
 
 public:
-	inline const VectorType& GetAsVector() const noexcept { return Coord; }
+	inline const UVector& GetAsVector() const noexcept { return Coord; }
 	inline const float* GetPtr() const noexcept { return Coord.GetPtr(); }
 
 private:
-	VectorType Coord;
+	UVector Coord;
 };
 
 UAbsCoord ToAbsolute(const URelCoord& Rel, const FScreenSize& Size) noexcept;

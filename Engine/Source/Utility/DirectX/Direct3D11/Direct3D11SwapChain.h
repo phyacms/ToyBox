@@ -31,17 +31,24 @@ private:
 	void DestroyResources() noexcept;
 
 	virtual bool IsValidImpl() const noexcept override final;
-	virtual void ResizeBuffer(const FScreenSize& ClientAreaSize) override final;
 
-	virtual void BeginScene(const FColor& ClearColor) const override final;
+	virtual void ResizeBuffer(const FScreenSize& ClientAreaSize) override final;
+	virtual void UpdateViewport(const FScreenArea& ViewportArea) override final;
+	virtual void UpdateProjection(const FProjection& Projection) override final;
+
+	virtual void BeginScene(const FColor& BackgroundColor, const FColor& ClearColor) const override final;
 	virtual void EndScene() const override final;
 
+	void FlushD2D() const;
+
 public:
+	inline virtual const Affine::Matrix4x4f& GetProjectionMatrix() const noexcept override final { return CachedProjectionMatrix; }
+
 	inline FDirect3D11Renderer& GetRenderer() const noexcept { return *Renderer; }
 	inline IDXGISwapChain& GetSwapChain() const& noexcept { return *SwapChain.Get(); }
 
 	inline ID2D1RenderTarget& GetD2DRenderTarget() const& noexcept { return *D2D.RenderTarget.Get(); }
-	ID2D1SolidColorBrush& GetD2DBrush(const FColor& Color);
+	ID2D1SolidColorBrush& GetD2DBrush(const FColor& Color) const;
 
 	virtual void DrawLine(
 		const FScreenLocation& Begin,
@@ -70,35 +77,11 @@ private:
 	struct FInteropDirect2D final
 	{
 		TComPtr<ID2D1RenderTarget> RenderTarget{};
-		std::unordered_map<FColorCode::ValueType, TComPtr<ID2D1SolidColorBrush>> Brushes{};
+		mutable std::unordered_map<FColorCode::ValueType, TComPtr<ID2D1SolidColorBrush>> Brushes{};
 	}
 	D2D;
+
+	Affine::Matrix4x4f CachedProjectionMatrix;
 };
-
-namespace Direct2D1
-{
-	inline D2D1_POINT_2F ToPoint(const FScreenLocation& Point) noexcept
-	{
-		return D2D1::Point2F(
-			Point.X<FLOAT>(),
-			Point.Y<FLOAT>());
-	}
-
-	inline D2D1_RECT_F ToRect(const FScreenArea& Rect) noexcept
-	{
-		return D2D1::RectF(
-			Rect.Location.X<FLOAT>(),
-			Rect.Location.Y<FLOAT>(),
-			Rect.Location.X<FLOAT>() + Rect.Size.X<FLOAT>(),
-			Rect.Location.Y<FLOAT>() + Rect.Size.Y<FLOAT>());
-	}
-
-	inline D2D1_COLOR_F ToColor(const FColor& Color) noexcept
-	{
-		D2D1_COLOR_F D2DColor{};
-		std::memcpy(&D2DColor, Color.GetPtr(), sizeof(D2D1_COLOR_F));
-		return D2DColor;
-	}
-}
 
 #endif

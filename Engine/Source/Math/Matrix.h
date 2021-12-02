@@ -443,6 +443,7 @@ public:
 	inline RetType& Invert() { return *this = Inverse(); }
 
 public:
+	inline ValueType* GetPtr() noexcept { return Elements.data(); }
 	inline const ValueType* GetPtr() const noexcept { return Elements.data(); }
 
 private:

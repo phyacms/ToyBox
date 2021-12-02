@@ -107,6 +107,8 @@ public:
 
 public:
 	inline const VectorType& GetAsVector() const noexcept { return Norms; }
+
+	inline ValueType* GetPtr() noexcept { return Norms.data(); }
 	inline const ValueType* GetPtr() const noexcept { return Norms.GetPtr(); }
 
 private:

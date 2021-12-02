@@ -72,7 +72,7 @@ private:
 			FElementProxy(const FElementProxy&) = default;
 			FElementProxy& operator=(const FElementProxy&) & = default;
 			FElementProxy(FElementProxy&&) noexcept = default;
-			FElementProxy& operator=(FElementProxy&&) &noexcept = default;
+			FElementProxy& operator=(FElementProxy&&) & noexcept = default;
 			~FElementProxy() noexcept = default;
 
 		private:

@@ -19,6 +19,6 @@ UAbsCoord::UAbsCoord(const FScreenLocation& Coord)
 		std::cbegin(Coord),
 		std::cend(Coord),
 		std::begin(this->Coord),
-		[](const FScreenLocation::ValueType& Value)->VectorType::ValueType {
-			return static_cast<VectorType::ValueType>(Value); });
+		[](const FScreenLocation::ValueType& Value)->UVector::ValueType {
+			return static_cast<UVector::ValueType>(Value); });
 }

@@ -84,6 +84,7 @@ public:
 	inline const DiffType& FromOrigin() const noexcept { return Coord; }
 
 public:
+	inline ValueType* GetPtr() noexcept { return Coord.data(); }
 	inline const ValueType* GetPtr() const noexcept { return Coord.GetPtr(); }
 
 private:
