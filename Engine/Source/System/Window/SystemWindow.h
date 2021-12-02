@@ -4,7 +4,7 @@
 
 #include "Type/Object.h"
 #include "Type/String.h"
-#include "ScreenSpace.h"
+#include "Type/ScreenSpace/ScreenArea.h"
 #include "SystemWindowEvents.h"
 
 class ISystemWindowProcedure;

@@ -7,7 +7,7 @@
 #include "Type/Color.h"
 #include "Type/Delegate/Delegate.h"
 #include "Type/Delegate/MulticastDelegate.h"
-#include "System/Window/ScreenSpace.h"
+#include "Type/ScreenSpace/ScreenArea.h"
 #include "IGraphicsRenderer.h"
 
 class FSystemWindow;

@@ -4,7 +4,7 @@
 
 #include "Type/Object.h"
 #include "Type/Delegate/DelegateHandle.h"
-#include "System/Window/ScreenSpace.h"
+#include "Type/ScreenSpace/ScreenLocation.h"
 #include "Controller/IInputController.h"
 
 class FInput;

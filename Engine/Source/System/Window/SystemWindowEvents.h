@@ -4,10 +4,11 @@
 
 #include "Type/Time.h"
 #include "Type/Delegate/EventDispatcher.h"
+#include "Type/ScreenSpace/ScreenLocation.h"
+#include "Type/ScreenSpace/ScreenSize.h"
 #include "System/Input/Code/KeyboardKey.h"
 #include "System/Input/Code/MouseButton.h"
 #include "System/Input/Code/MouseWheel.h"
-#include "ScreenSpace.h"
 
 #define EnumerateSystemWindowEvents(Enumerate)	\
 	Enumerate(OnClosed)							\

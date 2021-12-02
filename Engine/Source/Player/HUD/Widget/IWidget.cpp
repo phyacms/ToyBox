@@ -3,10 +3,6 @@
 #include "Engine.h"
 #include "IWidget.h"
 
-const URect IWidget::DefaultRect{
-	.Location{ URelCoord{ 0, 0 } },
-	.Size{ URelCoord{ 1, 1 } } };
-
 bool IWidget::FChildren::Add(std::unique_ptr<IWidget>&& Widget)
 {
 	const auto Index{ Widget->GetIndex() };

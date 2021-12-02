@@ -85,6 +85,9 @@
     <Filter Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer">
       <UniqueIdentifier>{2a4e2b73-d8e8-4d4b-982f-cc0890c8b5d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Type\ScreenSpace">
+      <UniqueIdentifier>{f0098531-3283-4fec-a4f3-c1866f584450}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -183,9 +186,6 @@
     </ClInclude>
     <ClInclude Include="Source\Player\HUD\HUD.h">
       <Filter>Source\Player\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Window\ScreenSpace.h">
-      <Filter>Source\System\Window</Filter>
     </ClInclude>
     <ClInclude Include="Source\Type\Delegate\Delegate.h">
       <Filter>Source\Type\Delegate</Filter>
@@ -307,6 +307,27 @@
     <ClInclude Include="Source\Math\Affine.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\ScreenLocation.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\ScreenSize.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\AbsCoord.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\Coord.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\Rect.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\RelCoord.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\ScreenSpace\ScreenArea.h">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -411,8 +432,17 @@
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Window\ScreenSpace.cpp">
-      <Filter>Source\System\Window</Filter>
+    <ClCompile Include="Source\Type\ScreenSpace\AbsCoord.cpp">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\ScreenSpace\Coord.cpp">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\ScreenSpace\Rect.cpp">
+      <Filter>Source\Type\ScreenSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\ScreenSpace\RelCoord.cpp">
+      <Filter>Source\Type\ScreenSpace</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

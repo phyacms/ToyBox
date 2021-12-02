@@ -5,7 +5,7 @@
 #include "Type/Time.h"
 #include "Type/Object.h"
 #include "Type/UniqueId.h"
-#include "System/Window/ScreenSpace.h"
+#include "Type/ScreenSpace/ScreenLocation.h"
 #include "System/Input/Chord/InputTrigger.h"
 
 class FInputContext;

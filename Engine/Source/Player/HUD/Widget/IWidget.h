@@ -6,7 +6,7 @@
 #include "Type/Object.h"
 #include "Type/String.h"
 #include "Type/UniqueId.h"
-#include "System/Window/ScreenSpace.h"
+#include "Type/ScreenSpace/Rect.h"
 
 class FHUD;
 class IWidget;
@@ -18,9 +18,6 @@ class IWidget
 	: public TObject<IWidget>
 {
 	friend class FHUD;
-
-public:
-	static const URect DefaultRect;
 
 private:
 	struct FChildren final
@@ -44,7 +41,7 @@ private:
 		bool bVisible);
 
 	// Special constructor for widget root class, instantiated by HUD.
-	IWidget() : IWidget(nullptr, {}, DefaultRect, true) {}
+	IWidget() : IWidget(nullptr, {}, URect::Default, true) {}
 
 protected:
 	// Constructor for derived classes.
@@ -119,7 +116,7 @@ private:
 	FChildren Children;
 	struct
 	{
-		URect Rect{ DefaultRect };
+		URect Rect{ URect::Default };
 		FScreenArea CachedAbsoluteArea{};
 	}
 	Dimension;

@@ -4,7 +4,7 @@
 
 #include "Type/Time.h"
 #include "Type/Delegate/DelegateHandle.h"
-#include "System/Window/ScreenSpace.h"
+#include "Type/ScreenSpace/Coord.h"
 #include "System/Input/Controller/IInputController.h"
 #include "Widget/IWidget.h"
 
