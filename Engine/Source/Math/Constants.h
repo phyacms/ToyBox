@@ -10,7 +10,7 @@ enum class EAngleUnit : std::size_t
 	Radian
 };
 
-namespace MathConstants
+namespace Math
 {
 	using ValueType = long double;
 

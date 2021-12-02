@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "MathFunctions.h"
+#include "Functions.h"
 #include "AxisIndex.h"
 #include "Type/Container.h"
 
@@ -40,7 +40,7 @@ public:
 			std::cbegin(Lhs.Components),
 			std::cend(Lhs.Components),
 			std::cbegin(Rhs.Components),
-			MathFunctions::TIsEqualTo<ValueType>{});
+			Math::TIsEqualTo<ValueType>{});
 	}
 	friend inline bool operator!=(const TVector& Lhs, const TVector& Rhs) noexcept
 	{
@@ -49,7 +49,7 @@ public:
 			std::cbegin(Lhs.Components),
 			std::cend(Lhs.Components),
 			std::cbegin(Rhs.Components),
-			MathFunctions::TIsNotEqualTo<ValueType>{});
+			Math::TIsNotEqualTo<ValueType>{});
 	}
 
 	inline TVector operator+() const { return *this; }

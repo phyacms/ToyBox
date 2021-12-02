@@ -3,9 +3,9 @@
 #pragma once
 
 #include "Engine.h"
-#include "MathConstants.h"
+#include "Constants.h"
 
-namespace MathFunctions
+namespace Math
 {
 	// Equality comparison
 	template<
@@ -53,8 +53,8 @@ namespace MathFunctions
 	class FConvertAngleUnit final
 	{
 	public:
-		inline static constexpr auto DegToRad{ MathConstants::PI{}.Value / 180 };
-		inline static constexpr auto RadToDeg{ 180 / MathConstants::PI{}.Value };
+		inline static constexpr auto DegToRad{ Math::PI{}.Value / 180 };
+		inline static constexpr auto RadToDeg{ 180 / Math::PI{}.Value };
 
 	public:
 		template<typename T>

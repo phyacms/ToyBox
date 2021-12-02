@@ -163,7 +163,7 @@
     <ClInclude Include="Source\Math\Matrix.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\MathFunctions.h">
+    <ClInclude Include="Source\Math\Functions.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11.h">
@@ -186,9 +186,6 @@
     </ClInclude>
     <ClInclude Include="Source\System\Window\ScreenSpace.h">
       <Filter>Source\System\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player\HUD\UISpace.h">
-      <Filter>Source\Player\HUD</Filter>
     </ClInclude>
     <ClInclude Include="Source\Type\Delegate\Delegate.h">
       <Filter>Source\Type\Delegate</Filter>
@@ -304,7 +301,10 @@
     <ClInclude Include="Source\Math\Angle.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\MathConstants.h">
+    <ClInclude Include="Source\Math\Constants.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Affine.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
   </ItemGroup>
@@ -363,9 +363,6 @@
     <ClCompile Include="Source\Player\HUD\HUD.cpp">
       <Filter>Source\Player\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\HUD\UISpace.cpp">
-      <Filter>Source\Player\HUD</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Type\Delegate\DelegateHandle.cpp">
       <Filter>Source\Type\Delegate</Filter>
     </ClCompile>
@@ -413,6 +410,9 @@
     </ClCompile>
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Window\ScreenSpace.cpp">
+      <Filter>Source\System\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

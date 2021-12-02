@@ -49,14 +49,12 @@ public:
 
 public:
 	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
-
-	inline const FColor& GetClearColor() const noexcept { return ClearColor; }
 	virtual FScreenArea GetViewportArea() const noexcept = 0;
 
 	inline void SetClearColor(FColor ClearColor) noexcept { this->ClearColor = std::move(ClearColor); }
+	inline const FColor& GetClearColor() const noexcept { return ClearColor; }
 
 	inline [[nodiscard]] FScene CreateScene() const noexcept { return FScene{ *this }; }
-
 	virtual void DrawLine(const FScreenLocation& Begin, const FScreenLocation& End, const FColor& Color = {}, float Width = 1.0f) = 0;
 	virtual void DrawRect(const FScreenArea& Rect, const FColor& Color = {}, float Width = 1.0f) = 0;
 

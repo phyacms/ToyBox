@@ -7,7 +7,6 @@
 #include "System/Window/ScreenSpace.h"
 #include "System/Input/Controller/IInputController.h"
 #include "Widget/IWidget.h"
-#include "UISpace.h"
 
 class FInputContext;
 class IGraphicsContext;

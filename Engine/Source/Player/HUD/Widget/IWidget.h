@@ -6,7 +6,7 @@
 #include "Type/Object.h"
 #include "Type/String.h"
 #include "Type/UniqueId.h"
-#include "Player/HUD/UISpace.h"
+#include "System/Window/ScreenSpace.h"
 
 class FHUD;
 class IWidget;

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "MathFunctions.h"
+#include "Functions.h"
 
 template<typename ValueType>
 class TAngle final
@@ -12,16 +12,16 @@ public:
 	inline static constexpr auto DefaultUnit{ EAngleUnit::Radian };
 
 private:
-	using ImplType = MathConstants::ValueType;
-	inline static constexpr auto Pi2{ 2 * MathConstants::PI{}.Value };
+	using ImplType = Math::ValueType;
+	inline static constexpr auto Pi2{ 2 * Math::PI{}.Value };
 
 public:
 	TAngle(ImplType Angle = {}, EAngleUnit Unit = DefaultUnit)
 		: Radian{
 			Unit == EAngleUnit::Radian
 			? Angle
-			: MathFunctions::ToRadian(Angle) } {}
-	TAngle(MathConstants::PI Pi) : Radian{ Pi.Value } {}
+			: Math::ToRadian(Angle) } {}
+	TAngle(Math::PI Pi) : Radian{ Pi.Value } {}
 	TAngle(const TAngle&) noexcept = default;
 	TAngle& operator=(const TAngle&) & noexcept = default;
 	TAngle(TAngle&&) noexcept = default;
@@ -48,9 +48,9 @@ public:
 	inline operator T() const noexcept { return static_cast<T>(Radian); }
 
 public:
-	inline bool IsZero() const noexcept { return MathFunctions::IsEqualTo<ImplType>(Normalized().Radian, 0); }
+	inline bool IsZero() const noexcept { return Math::IsEqualTo<ImplType>(Normalized().Radian, 0); }
 
-	inline bool IsNormalized() const noexcept { return MathFunctions::IsEqualTo(Radian, Normalized().Radian); }
+	inline bool IsNormalized() const noexcept { return Math::IsEqualTo(Radian, Normalized().Radian); }
 	inline TAngle Normalized() const noexcept { return TAngle{ *this }.Normalize(); }
 	inline TAngle& Normalize() noexcept
 	{
@@ -61,7 +61,7 @@ public:
 	template<typename T = ValueType, typename = std::enable_if_t<std::is_floating_point_v<T>>>
 	inline T ToRadian() const noexcept { return static_cast<T>(Radian); }
 	template<typename T = ValueType, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-	inline T ToDegree() const noexcept { return static_cast<T>(MathFunctions::ToDegree(Radian)); }
+	inline T ToDegree() const noexcept { return static_cast<T>(Math::ToDegree(Radian)); }
 
 private:
 	ImplType Radian;

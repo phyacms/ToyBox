@@ -91,10 +91,11 @@
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IApplicationEntry.h" />
     <ClInclude Include="Source\Log\Log.h" />
+    <ClInclude Include="Source\Math\Affine.h" />
     <ClInclude Include="Source\Math\Angle.h" />
     <ClInclude Include="Source\Math\AxisIndex.h" />
-    <ClInclude Include="Source\Math\MathConstants.h" />
-    <ClInclude Include="Source\Math\MathFunctions.h" />
+    <ClInclude Include="Source\Math\Constants.h" />
+    <ClInclude Include="Source\Math\Functions.h" />
     <ClInclude Include="Source\Math\Matrix.h" />
     <ClInclude Include="Source\Math\Normals.h" />
     <ClInclude Include="Source\Math\Point.h" />
@@ -104,7 +105,6 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformEntry.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h" />
     <ClInclude Include="Source\Player\HUD\HUD.h" />
-    <ClInclude Include="Source\Player\HUD\UISpace.h" />
     <ClInclude Include="Source\Player\HUD\Widget\IWidget.h" />
     <ClInclude Include="Source\System\CommandLineArgs.h" />
     <ClInclude Include="Source\System\Graphics\Data\DynamicVertex.h" />
@@ -169,7 +169,6 @@
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp" />
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp" />
     <ClCompile Include="Source\Player\HUD\HUD.cpp" />
-    <ClCompile Include="Source\Player\HUD\UISpace.cpp" />
     <ClCompile Include="Source\Player\HUD\Widget\IWidget.cpp" />
     <ClCompile Include="Source\System\Graphics\Data\DynamicVertex.cpp" />
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
@@ -183,6 +182,7 @@
     <ClCompile Include="Source\System\Input\InputContext.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\Window\ISystemWindowProcedure.cpp" />
+    <ClCompile Include="Source\System\Window\ScreenSpace.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindow.cpp" />
     <ClCompile Include="Source\System\Window\SystemWindowEvents.cpp" />
     <ClCompile Include="Source\Type\Byte.cpp" />

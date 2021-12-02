@@ -1,7 +1,7 @@
 ﻿// Copyrights 2021 by phyacms. All Rights Reserved.
 
 #include "Engine.h"
-#include "UISpace.h"
+#include "ScreenSpace.h"
 
 UAbsCoord::UAbsCoord(const FScreenLocation& Coord)
 	: Coord{}

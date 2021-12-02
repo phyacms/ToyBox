@@ -72,7 +72,7 @@ public:
 			std::cbegin(Lhs.Elements),
 			std::cend(Lhs.Elements),
 			std::cbegin(Rhs.Elements),
-			MathFunctions::TIsEqualTo<ValueType>{});
+			Math::TIsEqualTo<ValueType>{});
 	}
 	friend inline bool operator!=(const TMatrix& Lhs, const TMatrix& Rhs) noexcept
 	{
@@ -81,7 +81,7 @@ public:
 			std::cbegin(Lhs.Elements),
 			std::cend(Lhs.Elements),
 			std::cbegin(Rhs.Elements),
-			MathFunctions::TIsNotEqualTo<ValueType>{});
+			Math::TIsNotEqualTo<ValueType>{});
 	}
 
 	inline TMatrix operator+() const { return *this; }
@@ -304,7 +304,7 @@ public:
 	inline RetType IsInvertable() const noexcept
 	{
 		const auto& Det{ CalcDeterminant() };
-		return std::isnan(Det) || MathFunctions::IsEqualTo<ValueType>(Det, 0);
+		return std::isnan(Det) || Math::IsEqualTo<ValueType>(Det, 0);
 	}
 	template<typename RetType = std::enable_if_t<IsSquare(), RowVectorType>>
 	inline RowVectorType GetDiagonal() const noexcept
@@ -371,7 +371,7 @@ public:
 		TMatrix Inv{};
 		const auto& LU{ LUDecomposed() };
 		const auto& Det{ LU.GetDiagonal().Multiplication() };
-		if (std::isnan(Det) || MathFunctions::IsEqualTo<ValueType>(Det, 0))
+		if (std::isnan(Det) || Math::IsEqualTo<ValueType>(Det, 0))
 		{
 			throw std::runtime_error{ "Tried to get inverse matrix of singular matrix. (det M == 0)" };
 		}
