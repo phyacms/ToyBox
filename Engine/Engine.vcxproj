@@ -91,7 +91,9 @@
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IApplicationEntry.h" />
     <ClInclude Include="Source\Log\Log.h" />
+    <ClInclude Include="Source\Math\Angle.h" />
     <ClInclude Include="Source\Math\AxisIndex.h" />
+    <ClInclude Include="Source\Math\MathConstants.h" />
     <ClInclude Include="Source\Math\MathFunctions.h" />
     <ClInclude Include="Source\Math\Matrix.h" />
     <ClInclude Include="Source\Math\Normals.h" />

@@ -3,9 +3,11 @@
 #pragma once
 
 #include "Engine.h"
+#include "MathConstants.h"
 
 namespace MathFunctions
 {
+	// Equality comparison
 	template<
 		typename T,
 		typename = std::enable_if_t<std::is_floating_point_v<std::remove_cvref_t<T>>>>
@@ -34,7 +36,7 @@ namespace MathFunctions
 	};
 
 	template<typename T>
-	class TIsNotEqualTo
+	class TIsNotEqualTo final
 		: private TIsEqualTo<T>
 	{
 	public:
@@ -47,4 +49,29 @@ namespace MathFunctions
 
 	template<typename T>
 	inline bool IsNotEqualTo(const T& Lhs, const T& Rhs) noexcept { return TIsNotEqualTo<T>(Lhs, Rhs); }
+
+	class FConvertAngleUnit final
+	{
+	public:
+		inline static constexpr auto DegToRad{ MathConstants::PI{}.Value / 180 };
+		inline static constexpr auto RadToDeg{ 180 / MathConstants::PI{}.Value };
+
+	public:
+		template<typename T>
+		inline T operator()(T Angle, EAngleUnit Unit) noexcept
+		{
+			switch (Unit)
+			{
+				case EAngleUnit::Degree: return static_cast<T>(Angle * DegToRad);
+				case EAngleUnit::Radian: return static_cast<T>(Angle * RadToDeg);
+				default: return {};
+			}
+		}
+	};
+
+	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+	inline T ToDegree(T Radian) noexcept { return FConvertAngleUnit{}(Radian, EAngleUnit::Radian); }
+
+	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+	inline T ToRadian(T Degree) noexcept { return FConvertAngleUnit{}(Degree, EAngleUnit::Degree); }
 }

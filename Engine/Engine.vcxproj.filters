@@ -301,6 +301,12 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.h">
       <Filter>Source\Utility\DirectX\Direct3D11\Resource\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Angle.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\MathConstants.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
