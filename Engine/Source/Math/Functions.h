@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Engine.h"
-#include "Constants.h"
 
 namespace Math
 {
@@ -49,30 +48,4 @@ namespace Math
 
 	template<typename T>
 	inline bool IsNotEqualTo(const T& Lhs, const T& Rhs, T ErrorLimit = T()) noexcept { return TIsNotEqualTo<T>{ ErrorLimit }(Lhs, Rhs); }
-
-	// Angle unit conversion
-	class FConvertAngleUnit final
-	{
-	public:
-		inline static constexpr auto DegToRad{ Math::PI{}.Value / 180 };
-		inline static constexpr auto RadToDeg{ 180 / Math::PI{}.Value };
-
-	public:
-		template<typename T>
-		inline T operator()(T Angle, EAngleUnit Unit) noexcept
-		{
-			switch (Unit)
-			{
-				case EAngleUnit::Degree: return static_cast<T>(Angle * DegToRad);
-				case EAngleUnit::Radian: return static_cast<T>(Angle * RadToDeg);
-				default: return {};
-			}
-		}
-	};
-
-	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-	inline T ToDegree(T Radian) noexcept { return FConvertAngleUnit{}(Radian, EAngleUnit::Radian); }
-
-	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-	inline T ToRadian(T Degree) noexcept { return FConvertAngleUnit{}(Degree, EAngleUnit::Degree); }
 }

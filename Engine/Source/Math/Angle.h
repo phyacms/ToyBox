@@ -5,14 +5,57 @@
 #include "Engine.h"
 #include "Functions.h"
 
+enum class EAngleUnit : std::size_t
+{
+	Degree,
+	Radian
+};
+
+namespace Math
+{
+	struct PI final
+	{
+		using ValueType = long double;
+		inline static constexpr ValueType Value{ 3.14159265358979323846 };
+
+		template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+		inline constexpr operator T() const noexcept { return static_cast<T>(Value); }
+	};
+
+	class FConvertAngleUnit final
+	{
+	public:
+		inline static constexpr auto DegToRad{ Math::PI{}.Value / 180 };
+		inline static constexpr auto RadToDeg{ 180 / Math::PI{}.Value };
+
+	public:
+		template<typename T>
+		inline T operator()(T Angle, EAngleUnit Unit) noexcept
+		{
+			switch (Unit)
+			{
+				case EAngleUnit::Degree: return static_cast<T>(Angle * DegToRad);
+				case EAngleUnit::Radian: return static_cast<T>(Angle * RadToDeg);
+				default: return {};
+			}
+		}
+	};
+
+	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+	inline T ToDegree(T Radian) noexcept { return FConvertAngleUnit{}(Radian, EAngleUnit::Radian); }
+
+	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+	inline T ToRadian(T Degree) noexcept { return FConvertAngleUnit{}(Degree, EAngleUnit::Degree); }
+}
+
 template<typename ValueType>
 class TAngle final
 {
 public:
+	using ImplType = Math::PI::ValueType;
 	inline static constexpr auto DefaultUnit{ EAngleUnit::Radian };
 
 private:
-	using ImplType = Math::ValueType;
 	inline static constexpr auto Pi2{ 2 * Math::PI{}.Value };
 
 public:
@@ -67,7 +110,18 @@ private:
 	ImplType Radian;
 };
 
-template<typename F, typename T>
-inline TAngle<T> operator*(F Factor, const TAngle<T>& Angle) noexcept { return Angle * Factor; }
+template<typename V, typename T>
+inline TAngle<T> operator*(V Factor, const TAngle<T>& Angle) noexcept { return Angle * Factor; }
 
+// Angle operations on PI.
+template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+inline TAngle<T> operator*(Math::PI Pi, T Factor) noexcept { return Pi.Value * Factor; }
+
+template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+inline TAngle<T> operator/(Math::PI Pi, T Divisor) noexcept { return operator*(Pi, std::divides<T>{}(1, Divisor)); }
+
+template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+inline decltype(auto) operator*(T Factor, Math::PI Pi) noexcept { return Pi * Factor; }
+
+// Alias for typical use.
 using FAngle = TAngle<float>;

@@ -301,9 +301,6 @@
     <ClInclude Include="Source\Math\Angle.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Constants.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\Affine.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
@@ -330,6 +327,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\Graphics\Data\Projection.h">
       <Filter>Source\System\Graphics\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Quaternion.h">
+      <Filter>Source\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -160,7 +160,7 @@ public:
 
 public:
 	inline bool IsZero() const noexcept { return *this == TVector{}; }
-	inline bool IsNormalized() const noexcept { return LengthSq() == ValueType{ 1 }; }
+	inline bool IsUnit() const noexcept { return LengthSq() == ValueType{ 1 }; }
 	inline ValueType LengthSq() const noexcept { return DotProduct(*this); }
 	template<typename T = LengthType>
 	inline T Length() const noexcept { return static_cast<T>(std::sqrt(static_cast<LengthType>(LengthSq()))); }
