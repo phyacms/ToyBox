@@ -77,13 +77,17 @@ public:
 
 	inline TAngle operator+(const TAngle& Angle) const noexcept { return Radian + Angle.Radian; }
 	inline TAngle operator-(const TAngle& Angle) const noexcept { return Radian - Angle.Radian; }
-	inline TAngle operator*(ImplType Factor) const noexcept { return Radian * Factor; }
-	inline TAngle operator/(ImplType Divisor) const noexcept { return Radian / Divisor; }
+	template<typename T>
+	inline TAngle operator*(T Factor) const noexcept { return Radian * static_cast<ImplType>(Factor); }
+	template<typename T>
+	inline TAngle operator/(T Divisor) const noexcept { return Radian / static_cast<ImplType>(Divisor); }
 
 	inline TAngle& operator+=(const TAngle& Angle) noexcept { return *this = operator+(Angle); }
 	inline TAngle& operator-=(const TAngle& Angle) noexcept { return *this = operator-(Angle); }
-	inline TAngle& operator*=(ImplType Factor) noexcept { return *this = operator*(Factor); }
-	inline TAngle& operator/=(ImplType Divisor) noexcept { return *this = operator/(Divisor); }
+	template<typename T>
+	inline TAngle& operator*=(T Factor) noexcept { return *this = operator*<T>(Factor); }
+	template<typename T>
+	inline TAngle& operator/=(T Divisor) noexcept { return *this = operator/<T>(Divisor); }
 
 	template<typename T = ValueType, typename = std::enable_if_t<std::is_floating_point_v<T>>>
 	inline operator TAngle<T>() const noexcept { return TAngle<T>{ static_cast<T>(Radian) }; }
@@ -114,13 +118,21 @@ template<typename V, typename T>
 inline TAngle<T> operator*(V Factor, const TAngle<T>& Angle) noexcept { return Angle * Factor; }
 
 // Angle operations on PI.
-template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-inline TAngle<T> operator*(Math::PI Pi, T Factor) noexcept { return Pi.Value * Factor; }
+template<typename T>
+inline decltype(auto) operator*(Math::PI Pi, T Factor) noexcept
+{
+	using S = std::conditional_t<std::is_floating_point_v<T>, T, Math::PI::ValueType>;
+	return TAngle<S>{ Pi.Value * Factor };
+}
 
-template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-inline TAngle<T> operator/(Math::PI Pi, T Divisor) noexcept { return operator*(Pi, std::divides<T>{}(1, Divisor)); }
+template<typename T>
+inline decltype(auto) operator/(Math::PI Pi, T Divisor) noexcept
+{
+	using S = std::conditional_t<std::is_floating_point_v<T>, T, Math::PI::ValueType>;
+	return Pi * std::divides<S>{}(1, Divisor);
+}
 
-template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+template<typename T>
 inline decltype(auto) operator*(T Factor, Math::PI Pi) noexcept { return Pi * Factor; }
 
 // Alias for typical use.

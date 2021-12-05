@@ -6,6 +6,7 @@
 #include "Vector.h"
 #include "Point.h"
 #include "Matrix.h"
+#include "Quaternion.h"
 
 namespace Affine
 {
@@ -23,5 +24,24 @@ namespace Affine
 
 		inline Vector3f operator*(const Matrix4x4f& M, const Vector3f& V) noexcept { return ToVector3f(M * ToVector4f(V)); }
 		inline Point3f operator*(const Matrix4x4f& M, const Point3f& V) noexcept { return Point3f{ ToVector3f(M * ToVector4f(V)) }; }
+	}
+
+	inline Matrix4x4f ToScaleMatrix(const Vector3f& Scale) noexcept
+	{
+		auto S{ Matrix4x4f::GetIdentity() };
+		S.At<0, 0>() = Scale.X();
+		S.At<1, 1>() = Scale.Y();
+		S.At<2, 2>() = Scale.Z();
+		return S;
+	}
+	inline Matrix4x4f ToRotationMatrix(const FUnitQuaternion& Rotation) { return Rotation.ToMatrix(); }
+	inline Matrix4x4f ToRotationMatrix(FAngle Angle, const Vector3f& Axis) { return ToRotationMatrix({ Angle, Axis }); }
+	inline Matrix4x4f ToTranslationMatrix(const Point3f& Translation) noexcept
+	{
+		auto T{ Matrix4x4f::GetIdentity() };
+		T.At<0, 3>() = Translation.X();
+		T.At<1, 3>() = Translation.Y();
+		T.At<2, 3>() = Translation.Z();
+		return T;
 	}
 }

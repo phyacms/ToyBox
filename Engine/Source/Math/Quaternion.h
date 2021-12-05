@@ -210,4 +210,5 @@ private:
 	QuaternionType Q;
 };
 
+// Alias for typical use.
 using FUnitQuaternion = TUnitQuaternion<float>;
