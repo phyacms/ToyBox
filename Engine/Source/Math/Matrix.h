@@ -40,16 +40,10 @@ public:
 		static constexpr auto Dimension{ RowDimension };
 
 		TMatrix M{};
-
-		std::array<std::future<void>, Dimension> Tasks{};
-		const auto Set{ [&M](std::size_t Index)->void { M.At(Index, Index) = 1; } };
-
 		for (std::size_t Index{}; Index != Dimension; ++Index)
 		{
-			Tasks[Index] = std::async(Set, Index);
+			M.At(Index, Index) = 1;
 		}
-		for (auto& Task : Tasks) { Task.get(); }
-
 		return M;
 	}
 
@@ -84,8 +78,8 @@ public:
 			Math::TIsNotEqualTo<ValueType>{});
 	}
 
-	inline TMatrix operator+() const { return *this; }
-	inline TMatrix operator-() const
+	inline TMatrix operator+() const noexcept { return *this; }
+	inline TMatrix operator-() const noexcept
 	{
 		TMatrix M{};
 		std::transform(
@@ -97,9 +91,9 @@ public:
 		return M;
 	}
 
-	inline TMatrix operator+(const TMatrix& M) const { TMatrix N{ *this }; N += M; return N; }
-	inline TMatrix operator-(const TMatrix& M) const { TMatrix N{ *this }; N -= M; return N; }
-	inline TMatrix& operator+=(const TMatrix& M) &
+	inline TMatrix operator+(const TMatrix& M) const noexcept { TMatrix N{ *this }; N += M; return N; }
+	inline TMatrix operator-(const TMatrix& M) const noexcept { TMatrix N{ *this }; N -= M; return N; }
+	inline TMatrix& operator+=(const TMatrix& M) & noexcept
 	{
 		std::transform(
 			std::execution::par_unseq,
@@ -110,7 +104,7 @@ public:
 			std::plus<ValueType>{});
 		return *this;
 	}
-	inline TMatrix& operator-=(const TMatrix& M) &
+	inline TMatrix& operator-=(const TMatrix& M) & noexcept
 	{
 		std::transform(
 			std::execution::par_unseq,
@@ -122,9 +116,9 @@ public:
 		return *this;
 	}
 
-	inline TMatrix operator*(const ValueType& Factor) const { TMatrix N{ *this }; N *= Factor; return N; }
-	inline TMatrix operator/(const ValueType& Divisor) const { TMatrix N{ *this }; N /= Divisor; return N; }
-	inline TMatrix& operator*=(const ValueType& Factor) &
+	inline TMatrix operator*(const ValueType& Factor) const noexcept { TMatrix N{ *this }; N *= Factor; return N; }
+	inline TMatrix operator/(const ValueType& Divisor) const noexcept { TMatrix N{ *this }; N /= Divisor; return N; }
+	inline TMatrix& operator*=(const ValueType& Factor) & noexcept
 	{
 		std::transform(
 			std::execution::par_unseq,
@@ -134,53 +128,42 @@ public:
 			std::bind_front(std::multiplies<ValueType>{}, Factor));
 		return *this;
 	}
-	inline TMatrix& operator/=(const ValueType& Divisor) & { return operator*=(std::divides<ValueType>{}(1, Divisor)); }
-	friend inline TMatrix operator*(const ValueType& Factor, const TMatrix M) { return M * Factor; }
+	inline TMatrix& operator/=(const ValueType& Divisor) & noexcept { return operator*=(std::divides<ValueType>{}(1, Divisor)); }
+	friend inline TMatrix operator*(const ValueType& Factor, const TMatrix M) noexcept { return M * Factor; }
 
 	template<std::size_t Dimension>
-	inline TMatrix<ValueType, RowDimension, Dimension> operator*(const TMatrix<ValueType, ColumnDimension, Dimension>& M) const
+	inline TMatrix<ValueType, RowDimension, Dimension> operator*(const TMatrix<ValueType, ColumnDimension, Dimension>& M) const noexcept
 	{
 		TMatrix<ValueType, RowDimension, Dimension> N{};
-		const auto& Rows{ GetRows() };
-		const auto& Columns{ M.GetColumns() };
-
-		std::array<std::future<void>, ElementCount> Tasks{};
-		const auto DotProduct{
-			[&N, &Rows, &Columns](std::size_t RowIndex, std::size_t ColumnIndex)->void {
-				N.At(RowIndex, ColumnIndex) = Rows[RowIndex].DotProduct(Columns[ColumnIndex]); } };
 
 		for (std::size_t RowIndex{}; RowIndex != RowDimension; ++RowIndex)
 		{
 			for (std::size_t ColumnIndex{}; ColumnIndex != Dimension; ++ColumnIndex)
 			{
-				Tasks[CalcIndex(RowIndex, ColumnIndex)] = std::async(DotProduct, RowIndex, ColumnIndex);
+				for (std::size_t Index{}; Index != ColumnDimension; ++Index)
+				{
+					N.At(RowIndex, ColumnIndex) += At(RowIndex, Index) * M.At(Index, ColumnIndex);
+				}
 			}
 		}
-		for (auto& Task : Tasks) { Task.get(); }
-
 		return N;
 	}
 	template<typename RetType = std::enable_if_t<IsSquare(), TMatrix>>
-	inline RetType& operator*=(const TMatrix& SqM) & { return (*this = operator*(SqM));; }
+	inline RetType& operator*=(const TMatrix& SqM) & noexcept { return (*this = operator*(SqM));; }
 
-	inline ColumnVectorType operator*(const RowVectorType& V) const
+	inline ColumnVectorType operator*(const RowVectorType& V) const noexcept
 	{
 		ColumnVectorType U{};
-
-		std::array<std::future<void>, RowDimension> Tasks{};
-		const auto DotProduct{
-			[this, &U, &V](std::size_t RowIndex)->void {
-				U[RowIndex] = GetRow(RowIndex).DotProduct(V); } };
-
 		for (std::size_t RowIndex{}; RowIndex != RowDimension; ++RowIndex)
 		{
-			Tasks[RowIndex] = std::async(DotProduct, RowIndex);
+			for (std::size_t Index{}; Index != ColumnDimension; ++Index)
+			{
+				U[RowIndex] += At(RowIndex, Index) * V[Index];
+			}
 		}
-		for (auto& Task : Tasks) { Task.get(); }
-
 		return U;
 	}
-	friend inline RowVectorType operator*(const ColumnVectorType& V, const TMatrix& M) { return Transposed() * V; }
+	friend inline RowVectorType operator*(const ColumnVectorType& V, const TMatrix& M) noexcept { return Transposed() * V; }
 
 public:
 	inline ValueType& operator[](std::size_t Index) & { return Elements[Index]; }
@@ -218,81 +201,6 @@ public:
 		typename = std::enable_if_t<CalcIndex(RowIndex, ColumnIndex) < ElementCount>>
 	inline ValueType At() const&& noexcept { return At<CalcIndex(RowIndex, ColumnIndex)>(); }
 
-	inline RowVectorType GetRow(std::size_t RowIndex) const noexcept
-	{
-		RowVectorType V{};
-
-		std::array<std::future<void>, ColumnDimension> Tasks{};
-		const auto Get{
-			[this, &V, RowIndex](std::size_t ColumnIndex)->void {
-				V[ColumnIndex] = At(RowIndex, ColumnIndex); } };
-
-		for (std::size_t ColumnIndex{}; ColumnIndex != ColumnDimension; ++ColumnIndex)
-		{
-			Tasks[ColumnIndex] = std::async(Get, ColumnIndex);
-		}
-		for (auto& Task : Tasks) { Task.get(); }
-
-		return V;
-	}
-	inline ColumnVectorType GetColumn(std::size_t ColumnIndex) const noexcept
-	{
-		ColumnVectorType V{};
-
-		std::array<std::future<void>, RowDimension> Tasks{};
-		const auto Get{
-			[this, &V, ColumnIndex](std::size_t RowIndex)->void {
-				V[RowIndex] = At(RowIndex, ColumnIndex); } };
-
-		for (std::size_t RowIndex{}; RowIndex != RowDimension; ++RowIndex)
-		{
-			Tasks[RowIndex] = std::async(Get, RowIndex);
-		}
-		for (auto& Task : Tasks) { Task.get(); }
-
-		return V;
-	}
-
-	template<std::size_t RowIndex, typename = std::enable_if_t<RowIndex < RowDimension>>
-	inline RowVectorType GetRow() const noexcept { return GetRow(RowIndex); }
-	template<std::size_t ColumnIndex, typename = std::enable_if_t<ColumnIndex < ColumnDimension>>
-	inline ColumnVectorType GetColumn() const noexcept { return GetColumn(ColumnIndex); }
-
-	inline std::array<RowVectorType, RowDimension> GetRows() const noexcept
-	{
-		std::array<RowVectorType, RowDimension> Rows{};
-
-		std::array<std::future<void>, RowDimension> Tasks{};
-		const auto Get{
-			[this, &Rows](std::size_t RowIndex)->void {
-				Rows[RowIndex] = GetRow(RowIndex); } };
-
-		for (std::size_t RowIndex{}; RowIndex != RowDimension; ++RowIndex)
-		{
-			Tasks[RowIndex] = std::async(Get, RowIndex);
-		}
-		for (auto& Task : Tasks) { Task.get(); }
-
-		return Rows;
-	}
-	inline std::array<ColumnVectorType, ColumnDimension> GetColumns() const noexcept
-	{
-		std::array<ColumnVectorType, ColumnDimension> Columns{};
-
-		std::array<std::future<void>, ColumnDimension> Tasks{};
-		const auto Get{
-			[this, &Columns](std::size_t ColumnIndex)->void {
-				Columns[ColumnIndex] = GetColumn(ColumnIndex); } };
-
-		for (std::size_t ColumnIndex{}; ColumnIndex != ColumnDimension; ++ColumnIndex)
-		{
-			Tasks[ColumnIndex] = std::async(Get, ColumnIndex);
-		}
-		for (auto& Task : Tasks) { Task.get(); }
-
-		return Columns;
-	}
-
 	ExposeIterators(Elements)
 	ExposeReverseIterators(Elements)
 
@@ -303,29 +211,24 @@ public:
 	template<typename RetType = std::enable_if_t<IsSquare(), bool>>
 	inline RetType IsInvertable() const noexcept
 	{
-		const auto& Det{ CalcDeterminant() };
+		const auto& Det{ Determinant() };
 		return std::isnan(Det) || Math::IsEqualTo<ValueType>(Det, 0);
 	}
 	template<typename RetType = std::enable_if_t<IsSquare(), RowVectorType>>
-	inline RowVectorType GetDiagonal() const noexcept
+	inline RowVectorType Diagonal() const noexcept
 	{
 		static constexpr auto Dimension{ RowDimension };
 		using VectorType = RowVectorType;
-		RowVectorType V{};
 
-		std::array<std::future<void>, Dimension> Tasks{};
-		const auto Get{ [this, &V](std::size_t Index)->void { V[Index] = At(Index, Index); } };
-
+		VectorType V{};
 		for (std::size_t Index{}; Index != Dimension; ++Index)
 		{
-			Tasks[Index] = std::async(Get, Index);
+			V[Index] = At(Index, Index);
 		}
-		for (auto& Task : Tasks) { Task.get(); }
-
 		return V;
 	}
 	template<typename RetType = std::enable_if_t<IsSquare(), ValueType>>
-	inline RetType CalcDeterminant() const noexcept { return LUDecomposed().GetDiagonal().Multiplication(); }
+	inline RetType Determinant() const noexcept { return LUDecomposed().Diagonal().Multiplication(); }
 
 	inline TMatrix<ValueType, ColumnDimension, RowDimension> Transposed() const
 	{
@@ -338,27 +241,13 @@ public:
 		else
 		{
 			TMatrix<ValueType, ColumnDimension, RowDimension> M{};
-
-			std::array<std::array<std::future<void>, ColumnDimension>, RowDimension> Tasks{};
-			const auto Set{
-				[this, &M](std::size_t RowIndex, std::size_t ColumnIndex)->void {
-					At(ColumnIndex, RowIndex) = At(RowIndex, ColumnIndex); } };
-
 			for (std::size_t RowIndex{}; RowIndex != RowDimension; ++RowIndex)
 			{
 				for (std::size_t ColumnIndex{}; ColumnIndex != ColumnDimension; ++ColumnIndex)
 				{
-					Tasks[RowIndex][ColumnIndex] = std::async(Set, RowIndex, ColumnIndex);
+					At(ColumnIndex, RowIndex) = At(RowIndex, ColumnIndex);
 				}
 			}
-			for (auto& RowTasks : Tasks)
-			{
-				for (auto& Task : RowTasks)
-				{
-					Task.get();
-				}
-			}
-
 			return M;
 		}
 	}
@@ -368,52 +257,43 @@ public:
 		static constexpr auto Dimension{ RowDimension };
 		using VectorType = RowVectorType;
 
-		TMatrix Inv{};
 		const auto& LU{ LUDecomposed() };
-		const auto& Det{ LU.GetDiagonal().Multiplication() };
+		const auto& Det{ LU.Diagonal().Multiplication() };
 		if (std::isnan(Det) || Math::IsEqualTo<ValueType>(Det, 0))
 		{
 			throw std::runtime_error{ "Tried to get inverse matrix of singular matrix. (det M == 0)" };
 		}
 
 		// Solves M_this * Y = E to find the inverse matrix;
-		std::array<std::future<void>, Dimension> Tasks{};
-		const auto FindInvRow{
-			[&Inv, &LU](std::size_t RowIndex)->void
-			{
-				VectorType E{};
-				E[RowIndex] = 1;
-
-				VectorType Y{};
-				for (std::size_t ColumnIndex{}; ColumnIndex != Dimension; ++ColumnIndex)
-				{
-					ValueType X{};
-					for (std::size_t Index{}; Index != ColumnIndex; ++Index)
-					{
-						X += LU.At(Index, ColumnIndex) * Y[Index];
-					}
-					Y[ColumnIndex] = (E[ColumnIndex] - X);
-				}
-
-				for (std::size_t ReverseColumnIndex = Dimension; ReverseColumnIndex != 0; --ReverseColumnIndex)
-				{
-					const auto ColumnIndex{ ReverseColumnIndex - 1 };
-
-					ValueType X{};
-					for (std::size_t Index{ ReverseColumnIndex }; Index != Dimension; ++Index)
-					{
-						X += LU.At(Index, ColumnIndex) * Inv.At(RowIndex, Index);
-					}
-					Inv.At(RowIndex, ColumnIndex) = (Y[ColumnIndex] - X) / LU.At(ColumnIndex, ColumnIndex);
-				}
-			} };
-
-		for (std::size_t Index{}; Index < Dimension; Index++)
+		TMatrix Inv{};
+		for (std::size_t RowIndex{}; RowIndex < Dimension; RowIndex++)
 		{
-			Tasks[Index] = std::async(FindInvRow, Index);
-		}
-		for (auto& Task : Tasks) { Task.get(); }
+			VectorType E{};
+			E[RowIndex] = 1;
 
+			VectorType Y{};
+			for (std::size_t ColumnIndex{}; ColumnIndex != Dimension; ++ColumnIndex)
+			{
+				ValueType X{};
+				for (std::size_t Index{}; Index != ColumnIndex; ++Index)
+				{
+					X += LU.At(Index, ColumnIndex) * Y[Index];
+				}
+				Y[ColumnIndex] = (E[ColumnIndex] - X);
+			}
+
+			for (std::size_t ReverseColumnIndex = Dimension; ReverseColumnIndex != 0; --ReverseColumnIndex)
+			{
+				const auto ColumnIndex{ ReverseColumnIndex - 1 };
+
+				ValueType X{};
+				for (std::size_t Index{ ReverseColumnIndex }; Index != Dimension; ++Index)
+				{
+					X += LU.At(Index, ColumnIndex) * Inv.At(RowIndex, Index);
+				}
+				Inv.At(RowIndex, ColumnIndex) = (Y[ColumnIndex] - X) / LU.At(ColumnIndex, ColumnIndex);
+			}
+		}
 		return Inv;
 	}
 
@@ -422,21 +302,14 @@ public:
 	{
 		static constexpr auto Dimension{ RowDimension };
 
-		std::array<std::future<void>, Dimension * (Dimension - 1) / 2> Tasks{};
-		const auto Swap{
-			[this](std::size_t RowIndex, std::size_t ColumnIndex)->void {
-				std::swap(At(ColumnIndex, RowIndex), At(RowIndex, ColumnIndex)); } };
-
 		std::size_t TaskIndex{};
 		for (std::size_t RowIndex{}; RowIndex != Dimension - 1; ++RowIndex)
 		{
 			for (std::size_t ColumnIndex{ RowIndex + 1 }; ColumnIndex != ColumnDimension; ++ColumnIndex)
 			{
-				Tasks[TaskIndex++] = std::async(Swap, RowIndex, ColumnIndex);
+				std::swap(At(ColumnIndex, RowIndex), At(RowIndex, ColumnIndex));
 			}
 		}
-		for (auto& Task : Tasks) { Task.get(); }
-
 		return *this;
 	}
 	template<typename RetType = std::enable_if_t<IsSquare(), TMatrix>>
