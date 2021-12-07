@@ -87,11 +87,7 @@ private:
 					std::is_standard_layout_v<T>>>
 			inline FElementProxy& operator=(T&& Value) noexcept
 			{
-				if (IsValid())
-				{
-					std::memcpy(Dest, &Value, ByteSize);
-				}
-				return *this;
+				return CopyFrom(&Value, sizeof(Value));
 			}
 			template<
 				typename T,
@@ -101,15 +97,22 @@ private:
 				std::is_standard_layout_v<T>>>
 				inline FElementProxy& operator=(const T(&Array)[N]) noexcept
 			{
-				if (IsValid())
-				{
-					std::memcpy(Dest, Array, ByteSize);
-				}
-				return *this;
+				return CopyFrom(Array, sizeof(Array));
 			}
 
 		public:
 			inline bool IsValid() const noexcept { return Dest != nullptr && ByteSize != 0; }
+
+		private:
+			inline FElementProxy& CopyFrom(const void* Src, std::size_t ByteSize) noexcept
+			{
+				if (IsValid())
+				{
+					std::memset(Dest, 0, this->ByteSize);
+					std::memcpy(Dest, Src, ByteSize < this->ByteSize ? ByteSize : this->ByteSize);
+				}
+				return *this;
+			}
 
 		private:
 			Byte* Dest;
