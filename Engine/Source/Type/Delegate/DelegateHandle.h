@@ -4,14 +4,14 @@
 
 #include "Engine.h"
 #include "Delegate.h"
-#include "Type/Object.h"
+#include "Type/Object/Object.h"
 
 class ADelegateHandle;
 class IMulticastDelegate;
 
 class ADelegateHandle final
 {
-	friend class IMulticastDelegate;
+	friend IMulticastDelegate;
 
 public:
 	inline static constexpr std::size_t InvalidHandle{};
@@ -39,7 +39,7 @@ public:
 	void Release() noexcept;
 
 private:
-	AObject<IMulticastDelegate> Issuer;
+	TObjRef<IMulticastDelegate> Issuer;
 	std::size_t Index;
 };
 

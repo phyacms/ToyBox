@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Type/Time.h"
-#include "Type/Object.h"
-#include "Type/UniqueId.h"
+#include "Type/Object/Object.h"
+#include "Type/Resource/UniqueId.h"
 #include "Type/ScreenSpace/ScreenLocation.h"
 #include "System/Input/Chord/InputTrigger.h"
 
@@ -35,7 +35,7 @@ public:
 
 class AInputControllerBinding final
 {
-	friend class FInputContext;
+	friend FInputContext;
 
 public:
 	AInputControllerBinding() : Context{}, Id{} {}
@@ -52,6 +52,6 @@ public:
 	void Release() noexcept;
 
 private:
-	AObject<FInputContext> Context;
+	TObjRef<FInputContext> Context;
 	AUniqueId Id;
 };

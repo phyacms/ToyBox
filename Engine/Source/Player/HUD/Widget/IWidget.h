@@ -3,9 +3,9 @@
 #pragma once
 
 #include "Type/Time.h"
-#include "Type/Object.h"
 #include "Type/String.h"
-#include "Type/UniqueId.h"
+#include "Type/Object/Object.h"
+#include "Type/Resource/UniqueId.h"
 #include "Type/ScreenSpace/Dim.h"
 
 class FHUD;
@@ -17,7 +17,7 @@ class IGraphicsContext;
 class IWidget
 	: public TObject<IWidget>
 {
-	friend class FHUD;
+	friend FHUD;
 
 private:
 	struct FChildren final
@@ -61,14 +61,14 @@ public:
 	bool IsValid() const noexcept;
 
 	inline std::size_t GetIndex() const noexcept { return UniqueId.GetHash(); }
-	inline FString GetUniqueId() const noexcept { return GetWidgetName() + USTR("_") + ::ToString(GetIndex()); }
+	inline FString GetName() const noexcept { return GetWidgetName() + USTR("_") + ::ToString(GetIndex()); }
 
 	inline bool IsRoot() const noexcept { return Parent == nullptr; }
 	inline IWidget& GetRoot() noexcept { return !IsRoot() ? Parent->GetRoot() : *this; }
 	inline const IWidget& GetRoot() const noexcept { return !IsRoot() ? Parent->GetRoot() : *this; }
 	inline bool IsLeaf() const noexcept { return Children.IsEmpty(); }
 
-	inline AObject<IWidget> GetParent() const noexcept { return !IsRoot() ? *Parent : AObject<IWidget>{}; }
+	inline TObjRef<IWidget> GetParent() const noexcept { return !IsRoot() ? *Parent : TObjRef<IWidget>{}; }
 
 	// @NOTE: Note that [[nodiscard]] attribute is NOT enforced here.
 	template<
@@ -122,7 +122,7 @@ template<typename T>
 class AWidget final
 {
 	static_assert(std::is_base_of_v<IWidget, T>);
-	friend class IWidget;
+	friend IWidget;
 
 public:
 	AWidget() : Object{}, Ptr{} {}
@@ -150,6 +150,6 @@ public:
 	}
 
 private:
-	AObject<IWidget> Object;
+	TObjRef<IWidget> Object;
 	T* Ptr;
 };

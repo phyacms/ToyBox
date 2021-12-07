@@ -23,6 +23,12 @@ FUniqueId& FUniqueId::operator=(FUniqueId&& Other) & noexcept
 	return *this;
 }
 
+void FUniqueId::Swap(FUniqueId& Other) noexcept
+{
+	std::swap(Arg, Other.Arg);
+	std::swap(Value, Other.Value);
+}
+
 AUniqueId::AUniqueId(AUniqueId&& Other) noexcept
 	: Issuer{ std::move(Other.Issuer) }
 	, Id{ std::move(Other.Id) }
@@ -53,6 +59,12 @@ bool AUniqueId::IsValid() const noexcept
 	return Issuer.IsValid()
 		&& Issuer->IsValid()
 		&& Id.IsValid();
+}
+
+void AUniqueId::Swap(AUniqueId& Other) noexcept
+{
+	Issuer.Swap(Other.Issuer);
+	Id.Swap(Other.Id);
 }
 
 void AUniqueId::Release() noexcept

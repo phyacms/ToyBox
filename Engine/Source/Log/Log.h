@@ -17,7 +17,7 @@ private:
 	};
 	class FStream final
 	{
-		friend class FLog;
+		friend FLog;
 
 	private:
 		FStream() : Buffer{} {}

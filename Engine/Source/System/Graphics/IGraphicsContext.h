@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "Type/Object.h"
 #include "Type/Time.h"
 #include "Type/Color.h"
 #include "Type/Delegate/Delegate.h"
 #include "Type/Delegate/MulticastDelegate.h"
+#include "Type/Object/Object.h"
 #include "Type/ScreenSpace/Dim.h"
 #include "Math/Affine.h"
 #include "Data/Projection.h"
@@ -20,7 +20,7 @@ class IGraphicsContext
 private:
 	class FScene final
 	{
-		friend class IGraphicsContext;
+		friend IGraphicsContext;
 
 	private:
 		FScene(const IGraphicsContext& Context)
@@ -94,9 +94,9 @@ private:
 	FScreenArea GetViewportTarget() const noexcept;
 
 private:
-	AObject<IGraphicsRenderer> Renderer;
+	TObjRef<IGraphicsRenderer> Renderer;
 
-	AObject<FSystemWindow> OutputWindow;
+	TObjRef<FSystemWindow> OutputWindow;
 	ADelegateHandle DH_OnResized;
 
 	FAspectRatio Viewport;

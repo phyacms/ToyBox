@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/Object.h"
 #include "Type/Time.h"
+#include "Type/Object/Object.h"
 
 class IGraphicsResource
 {

@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include "Object.h"
+#include "Type/Object/Object.h"
 
 class FUniqueIdIssuer;
 
 class FUniqueId final
 {
-	friend class FUniqueIdIssuer;
+	friend FUniqueIdIssuer;
 
 public:
 	using ArgumentType = std::uint32_t;
@@ -42,6 +42,8 @@ public:
 	inline bool IsValid() const noexcept { return Value != InvalidId; }
 	inline std::size_t GetHash() const noexcept { return static_cast<std::size_t>(Value); }
 
+	void Swap(FUniqueId& Other) noexcept;
+
 private:
 	ArgumentType Arg;
 	ValueType Value;
@@ -49,7 +51,7 @@ private:
 
 class AUniqueId final
 {
-	friend class FUniqueIdIssuer;
+	friend FUniqueIdIssuer;
 
 public:
 	AUniqueId() : Issuer{}, Id{} {}
@@ -71,10 +73,11 @@ public:
 	bool IsValid() const noexcept;
 	inline std::size_t GetHash() const noexcept { return Id.GetHash(); }
 
+	void Swap(AUniqueId& Other) noexcept;
 	void Release() noexcept;
 
 private:
-	AObject<FUniqueIdIssuer> Issuer;
+	TObjRef<FUniqueIdIssuer> Issuer;
 	FUniqueId Id;
 };
 

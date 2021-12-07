@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/Object.h"
+#include "Type/Object/Object.h"
 
 class FSystemWindow;
 class FGraphics;

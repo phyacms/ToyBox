@@ -60,12 +60,12 @@ class FVertexData final
 private:
 	class FVertexProxy final
 	{
-		friend class FVertexData;
+		friend FVertexData;
 
 	private:
 		class FElementProxy final
 		{
-			friend class FVertexProxy;
+			friend FVertexProxy;
 
 		public:
 			FElementProxy() : FElementProxy(nullptr, 0) {}

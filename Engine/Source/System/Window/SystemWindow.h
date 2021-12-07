@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "Type/Object.h"
 #include "Type/String.h"
+#include "Type/Object/Object.h"
 #include "Type/ScreenSpace/ScreenArea.h"
 #include "SystemWindowEvents.h"
 

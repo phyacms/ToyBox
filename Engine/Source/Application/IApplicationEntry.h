@@ -38,7 +38,7 @@ public:
 protected:
 	[[nodiscard]] struct FEntryGuard final
 	{
-		friend class IApplicationEntry;
+		friend IApplicationEntry;
 
 	private:
 		FEntryGuard(

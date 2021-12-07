@@ -57,7 +57,7 @@ ESwitchState FInputContext::GetMouseButtonState(EMouseButton Button) const noexc
 AInputControllerBinding FInputContext::BindInputController(IInputController& Controller)
 {
 	AUniqueId Issued{ ControllerIdIssuer.Issue() };
-	Controllers.emplace_front(std::make_pair(Issued.GetHash(), AObject<IInputController>{ Controller }));
+	Controllers.emplace_front(std::make_pair(Issued.GetHash(), TObjRef<IInputController>{ Controller }));
 	return { *this, std::move(Issued) };
 }
 

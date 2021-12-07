@@ -78,8 +78,8 @@ private:
 		const FInputTrigger& Trigger) const override final;
 
 private:
-	AObject<FInputContext> Input;
-	AObject<IGraphicsContext> Graphics;
+	TObjRef<FInputContext> Input;
+	TObjRef<IGraphicsContext> Graphics;
 
 	FAspectRatio Area;
 	ADelegateHandle DH_OnViewportChanged;

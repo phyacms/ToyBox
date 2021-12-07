@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "Type/Object.h"
 #include "Type/Delegate/DelegateHandle.h"
+#include "Type/Object/Object.h"
 #include "Type/ScreenSpace/ScreenLocation.h"
 #include "Controller/IInputController.h"
 
@@ -53,7 +53,7 @@ private:
 
 private:
 	FInput* Input;
-	AObject<FSystemWindow> InputWindow;
+	TObjRef<FSystemWindow> InputWindow;
 	FDelegateHandles KeyboardMouseEvents;
 
 	FKeyboardKeyStates KeyboardKeyStates;
@@ -61,5 +61,5 @@ private:
 	FScreenLocation MouseCursorLocation;
 
 	FUniqueIdIssuer ControllerIdIssuer;
-	std::list<std::pair<std::size_t, AObject<IInputController>>> Controllers;
+	std::list<std::pair<std::size_t, TObjRef<IInputController>>> Controllers;
 };

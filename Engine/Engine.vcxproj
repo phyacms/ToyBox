@@ -144,7 +144,9 @@
     <ClInclude Include="Source\Type\Delegate\EventDispatcher.h" />
     <ClInclude Include="Source\Type\Delegate\IMulticastDelegate.h" />
     <ClInclude Include="Source\Type\Delegate\MulticastDelegate.h" />
-    <ClInclude Include="Source\Type\Object.h" />
+    <ClInclude Include="Source\Type\Object\Object.h" />
+    <ClInclude Include="Source\Type\Object\ObjRef.h" />
+    <ClInclude Include="Source\Type\Resource\UniqueId.h" />
     <ClInclude Include="Source\Type\ScreenSpace\AbsCoord.h" />
     <ClInclude Include="Source\Type\ScreenSpace\Coord.h" />
     <ClInclude Include="Source\Type\ScreenSpace\Dim.h" />
@@ -155,7 +157,6 @@
     <ClInclude Include="Source\Type\String.h" />
     <ClInclude Include="Source\Type\Time.h" />
     <ClInclude Include="Source\Type\TypeTraits.h" />
-    <ClInclude Include="Source\Type\UniqueId.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11SwapChain.h" />
@@ -195,13 +196,13 @@
     <ClCompile Include="Source\Type\Color.cpp" />
     <ClCompile Include="Source\Type\Delegate\DelegateHandle.cpp" />
     <ClCompile Include="Source\Type\Delegate\IMulticastDelegate.cpp" />
+    <ClCompile Include="Source\Type\Resource\UniqueId.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\AbsCoord.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\Coord.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\Dim.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\RelCoord.cpp" />
     <ClCompile Include="Source\Type\ScreenSpace\ScreenArea.cpp" />
     <ClCompile Include="Source\Type\String.cpp" />
-    <ClCompile Include="Source\Type\UniqueId.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Direct3D11SwapChain.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Buffer\Direct3D11Buffer.cpp" />

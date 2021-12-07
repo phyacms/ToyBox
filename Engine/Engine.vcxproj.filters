@@ -88,6 +88,12 @@
     <Filter Include="Source\Type\ScreenSpace">
       <UniqueIdentifier>{f0098531-3283-4fec-a4f3-c1866f584450}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Type\Object">
+      <UniqueIdentifier>{efde29b1-05a5-4b63-bb5f-ae1047b6b7b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Type\Resource">
+      <UniqueIdentifier>{614a3c70-87ea-4ef8-8053-0da5ee8d3650}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -120,12 +126,6 @@
     </ClInclude>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.h">
       <Filter>Source\Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\Object.h">
-      <Filter>Source\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Type\UniqueId.h">
-      <Filter>Source\Type</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\IApplicationEntry.h">
       <Filter>Source\Application</Filter>
@@ -331,6 +331,15 @@
     <ClInclude Include="Source\Math\Quaternion.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Type\Object\Object.h">
+      <Filter>Source\Type\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Object\ObjRef.h">
+      <Filter>Source\Type\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Resource\UniqueId.h">
+      <Filter>Source\Type\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -350,9 +359,6 @@
     </ClCompile>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformWindowProcedure.cpp">
       <Filter>Source\Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Type\UniqueId.cpp">
-      <Filter>Source\Type</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IApplicationEntry.cpp">
       <Filter>Source\Application</Filter>
@@ -449,6 +455,9 @@
     </ClCompile>
     <ClCompile Include="Source\Type\ScreenSpace\ScreenArea.cpp">
       <Filter>Source\Type\ScreenSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Type\Resource\UniqueId.cpp">
+      <Filter>Source\Type\Resource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

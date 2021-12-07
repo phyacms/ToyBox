@@ -4,7 +4,7 @@
 
 #include "Engine.h"
 #include "DelegateHandle.h"
-#include "Type/Object.h"
+#include "Type/Object/Object.h"
 
 class IMulticastDelegate
 	: public TObject<IMulticastDelegate>
