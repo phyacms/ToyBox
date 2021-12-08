@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "Type/TypeTraits.h"
+#include "Type/Traits.h"
 
 using Byte = std::uint8_t;
 

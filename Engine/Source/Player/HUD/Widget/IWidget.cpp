@@ -60,10 +60,9 @@ void IWidget::Render(IGraphicsContext& Context, FTimeDuration DeltaTime)
 	if (IsVisible())
 	{
 		RenderImpl(Context, Dimension.GetArea(), DeltaTime);
-		std::for_each(
-			std::execution::seq,
-			std::cbegin(Children.Widgets),
-			std::cend(Children.Widgets),
-			[&Context, &DeltaTime](const auto& Pair)->void { Pair.second->Render(Context, DeltaTime); });
+		for (auto& [Index, Child] : Children.Widgets)
+		{
+			Child->Render(Context, DeltaTime);
+		}
 	}
 }

@@ -22,11 +22,12 @@ private:
 	inline virtual void TerminateImpl() noexcept override final { PixelShader.Reset(); }
 
 	inline virtual bool IsValidImpl() const noexcept override final { return PixelShader != nullptr; }
+	inline virtual void BindResourceImpl() const noexcept override final;
+
 	inline virtual void BindResourceImpl(ID3D11DeviceContext& Context) const noexcept override final { Context.PSSetShader(PixelShader.Get(), nullptr, 0); }
 
 public:
 	inline virtual bool IsValid() const noexcept override final { return FDirect3D11ShaderReflection::IsValid(); }
-	bool BindResource() const noexcept override final;
 
 	inline virtual std::size_t QueryConstantBufferIndex(std::string_view Name) const noexcept override final { return FDirect3D11ShaderReflection::QueryConstantBufferIndex(Name); }
 	inline virtual FDynamicBuffer QueryConstantBuffer(std::size_t SlotIndex) const& noexcept override final { return FDirect3D11ShaderReflection::QueryConstantBuffer(SlotIndex); }

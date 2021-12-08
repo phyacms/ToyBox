@@ -19,5 +19,8 @@ public:
 
 public:
 	virtual bool IsValid() const noexcept = 0;
-	virtual bool BindResource() const noexcept = 0;
+	inline void BindResource() const noexcept { if (IsValid()) { BindResourceImpl(); } 	}
+
+private:
+	virtual void BindResourceImpl() const noexcept = 0;
 };

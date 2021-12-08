@@ -35,9 +35,9 @@ bool FDirect3D11PixelShader::InitializeImpl(FDirect3D11Renderer& Renderer, ID3DB
 	return true;
 }
 
-bool FDirect3D11PixelShader::BindResource() const noexcept
+void FDirect3D11PixelShader::BindResourceImpl() const noexcept
 {
-	return FDirect3D11ShaderReflection::BindResource(Renderer->GetDeviceContext());
+	FDirect3D11ShaderReflection::BindResource(Renderer->GetDeviceContext());
 }
 
 #endif

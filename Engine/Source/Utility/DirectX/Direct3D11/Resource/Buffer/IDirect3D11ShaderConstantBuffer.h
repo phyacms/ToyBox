@@ -24,7 +24,6 @@ public:
 
 public:
 	inline virtual bool UpdateBuffer(const void* SrcData) override final { return FDirect3D11Buffer::UpdateBuffer(SrcData); }
-	inline virtual bool BindResource() const noexcept override final { return FDirect3D11Buffer::BindResource(); }
 
 	inline virtual std::size_t GetCount() const noexcept override final { return 1; }
 	inline virtual std::size_t GetStride() const noexcept override final { return ByteWidth; }
@@ -37,6 +36,8 @@ protected:
 
 private:
 	inline virtual bool IsValidImpl() const noexcept override final { return FDirect3D11Buffer::IsValid(); }
+	inline virtual void BindResourceImpl() const noexcept override final { return FDirect3D11Buffer::BindResource(); }
+
 	virtual void BindResourceImpl(ID3D11DeviceContext& Context) const noexcept override = 0;
 	virtual bool UpdateBufferImpl(ID3D11DeviceContext& Context, const void* SrcData) override final;
 

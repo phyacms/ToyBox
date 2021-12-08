@@ -23,16 +23,17 @@ public:
 	template<typename T, typename... Ts, typename = std::enable_if_t<std::is_base_of_v<IGraphicsRenderer, T>>>
 	inline bool CreateRenderer(Ts&&... Params) noexcept
 	{
-		Renderer = std::make_unique<T>(*this, std::forward<Ts>(Params)...);
-		if (Renderer == nullptr || !Renderer->IsValid())
+		if (auto Created = std::make_unique<T>(*this, std::forward<Ts>(Params)...);
+			Created != nullptr && Created->IsValid())
 		{
-			Renderer.reset();
-			return false;
+			return SetRenderer(std::move(Created));
 		}
-
-		return true;
+		return false;
 	}
 	[[nodiscard]] std::unique_ptr<IGraphicsContext> CreateContext(FSystemWindow& OutputWindow) &;
+
+private:
+	bool SetRenderer(std::unique_ptr<IGraphicsRenderer>&& Created) noexcept;
 
 private:
 	FSystem* System;

@@ -4,6 +4,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "Type/Traits.h"
 #include "System/Graphics/Resource/Buffer/IDynamicBuffer.h"
 #include "Utility/DirectX/Direct3D11/Direct3D11.h"
 
@@ -12,9 +13,6 @@ class IDirect3D11ShaderConstantBuffer;
 
 class FDirect3D11ShaderReflection
 {
-public:
-	inline static constexpr auto InvalidIndex{ static_cast<std::size_t>(-1) };
-
 public:
 	FDirect3D11ShaderReflection();
 	virtual ~FDirect3D11ShaderReflection() noexcept;
@@ -68,7 +66,7 @@ private:
 
 public:
 	inline bool IsValid() const noexcept { return IsReflected() && IsValidImpl(); }
-	bool BindResource(ID3D11DeviceContext& Context) const noexcept;
+	void BindResource(ID3D11DeviceContext& Context) const noexcept;
 
 	inline ID3D11ShaderReflection& GetShaderReflector() const& noexcept { return *Reflector.Get(); }
 	inline const D3D11_SHADER_DESC& GetShaderDescriptions() const& noexcept { return ShaderDesc; }

@@ -138,6 +138,7 @@
     <ClInclude Include="Source\System\Window\SystemWindowEvents.h" />
     <ClInclude Include="Source\Type\Byte.h" />
     <ClInclude Include="Source\Type\Color.h" />
+    <ClInclude Include="Source\Type\Common.h" />
     <ClInclude Include="Source\Type\Container.h" />
     <ClInclude Include="Source\Type\Delegate\Delegate.h" />
     <ClInclude Include="Source\Type\Delegate\DelegateHandle.h" />
@@ -156,7 +157,7 @@
     <ClInclude Include="Source\Type\ScreenSpace\ScreenSize.h" />
     <ClInclude Include="Source\Type\String.h" />
     <ClInclude Include="Source\Type\Time.h" />
-    <ClInclude Include="Source\Type\TypeTraits.h" />
+    <ClInclude Include="Source\Type\Traits.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11Renderer.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Direct3D11SwapChain.h" />

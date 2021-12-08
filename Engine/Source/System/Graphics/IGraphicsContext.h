@@ -10,8 +10,8 @@
 #include "Type/ScreenSpace/Dim.h"
 #include "Math/Affine.h"
 #include "Data/Projection.h"
-#include "IGraphicsRenderer.h"
 
+class IGraphicsRenderer;
 class FSystemWindow;
 
 class IGraphicsContext
@@ -55,7 +55,7 @@ public:
 	IGraphicsContext& operator=(const IGraphicsContext&) & = delete;
 
 public:
-	inline bool IsValid() const noexcept { return Renderer.IsValid() && OutputWindow.IsValid() && IsValidImpl(); }
+	bool IsValid() const noexcept;
 
 	void SetViewportDimension(UDim Dimension);
 	void SetViewportAspectRatio(float MinimumAspectRatio, float MaximumAspectRatio);
@@ -106,8 +106,6 @@ private:
 	FColor ClearColor;
 
 public:
-	using FOnOutputWindowSizeChanged = TMulticastDelegate<void(const FScreenSize&)>;
-	FOnOutputWindowSizeChanged OnOutputWindowSizeChanged;
 	using FOnViewportChanged = TMulticastDelegate<void(const FScreenArea&)>;
 	FOnViewportChanged OnViewportChanged;
 };

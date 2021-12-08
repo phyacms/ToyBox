@@ -5,6 +5,7 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "Type/Common.h"
 #include "Utility/DirectX/Direct3D11/Resource/Buffer/IDirect3D11ShaderConstantBuffer.h"
 
 FDirect3D11ShaderReflection::FDirect3D11ShaderReflection()
@@ -105,19 +106,16 @@ bool FDirect3D11ShaderReflection::AddConstantBuffer(std::unique_ptr<IDirect3D11S
 	return bEmplaced;
 }
 
-bool FDirect3D11ShaderReflection::BindResource(ID3D11DeviceContext& Context) const noexcept
+void FDirect3D11ShaderReflection::BindResource(ID3D11DeviceContext& Context) const noexcept
 {
 	if (IsValid())
 	{
 		BindResourceImpl(Context);
-		std::for_each(
-			std::execution::seq,
-			std::cbegin(ConstBuf.Objects),
-			std::cend(ConstBuf.Objects),
-			[&Context](const auto& Pair)->void { Pair.second->BindResource(); });
-		return true;
+		for (const auto& [SlotIndex, Buffer] : ConstBuf.Objects)
+		{
+			Buffer->IDynamicBuffer::BindResource();
+		}
 	}
-	return false;
 }
 
 std::size_t FDirect3D11ShaderReflection::QueryConstantBufferIndex(std::string_view Name) const noexcept
@@ -129,7 +127,7 @@ std::size_t FDirect3D11ShaderReflection::QueryConstantBufferIndex(std::string_vi
 		[&Name](const D3D11_SHADER_BUFFER_DESC& BufDesc)->bool { return Name == BufDesc.Name; }) };
 	return cIt != std::cend(ConstBuf.BufDescs)
 		? cIt - std::cbegin(ConstBuf.BufDescs)
-		: InvalidIndex;
+		: Common::InvalidIndexValue;
 }
 
 FDynamicBuffer FDirect3D11ShaderReflection::QueryConstantBuffer(std::size_t SlotIndex) const& noexcept

@@ -151,7 +151,7 @@
     <ClInclude Include="Source\Math\Point.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Type\TypeTraits.h">
+    <ClInclude Include="Source\Type\Traits.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
     <ClInclude Include="Source\Log\Log.h">
@@ -339,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="Source\Type\Resource\UniqueId.h">
       <Filter>Source\Type\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Common.h">
+      <Filter>Source\Type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

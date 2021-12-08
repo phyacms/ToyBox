@@ -44,6 +44,11 @@ bool FDirect3D11VertexShader::IsValidImpl() const noexcept
 		|| !InputLayout);
 }
 
+void FDirect3D11VertexShader::BindResourceImpl() const noexcept
+{
+	FDirect3D11ShaderReflection::BindResource(Renderer->GetDeviceContext());
+}
+
 void FDirect3D11VertexShader::BindResourceImpl(ID3D11DeviceContext& Context) const noexcept
 {
 	Context.IASetInputLayout(InputLayout.Get());
@@ -171,11 +176,6 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 	}
 
 	return true;
-}
-
-bool FDirect3D11VertexShader::BindResource() const noexcept
-{
-	return FDirect3D11ShaderReflection::BindResource(Renderer->GetDeviceContext());
 }
 
 #endif

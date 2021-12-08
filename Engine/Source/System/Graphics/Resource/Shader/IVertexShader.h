@@ -17,10 +17,12 @@ public:
 
 public:
 	virtual bool IsValid() const noexcept override = 0;
-	virtual bool BindResource() const noexcept override = 0;
 
 	virtual std::size_t QueryConstantBufferIndex(std::string_view Name) const noexcept override = 0;
 	virtual FDynamicBuffer QueryConstantBuffer(std::size_t SlotIndex) const& noexcept override = 0;
 
 	virtual const FVertexDesc& GetVertexDescription() const noexcept = 0;
+
+private:
+	virtual void BindResourceImpl() const noexcept override = 0;
 };

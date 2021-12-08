@@ -30,11 +30,10 @@ public:
 			sizeof(FIndexData::value_type)) {}
 	virtual ~FDirect3D11IndexBuffer() noexcept = default;
 
-public:
-	inline virtual bool BindResource() const noexcept override final { return FDirect3D11Buffer::BindResource(); }
-
 private:
 	inline virtual bool IsValidImpl() const noexcept override final { return FDirect3D11Buffer::IsValid(); }
+	inline virtual void BindResourceImpl() const noexcept override final { FDirect3D11Buffer::BindResource(); }
+
 	inline virtual void BindResourceImpl(ID3D11DeviceContext& Context) const noexcept override final
 	{
 		UINT Offset{};

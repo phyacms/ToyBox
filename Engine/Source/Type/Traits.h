@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Common.h"
 
 namespace TypeTraits
 {
@@ -35,34 +36,28 @@ namespace TypeTraits
 	// Retrieves the index of a uniquely-existing type in the given tuple of Ts.
 	// If type T is NOT an uniquely-existing type, the retrieved value is equal to std::size_t(-1).
 	// c.f.) std::get<T>()
-	namespace Tuple
-	{
-		struct InvalidIndex final { inline static constexpr auto Value{ static_cast<std::size_t>(-1) }; };
-		inline constexpr auto InvalidIndexValue{ InvalidIndex::Value };
-	}
-
 	template<typename T, typename Tuple>
 	struct IndexOf;
 	template<typename T>
 	struct IndexOf<T, std::tuple<>> final
 	{
-		inline static constexpr auto Value{ Tuple::InvalidIndexValue };
+		inline static constexpr auto Value{ Common::InvalidIndexValue };
 	};
 	template<typename T, typename... Ts>
 	struct IndexOf<T, std::tuple<T, Ts...>> final
 	{
 		inline static constexpr auto Value{
-			IndexOf<T, std::tuple<Ts...>>::Value == Tuple::InvalidIndexValue
+			IndexOf<T, std::tuple<Ts...>>::Value == Common::InvalidIndexValue
 				? 0
-				: Tuple::InvalidIndexValue };
+				: Common::InvalidIndexValue };
 	};
 	template<typename T, typename T1, typename... Ts>
 	struct IndexOf<T, std::tuple<T1, Ts...>> final
 	{
 		inline static constexpr auto Value{
-			IndexOf<T, std::tuple<Ts...>>::Value != Tuple::InvalidIndexValue
+			IndexOf<T, std::tuple<Ts...>>::Value != Common::InvalidIndexValue
 				? (1 + IndexOf<T, std::tuple<Ts...>>::Value)
-				: Tuple::InvalidIndexValue };
+				: Common::InvalidIndexValue };
 	};
 	template<typename T, typename... Ts>
 	inline constexpr auto IndexValueOf{ IndexOf<T, Ts...>::Value };

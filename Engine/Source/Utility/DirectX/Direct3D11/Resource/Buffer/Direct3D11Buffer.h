@@ -28,7 +28,7 @@ public:
 
 public:
 	inline bool IsValid() const noexcept { return Buffer != nullptr; }
-	bool BindResource() const noexcept;
+	void BindResource() const noexcept;
 
 protected:
 	inline ID3D11Buffer& GetBuffer() const noexcept { return *Buffer.Get(); }

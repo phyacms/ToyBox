@@ -14,13 +14,13 @@ public:
 
 public:
 	virtual bool UpdateBuffer(const void* SrcData) = 0;
-	virtual bool BindResource() const noexcept override = 0;
 
 	virtual std::size_t GetCount() const noexcept override = 0;
 	virtual std::size_t GetStride() const noexcept override = 0;
 
 private:
 	virtual bool IsValidImpl() const noexcept override = 0;
+	virtual void BindResourceImpl() const noexcept override = 0;
 };
 
 // Proxy of IDynamicBuffer.

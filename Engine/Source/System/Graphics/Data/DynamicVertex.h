@@ -30,7 +30,7 @@ private:
 	using FElementDescs = std::unordered_map<SemanticNameHash, FSemanticIndices>;
 
 public:
-	FVertexDesc() : ElementDescs{} {}
+	FVertexDesc() : ElementDescs{}, CachedTotalByteSize{} {}
 	FVertexDesc(const FVertexDesc&) = default;
 	FVertexDesc& operator=(const FVertexDesc&) & = default;
 	FVertexDesc(FVertexDesc&&) noexcept = default;
@@ -154,7 +154,7 @@ public:
 	FVertexProxy At(std::size_t Index)&;
 
 public:
-	inline bool IsValid() const noexcept { return Desc != nullptr; }
+	inline bool IsValid() const noexcept { return Desc != nullptr && Desc->IsValid(); }
 	inline std::size_t GetCount() const noexcept { return IsValid() ? GetByteSize() / GetStride() : 0; }
 	inline std::size_t GetStride() const noexcept { return IsValid() ? Desc->GetByteSize() : 0; }
 	inline std::size_t GetByteSize() const noexcept { return Bytes.GetByteSize(); }

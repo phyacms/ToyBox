@@ -2,6 +2,7 @@
 
 #include "Engine.h"
 #include "IGraphicsContext.h"
+#include "IGraphicsRenderer.h"
 #include "System/Window/SystemWindow.h"
 
 IGraphicsContext::IGraphicsContext(
@@ -15,7 +16,7 @@ IGraphicsContext::IGraphicsContext(
 	, Projection{ FPerspectiveProjectionFoV{} }
 	, BackgroundColor{ ColorCodes::Black }
 	, ClearColor{ ColorCodes::CornflowerBlue }
-	, OnOutputWindowSizeChanged{}
+	, OnViewportChanged{}
 {
 	if (this->OutputWindow.IsValid())
 	{
@@ -23,7 +24,6 @@ IGraphicsContext::IGraphicsContext(
 			[this](const FOnResized& EventArgs)->bool {
 				ResizeBuffer(EventArgs.ClientAreaSize);
 				UpdateViewport();
-				OnOutputWindowSizeChanged.Broadcast(EventArgs.ClientAreaSize);
 				return false; });
 	}
 }
@@ -33,6 +33,14 @@ IGraphicsContext::~IGraphicsContext() noexcept
 	DH_OnResized.Release();
 	OutputWindow.Release();
 	Renderer.Release();
+}
+
+bool IGraphicsContext::IsValid() const noexcept
+{
+	return Renderer.IsValid()
+		&& Renderer->IsValid()
+		&& OutputWindow.IsValid()
+		&& IsValidImpl();
 }
 
 void IGraphicsContext::SetViewportDimension(UDim Dimension)

@@ -45,14 +45,9 @@ FDirect3D11Buffer::FDirect3D11Buffer(
 	}
 }
 
-bool FDirect3D11Buffer::BindResource() const noexcept
+void FDirect3D11Buffer::BindResource() const noexcept
 {
-	if (IsValid())
-	{
-		BindResourceImpl(Renderer->GetDeviceContext());
-		return true;
-	}
-	return false;
+	BindResourceImpl(Renderer->GetDeviceContext());
 }
 
 bool FDirect3D11Buffer::UpdateBuffer(const void* SrcData)

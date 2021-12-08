@@ -6,6 +6,7 @@
 
 FGraphics::FGraphics(FSystem& System)
 	: System{ &System }
+	, Renderer{}
 {
 }
 
@@ -17,12 +18,17 @@ std::unique_ptr<IGraphicsContext> FGraphics::CreateContext(FSystemWindow& Output
 {
 	if (Renderer != nullptr)
 	{
-		auto Context{ Renderer->CreateContext(OutputWindow) };
-		if (Context != nullptr && Context->IsValid())
+		if (auto Context{ Renderer->CreateContext(OutputWindow) };
+			Context != nullptr && Context->IsValid())
 		{
 			return Context;
 		}
 	}
-
 	return nullptr;
+}
+
+bool FGraphics::SetRenderer(std::unique_ptr<IGraphicsRenderer>&& Created) noexcept
+{
+	Renderer = std::move(Created);
+	return true;
 }

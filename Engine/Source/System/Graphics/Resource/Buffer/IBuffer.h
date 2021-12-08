@@ -14,7 +14,6 @@ public:
 
 public:
 	virtual bool IsValid() const noexcept override final { return GetByteSize() != 0 && IsValidImpl(); }
-	virtual bool BindResource() const noexcept override = 0;
 
 	virtual std::size_t GetCount() const noexcept = 0;
 	virtual std::size_t GetStride() const noexcept = 0;
@@ -22,4 +21,5 @@ public:
 
 private:
 	virtual bool IsValidImpl() const noexcept = 0;
+	virtual void BindResourceImpl() const noexcept override = 0;
 };
