@@ -80,12 +80,19 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 		return false;
 	}
 
-	std::vector<D3D11_SIGNATURE_PARAMETER_DESC> ParamDescs(InputParamCount);
+	std::vector<D3D11_SIGNATURE_PARAMETER_DESC> ParamDescs{};
+	ParamDescs.reserve(InputParamCount);
 	for (UINT ParamIndex{}; ParamIndex != InputParamCount; ++ParamIndex)
 	{
-		if (FAILED(Reflector.GetInputParameterDesc(ParamIndex, &ParamDescs[ParamIndex])))
+		D3D11_SIGNATURE_PARAMETER_DESC ParamDesc{};
+		if (FAILED(Reflector.GetInputParameterDesc(ParamIndex, &ParamDesc)))
 		{
 			return false;
+		}
+
+		if (!std::string{ ParamDesc.SemanticName }.starts_with("SV_"))
+		{
+			ParamDescs.emplace_back(std::move(ParamDesc));
 		}
 	}
 
@@ -135,7 +142,7 @@ bool FDirect3D11VertexShader::CreateInputLayout(ID3D11Device& Device, ID3DBlob& 
 			return Formats[SizeIndex][TypeIndex];
 		} };
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> ElementDescs(InputParamCount);
+	std::vector<D3D11_INPUT_ELEMENT_DESC> ElementDescs(ParamDescs.size());
 	std::transform(
 		std::execution::par_unseq,
 		std::cbegin(ParamDescs),

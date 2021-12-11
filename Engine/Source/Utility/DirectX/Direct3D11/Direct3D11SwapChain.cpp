@@ -286,8 +286,8 @@ void FDirect3D11SwapChain::UpdateViewport(const FScreenArea& ViewportArea)
 		.TopLeftY{ ViewportArea.Location.Y<FLOAT>() },
 		.Width{ ViewportArea.Size.X<FLOAT>() },
 		.Height{ ViewportArea.Size.Y<FLOAT>() },
-		.MinDepth{ 0.0f },
-		.MaxDepth{ 1.0f },
+		.MinDepth{ D3D11_MIN_DEPTH },
+		.MaxDepth{ D3D11_MAX_DEPTH },
 	};
 
 	ScissorRect = {
