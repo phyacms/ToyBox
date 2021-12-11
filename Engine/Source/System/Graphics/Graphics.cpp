@@ -29,6 +29,11 @@ std::unique_ptr<IGraphicsContext> FGraphics::CreateContext(FSystemWindow& Output
 
 bool FGraphics::SetRenderer(std::unique_ptr<IGraphicsRenderer>&& Created) noexcept
 {
+	if (!Created->CreateStaticResources())
+	{
+		return false;
+	}
+
 	Renderer = std::move(Created);
 	return true;
 }

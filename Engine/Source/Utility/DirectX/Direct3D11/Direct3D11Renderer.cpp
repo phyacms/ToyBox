@@ -6,6 +6,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include "Direct3D11SwapChain.h"
+#include "Resource/Topology/Direct3D11PrimitiveTopology.h"
 
 FDirect3D11Renderer::FDirect3D11Renderer(FGraphics& Graphics)
 	: IGraphicsRenderer(Graphics)
@@ -168,6 +169,11 @@ bool FDirect3D11Renderer::IsValid() const noexcept
 std::unique_ptr<IGraphicsContext> FDirect3D11Renderer::CreateContext(FSystemWindow& OutputWindow) &
 {
 	return std::make_unique<FDirect3D11SwapChain>(*this, OutputWindow);
+}
+
+std::unique_ptr<IPrimitiveTopology> FDirect3D11Renderer::CreatePrimitiveTopology(EPrimitiveTopology Topology) noexcept
+{
+	return std::make_unique<FDirect3D11PrimitiveTopology>(*this, Topology);
 }
 
 #endif

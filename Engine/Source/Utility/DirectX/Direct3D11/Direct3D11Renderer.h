@@ -10,6 +10,16 @@
 class FDirect3D11Renderer final
 	: public IGraphicsRenderer
 {
+private:
+	inline static constexpr UINT CreateDeviceFlags
+	{
+		D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_BGRA_SUPPORT // Required by interoperable Direct2D.
+#ifndef NDEBUG
+		| D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG
+#endif
+	};
+	inline static constexpr D3D_FEATURE_LEVEL MinimumFeatureLevel{ D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_1 };
+
 public:
 	explicit FDirect3D11Renderer(FGraphics& Graphics);
 	virtual ~FDirect3D11Renderer() noexcept { Terminate(); }
@@ -41,14 +51,7 @@ public:
 	inline bool AllowsTearing() const noexcept { return bAllowTearing; }
 
 private:
-	inline static constexpr UINT CreateDeviceFlags
-	{
-		D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_BGRA_SUPPORT // Required by interoperable Direct2D.
-#ifndef NDEBUG
-		| D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG
-#endif
-	};
-	inline static constexpr D3D_FEATURE_LEVEL MinimumFeatureLevel{ D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_1 };
+	virtual std::unique_ptr<IPrimitiveTopology> CreatePrimitiveTopology(EPrimitiveTopology Topology) noexcept override final;
 
 private:
 	TComPtr<IDXGIFactory1> Factory;

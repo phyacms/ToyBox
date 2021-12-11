@@ -94,6 +94,12 @@
     <Filter Include="Source\Type\Resource">
       <UniqueIdentifier>{614a3c70-87ea-4ef8-8053-0da5ee8d3650}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System\Graphics\Resource\Topology">
+      <UniqueIdentifier>{fc8827fc-d49a-4cd2-aa26-b5bb0477d6bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utility\DirectX\Direct3D11\Resource\Topology">
+      <UniqueIdentifier>{fba64fb8-fa77-426f-810b-97bb762a7205}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -343,6 +349,15 @@
     <ClInclude Include="Source\Type\Common.h">
       <Filter>Source\Type</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Data\PrimitiveTopology.h">
+      <Filter>Source\System\Graphics\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Topology\IPrimitiveTopology.h">
+      <Filter>Source\System\Graphics\Resource\Topology</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Topology\Direct3D11PrimitiveTopology.h">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Topology</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -461,6 +476,15 @@
     </ClCompile>
     <ClCompile Include="Source\Type\Resource\UniqueId.cpp">
       <Filter>Source\Type\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\IGraphicsRenderer.cpp">
+      <Filter>Source\System\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Resource\Topology\IPrimitiveTopology.cpp">
+      <Filter>Source\System\Graphics\Resource\Topology</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Topology\Direct3D11PrimitiveTopology.cpp">
+      <Filter>Source\Utility\DirectX\Direct3D11\Resource\Topology</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
