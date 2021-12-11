@@ -121,6 +121,7 @@
     <ClInclude Include="Source\System\Graphics\Resource\Shader\IPixelShader.h" />
     <ClInclude Include="Source\System\Graphics\Resource\Shader\IShader.h" />
     <ClInclude Include="Source\System\Graphics\Resource\Shader\IVertexShader.h" />
+    <ClInclude Include="Source\System\Graphics\Resource\Shader\Shader.h" />
     <ClInclude Include="Source\System\Graphics\Resource\Topology\IPrimitiveTopology.h" />
     <ClInclude Include="Source\System\Input\Chord\InputAction.h" />
     <ClInclude Include="Source\System\Input\Chord\InputChord.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Source\System\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsContext.cpp" />
     <ClCompile Include="Source\System\Graphics\IGraphicsRenderer.cpp" />
+    <ClCompile Include="Source\System\Graphics\Resource\Shader\Shader.cpp" />
     <ClCompile Include="Source\System\Graphics\Resource\Topology\IPrimitiveTopology.cpp" />
     <ClCompile Include="Source\System\Input\Chord\InputChord.cpp" />
     <ClCompile Include="Source\System\Input\Chord\InputTrigger.cpp" />

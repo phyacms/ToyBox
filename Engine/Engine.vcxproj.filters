@@ -358,6 +358,9 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Topology\Direct3D11PrimitiveTopology.h">
       <Filter>Source\Utility\DirectX\Direct3D11\Resource\Topology</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\Graphics\Resource\Shader\Shader.h">
+      <Filter>Source\System\Graphics\Resource\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -485,6 +488,9 @@
     </ClCompile>
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Topology\Direct3D11PrimitiveTopology.cpp">
       <Filter>Source\Utility\DirectX\Direct3D11\Resource\Topology</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Graphics\Resource\Shader\Shader.cpp">
+      <Filter>Source\System\Graphics\Resource\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
