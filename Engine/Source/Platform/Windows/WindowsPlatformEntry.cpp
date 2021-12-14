@@ -30,11 +30,13 @@ FWindowsPlatformEntry::~FWindowsPlatformEntry() noexcept
 
 bool FWindowsPlatformEntry::Initialize() noexcept
 {
-	bCoInit = SUCCEEDED(::CoInitializeEx(nullptr, COINIT::COINIT_APARTMENTTHREADED));
-	if (!bCoInit)
+	if (FAILED(::CoInitializeEx(
+		nullptr,
+		COINIT::COINIT_APARTMENTTHREADED | COINIT::COINIT_DISABLE_OLE1DDE)))
 	{
 		return false;
 	}
+	bCoInit = true;
 
 #ifndef NDEBUG
 	// Enables run-time memory check in debug build.

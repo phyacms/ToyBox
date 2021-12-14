@@ -100,6 +100,9 @@
     <Filter Include="Source\Utility\DirectX\Direct3D11\Resource\Topology">
       <UniqueIdentifier>{fba64fb8-fa77-426f-810b-97bb762a7205}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Utility\ImageDecoder">
+      <UniqueIdentifier>{dfc7a5bc-43f1-4e22-b935-f7028d88d372}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -361,6 +364,12 @@
     <ClInclude Include="Source\System\Graphics\Resource\Shader\Shader.h">
       <Filter>Source\System\Graphics\Resource\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Utility\ImageDecoder\IImageDecoder.h">
+      <Filter>Source\Utility\ImageDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\ImageDecoder\WICImageDecoder.h">
+      <Filter>Source\Utility\ImageDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -491,6 +500,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\Graphics\Resource\Shader\Shader.cpp">
       <Filter>Source\System\Graphics\Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\ImageDecoder\WICImageDecoder.cpp">
+      <Filter>Source\Utility\ImageDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

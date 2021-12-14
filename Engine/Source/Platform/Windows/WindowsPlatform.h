@@ -24,6 +24,7 @@
 #include <windowsx.h>
 #include <objbase.h>
 #include <shellapi.h>
+#include <wincodec.h>
 #ifndef NDEBUG
 #include <crtdbg.h>
 #endif
@@ -40,6 +41,9 @@
 #endif
 #ifdef CreateWindow
 #undef CreateWindow
+#endif
+#ifdef LoadImage
+#undef LoadImage
 #endif
 
 template<typename T>
