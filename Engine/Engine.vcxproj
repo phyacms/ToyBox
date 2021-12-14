@@ -175,6 +175,7 @@
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.h" />
     <ClInclude Include="Source\Utility\DirectX\Direct3D11\Resource\Topology\Direct3D11PrimitiveTopology.h" />
     <ClInclude Include="Source\Utility\ImageDecoder\IImageDecoder.h" />
+    <ClInclude Include="Source\Utility\ImageDecoder\STBImageDecoder.h" />
     <ClInclude Include="Source\Utility\ImageDecoder\WICImageDecoder.h" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +222,7 @@
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11ShaderReflection.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Shader\Direct3D11VertexShader.cpp" />
     <ClCompile Include="Source\Utility\DirectX\Direct3D11\Resource\Topology\Direct3D11PrimitiveTopology.cpp" />
+    <ClCompile Include="Source\Utility\ImageDecoder\STBImageDecoder.cpp" />
     <ClCompile Include="Source\Utility\ImageDecoder\WICImageDecoder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

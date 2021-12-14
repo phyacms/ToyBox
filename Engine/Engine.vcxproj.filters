@@ -370,6 +370,9 @@
     <ClInclude Include="Source\Utility\ImageDecoder\WICImageDecoder.h">
       <Filter>Source\Utility\ImageDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Utility\ImageDecoder\STBImageDecoder.h">
+      <Filter>Source\Utility\ImageDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -502,6 +505,9 @@
       <Filter>Source\System\Graphics\Resource\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\ImageDecoder\WICImageDecoder.cpp">
+      <Filter>Source\Utility\ImageDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\ImageDecoder\STBImageDecoder.cpp">
       <Filter>Source\Utility\ImageDecoder</Filter>
     </ClCompile>
   </ItemGroup>
