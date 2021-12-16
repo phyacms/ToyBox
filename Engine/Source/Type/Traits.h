@@ -35,7 +35,7 @@ namespace TypeTraits
 
 	// Retrieves the index of a uniquely-existing type in the given tuple of Ts.
 	// If type T is NOT an uniquely-existing type, the retrieved value is equal to std::size_t(-1).
-	// c.f.) std::get<T>()
+	// cf.) std::get<T>()
 	template<typename T, typename Tuple>
 	struct IndexOf;
 	template<typename T>

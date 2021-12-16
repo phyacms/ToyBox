@@ -34,8 +34,5 @@ protected:
 	inline FGraphics& GetGraphics() const noexcept { return *Graphics; }
 
 private:
-	virtual std::unique_ptr<IPrimitiveTopology> CreatePrimitiveTopology(EPrimitiveTopology Topology) noexcept = 0;
-
-private:
 	FGraphics* Graphics;
 };

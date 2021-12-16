@@ -111,13 +111,13 @@ FImageFrame FWICImageDecoder::DecodeFrame(IWICBitmapFrameDecode& Decoded) const 
 	const auto RowPitch{ static_cast<std::size_t>(Width) * 4 };
 	FImageFrame Frame{
 		.RGBAs{ FBytes{ RowPitch * Height } },
-		.RowPitch{ RowPitch } };
+		.SysMemRowPitch{ RowPitch } };
 
 	if (FAILED(BitmapSource->CopyPixels(
 		nullptr,
-		static_cast<UINT>(Frame.RowPitch),
-		static_cast<UINT>(Frame.RGBAs.GetByteSize()),
-		Frame.RGBAs.GetPtr())))
+		Frame.RowPitch<UINT>(),
+		Frame.GetByteSize<UINT>(),
+		Frame.GetPtr())))
 	{
 		return {};
 	}

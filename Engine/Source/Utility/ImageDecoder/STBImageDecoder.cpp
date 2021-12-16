@@ -39,7 +39,7 @@ FImageFrame FSTBImageDecoder::LoadImage(const fs::path& ImageFilePath) const noe
 	const auto RowPitch{ static_cast<std::size_t>(LoadedImage.Width) * 4 };
 	FImageFrame Frame{
 		.RGBAs{ FBytes{ RowPitch * LoadedImage.Height } },
-		.RowPitch{ RowPitch } };
+		.SysMemRowPitch{ RowPitch } };
 	std::memcpy(Frame.RGBAs.GetPtr(), LoadedImage.Bytes, Frame.RGBAs.GetByteSize());
 	return Frame;
 }

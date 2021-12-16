@@ -66,7 +66,7 @@ private:
 	TComPtr<IDXGISwapChain> SwapChain;
 	UINT PresentFlags;
 
-	TComPtr<ID3D11Resource> BackBuffer;
+	TComPtr<ID3D11Texture2D> BackBuffer;
 	TComPtr<ID3D11RenderTargetView> RenderTargetView;
 	TComPtr<ID3D11DepthStencilState> DepthStencilState;
 	TComPtr<ID3D11DepthStencilView> DepthStencilView;

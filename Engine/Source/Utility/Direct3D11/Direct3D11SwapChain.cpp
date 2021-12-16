@@ -403,6 +403,7 @@ void FDirect3D11SwapChain::DrawLine(
 		&GetD2DBrush(Color),
 		Width,
 		nullptr);
+	FlushD2D();
 }
 
 void FDirect3D11SwapChain::DrawRect(
@@ -415,6 +416,7 @@ void FDirect3D11SwapChain::DrawRect(
 		&GetD2DBrush(Color),
 		Width,
 		nullptr);
+	FlushD2D();
 }
 
 #endif

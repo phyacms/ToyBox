@@ -9,7 +9,7 @@
 #include <System/Graphics/Graphics.h>
 #include <System/Graphics/IGraphicsContext.h>
 #include <Player/HUD/HUD.h>
-#include <Utility/DirectX/Direct3D11/Direct3D11Renderer.h>
+#include <Utility/Direct3D11/Direct3D11Renderer.h>
 
 FApplication::FApplication(FSystem& System)
 	: IApplication(System)

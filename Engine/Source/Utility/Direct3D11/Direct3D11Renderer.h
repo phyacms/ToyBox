@@ -51,9 +51,6 @@ public:
 	inline bool AllowsTearing() const noexcept { return bAllowTearing; }
 
 private:
-	virtual std::unique_ptr<IPrimitiveTopology> CreatePrimitiveTopology(EPrimitiveTopology Topology) noexcept override final;
-
-private:
 	TComPtr<IDXGIFactory1> Factory;
 	TComPtr<IDXGIAdapter1> Adapter;
 	DXGI_ADAPTER_DESC1 AdapterDesc;
