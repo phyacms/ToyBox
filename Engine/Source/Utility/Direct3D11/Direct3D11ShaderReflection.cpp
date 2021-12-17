@@ -72,7 +72,7 @@ FDirect3D11ShaderReflection::~FDirect3D11ShaderReflection() noexcept
 	DestroyReflection();
 }
 
-FDirect3D11Buffer::Writer FDirect3D11ShaderReflection::QueryConstantBuffer(std::size_t Index) const noexcept
+FDirect3D11Buffer::Mapping FDirect3D11ShaderReflection::QueryConstantBuffer(std::size_t Index) const noexcept
 {
 	if (CBufs.Instances.at(Index) != nullptr)
 	{
@@ -94,7 +94,7 @@ std::size_t FDirect3D11ShaderReflection::GetTexture2DSRVIndex(const std::string&
 	return Common::InvalidIndexValue;
 }
 
-FDirect3D11SRV_Texture2D::Proxy FDirect3D11ShaderReflection::QueryTexture2DSRV(std::size_t Index) const noexcept
+FDirect3D11SRV_Texture2D::Mapping FDirect3D11ShaderReflection::QueryTexture2DSRV(std::size_t Index) const noexcept
 {
 	if (SRVs.Instances.Texture2Ds.contains(Index))
 	{
@@ -207,13 +207,13 @@ bool FDirect3D11ShaderReflection::CreateReflection(ID3D11Device& Device, ID3DBlo
 				{
 					case D3D_SRV_DIMENSION::D3D_SRV_DIMENSION_TEXTURE2D:
 					{
-						auto Proxy{ std::make_unique<FDirect3D11SRV_Texture2D>(&SRVs.Slots[ResDesc.BindPoint]) };
-						if (Proxy == nullptr || !Proxy->IsValid())
+						auto Mapping{ std::make_unique<FDirect3D11SRV_Texture2D>(&SRVs.Slots[ResDesc.BindPoint]) };
+						if (Mapping == nullptr || !Mapping->IsValid())
 						{
 							return false;
 						}
 
-						auto [It, bEmplaced] = SRVs.Instances.Texture2Ds.emplace(ResDesc.BindPoint, std::move(Proxy));
+						auto [It, bEmplaced] = SRVs.Instances.Texture2Ds.emplace(ResDesc.BindPoint, std::move(Mapping));
 						if (!bEmplaced)
 						{
 							return false;

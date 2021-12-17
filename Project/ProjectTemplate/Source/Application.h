@@ -21,11 +21,12 @@ public:
 
 private:
 	virtual bool Initialize(const FCommandLineArgs& CmdLine) noexcept override final;
-	virtual void BindInputActions(FInputActionBindings& Actions) override final;
 	virtual void Terminate() noexcept override final;
 
-	void Tick(FTimeDuration DeltaTime) override final;
-	void Render(FTimeDuration DeltaTime) override final;
+	virtual void Tick(FTimeDuration DeltaTime) override final;
+	virtual void Render(FTimeDuration DeltaTime) override final;
+
+	virtual void BindInputActions(FInputActionBindings& Actions) override final;
 
 private:
 	std::unique_ptr<FSystemWindow> Window;

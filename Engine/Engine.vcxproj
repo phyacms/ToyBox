@@ -209,6 +209,7 @@
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11PixelShader.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11ShaderReflection.cpp" />
+    <ClCompile Include="Source\Utility\Direct3D11\Direct3D11SRV_Texture2D.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11SwapChain.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11Texture2D.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11VertexShader.cpp" />

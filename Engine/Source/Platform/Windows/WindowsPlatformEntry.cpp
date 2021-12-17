@@ -74,11 +74,10 @@ FCommandLineArgs FWindowsPlatformEntry::ParseCommandLine() const noexcept
 				Parsed.reserve(Count);
 				for (std::size_t Index{}; Index != Count; ++Index)
 				{
-					// In Windows platform, LPWSTR is the pointer of WCHAR and WCHAR is the alias of wchar_t
-					// and the size of wchar_t is guaranteed to be 16-bit wide.
-					// As the parsed LPWSTR command-line arguments are represented in UCS-2, i.e. UTF-16LE,
-					// it seems safe enough to cast the type of a parsed argument from LPWSTR to const char16_t*
-					// and store it in FString class instance without any further conversion.
+					// In Windows platform, it is guaranteed that sizeof(wchar_t) == 16, and therefore
+					// it seems to be safe enough to cast parsed argument type to const char16_t.
+					// As the parsed command-line arguments are encoded in UTF-16LE,
+					// FString can store them w/o any further type conversion or code page conversion.
 					Parsed.emplace_back(reinterpret_cast<const char16_t*>(Argv[Index]));
 				}
 				Parsed.shrink_to_fit();

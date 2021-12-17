@@ -35,7 +35,7 @@ FDirect3D11Texture2D::FDirect3D11Texture2D(
 		.MipLevels{ 1 },
 		.ArraySize{ 1 },
 		.Format{ DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM },
-		.SampleDesc{.Count{ 1 }, .Quality{} },
+		.SampleDesc{ .Count{ 1 }, .Quality{} },
 		.Usage{ Usage },
 		.BindFlags{ BindFlags },
 		.CPUAccessFlags{ CPUAccessFlags },

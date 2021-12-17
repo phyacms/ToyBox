@@ -72,15 +72,6 @@ bool FApplication::Initialize(const FCommandLineArgs& CmdLine) noexcept
 	return true;
 }
 
-void FApplication::BindInputActions(FInputActionBindings& Actions)
-{
-	Actions += FInputAction{
-		.Chord{ FInputChord{}
-			.AddModifier(EKeyboardKey::Alt)
-			.SetTrigger(FInputCodeTrigger{.InputCode{ EKeyboardKey::F4 }, .Event{ ESwitchEvent::Pressed } }) },
-		.Callback{ [this](const FInputContext&)->bool { Window->Close(); return true; } } };
-}
-
 void FApplication::Terminate() noexcept
 {
 	IC_Application.Release();
@@ -100,4 +91,13 @@ void FApplication::Render(FTimeDuration DeltaTime)
 	auto Scene{ Graphics->CreateScene() };
 
 	HUD->Render(DeltaTime);
+}
+
+void FApplication::BindInputActions(FInputActionBindings& Actions)
+{
+	Actions += FInputAction{
+		.Chord{ FInputChord{}
+			.AddModifier(EKeyboardKey::Alt)
+			.SetTrigger(FInputCodeTrigger{ .InputCode{ EKeyboardKey::F4 }, .Event{ ESwitchEvent::Pressed } }) },
+		.Callback{ [this](const FInputContext&)->bool { Window->Close(); return true; } } };
 }

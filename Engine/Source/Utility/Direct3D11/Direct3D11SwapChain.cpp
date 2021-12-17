@@ -316,7 +316,7 @@ void FDirect3D11SwapChain::UpdateProjection(const FProjection& Projection)
 				std::visit(stdhelp::overloaded{
 				[&ViewportArea](const FOrthographicProjection& Orthographics)->DirectX::XMMATRIX
 				{
-					const auto& Area{ ::ToScreenArea(Orthographics.Dimension, {.Location{}, .Size{ ViewportArea.Size } }) };
+					const auto& Area{ ::ToScreenArea(Orthographics.Dimension, { .Location{}, .Size{ ViewportArea.Size } }) };
 					return DirectX::XMMatrixOrthographicLH(
 						Area.Size.X<float>(),
 						Area.Size.Y<float>(),

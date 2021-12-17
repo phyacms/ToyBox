@@ -12,11 +12,11 @@ public:
 	inline static constexpr auto ByteSizeLimit{ D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT };
 	inline static constexpr auto CalcElementCountLimit(std::size_t ElemSize) noexcept { return ByteSizeLimit / ElemSize; }
 
-	class Writer final
+	class Mapping final
 	{
 	public:
-		Writer() : Buffer{} {}
-		Writer(FDirect3D11Buffer& Buffer) : Buffer{
+		Mapping() : Buffer{} {}
+		Mapping(FDirect3D11Buffer& Buffer) : Buffer{
 			(Buffer.IsDynamic() && Buffer.IsWritable())
 			? &Buffer
 			: nullptr } {}

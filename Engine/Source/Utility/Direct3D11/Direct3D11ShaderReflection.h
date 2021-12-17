@@ -32,12 +32,12 @@ public:
 
 protected:
 	inline std::size_t GetConstantBufferIndex(const std::string& Name) const noexcept { return CBufs.Names.contains(Name) ? CBufs.Names.at(Name) : Common::InvalidIndexValue; }
-	inline FDirect3D11Buffer::Writer QueryConstantBuffer(const std::string& Name) const noexcept { return QueryConstantBuffer(GetConstantBufferIndex(Name)); }
-	FDirect3D11Buffer::Writer QueryConstantBuffer(std::size_t Index) const noexcept;
+	inline FDirect3D11Buffer::Mapping QueryConstantBuffer(const std::string& Name) const noexcept { return QueryConstantBuffer(GetConstantBufferIndex(Name)); }
+	FDirect3D11Buffer::Mapping QueryConstantBuffer(std::size_t Index) const noexcept;
 
 	std::size_t GetTexture2DSRVIndex(const std::string& Name) const noexcept;
-	inline FDirect3D11SRV_Texture2D::Proxy QueryTexture2DSRV(const std::string& Name) const noexcept { return QueryTexture2DSRV(GetTexture2DSRVIndex(Name)); }
-	FDirect3D11SRV_Texture2D::Proxy QueryTexture2DSRV(std::size_t Index) const noexcept;
+	inline FDirect3D11SRV_Texture2D::Mapping QueryTexture2DSRV(const std::string& Name) const noexcept { return QueryTexture2DSRV(GetTexture2DSRVIndex(Name)); }
+	FDirect3D11SRV_Texture2D::Mapping QueryTexture2DSRV(std::size_t Index) const noexcept;
 
 	void BindResourceSlots(ID3D11DeviceContext& Context) const noexcept;
 
