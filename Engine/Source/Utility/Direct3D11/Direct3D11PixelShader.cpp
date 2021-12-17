@@ -14,14 +14,14 @@ FDirect3D11PixelShader::FDirect3D11PixelShader(
 {
 	if (IsReflected())
 	{
-		if (!Iniitialize(Device, ByteCode))
+		if (!Initialize(Device, ByteCode))
 		{
 			Terminate();
 		}
 	}
 }
 
-bool FDirect3D11PixelShader::Iniitialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
+bool FDirect3D11PixelShader::Initialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
 {
 	return SUCCEEDED(Device.CreatePixelShader(
 		ByteCode.GetBufferPointer(),

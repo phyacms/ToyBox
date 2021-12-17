@@ -4,8 +4,8 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Direct3D11.h"
 #include "System/Graphics/IGraphicsRenderer.h"
+#include "Direct3D11.h"
 
 class FDirect3D11Renderer final
 	: public IGraphicsRenderer

@@ -14,14 +14,14 @@ FDirect3D11VertexShader::FDirect3D11VertexShader(
 {
 	if (IsReflected())
 	{
-		if (!Iniitialize(Device, ByteCode))
+		if (!Initialize(Device, ByteCode))
 		{
 			Terminate();
 		}
 	}
 }
 
-bool FDirect3D11VertexShader::Iniitialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
+bool FDirect3D11VertexShader::Initialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept
 {
 	if (FAILED(Device.CreateVertexShader(
 		ByteCode.GetBufferPointer(),

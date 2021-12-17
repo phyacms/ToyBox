@@ -17,7 +17,7 @@ public:
 	virtual ~FDirect3D11PixelShader() noexcept { Terminate(); }
 
 private:
-	bool Iniitialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
+	bool Initialize(ID3D11Device& Device, ID3DBlob& ByteCode) noexcept;
 	inline void Terminate() noexcept { PixelShader.Reset(); }
 
 public:

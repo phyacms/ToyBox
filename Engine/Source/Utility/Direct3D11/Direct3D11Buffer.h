@@ -61,7 +61,6 @@ public:
 	template<typename T = std::size_t> inline T GetByteSize() const noexcept { return static_cast<T>(ByteSize); }
 
 	inline ID3D11Buffer* GetPtr() const noexcept { return Buffer.Get(); }
-	inline ID3D11Buffer** GetAddressOf() noexcept { return Buffer.GetAddressOf(); }
 	inline ID3D11Buffer* const* GetAddressOf() const noexcept { return Buffer.GetAddressOf(); }
 
 private:

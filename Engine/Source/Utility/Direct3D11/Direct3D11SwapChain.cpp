@@ -102,11 +102,15 @@ bool FDirect3D11SwapChain::CreateSwapChain() noexcept
 
 bool FDirect3D11SwapChain::CreateResources() noexcept
 {
-	// Swap chain back buffer resource.
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
-	if (SwapChain == nullptr
-		|| FAILED(SwapChain->GetDesc(&SwapChainDesc))
-		|| FAILED(SwapChain->GetBuffer(0, IID_PPV_ARGS(&BackBuffer))))
+	if (FAILED(SwapChain->GetDesc(&SwapChainDesc)))
+	{
+		return {};
+	}
+
+	// Swap chain back buffer resource.
+	BackBuffer = FDirect3D11Texture2D::GetSwapChainBackBuffer(*SwapChain.Get());
+	if (!BackBuffer.IsValid())
 	{
 		return false;
 	}
@@ -116,7 +120,7 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 
 	// Swap chain render target view.
 	if (FAILED(Device.CreateRenderTargetView(
-		BackBuffer.Get(),
+		BackBuffer.GetPtr(),
 		nullptr,
 		&RenderTargetView)))
 	{
@@ -234,7 +238,7 @@ bool FDirect3D11SwapChain::CreateResources() noexcept
 
 void FDirect3D11SwapChain::DestroyResources() noexcept
 {
-	BackBuffer.Reset();
+	BackBuffer = {};
 	RenderTargetView.Reset();
 	DepthStencilState.Reset();
 	DepthStencilView.Reset();
@@ -249,7 +253,7 @@ bool FDirect3D11SwapChain::IsValidImpl() const noexcept
 {
 	return !(false
 		|| !SwapChain
-		|| !BackBuffer
+		|| !BackBuffer.IsValid()
 		|| !RenderTargetView
 		|| !DepthStencilState
 		|| !DepthStencilView

@@ -4,9 +4,10 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "System/Graphics/IGraphicsContext.h"
 #include "Direct3D11.h"
 #include "Direct3D11Renderer.h"
-#include "System/Graphics/IGraphicsContext.h"
+#include "Direct3D11Texture2D.h"
 
 class FSystemWindow;
 
@@ -66,7 +67,7 @@ private:
 	TComPtr<IDXGISwapChain> SwapChain;
 	UINT PresentFlags;
 
-	TComPtr<ID3D11Texture2D> BackBuffer;
+	FDirect3D11Texture2D BackBuffer;
 	TComPtr<ID3D11RenderTargetView> RenderTargetView;
 	TComPtr<ID3D11DepthStencilState> DepthStencilState;
 	TComPtr<ID3D11DepthStencilView> DepthStencilView;

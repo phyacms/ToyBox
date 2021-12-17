@@ -138,6 +138,7 @@
     <ClInclude Include="Source\Type\Delegate\EventDispatcher.h" />
     <ClInclude Include="Source\Type\Delegate\IMulticastDelegate.h" />
     <ClInclude Include="Source\Type\Delegate\MulticastDelegate.h" />
+    <ClInclude Include="Source\Type\Media\ImageFrame.h" />
     <ClInclude Include="Source\Type\Object\Object.h" />
     <ClInclude Include="Source\Type\Object\ObjRef.h" />
     <ClInclude Include="Source\Type\Resource\UniqueId.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Source\Utility\Direct3D11\Direct3D11ShaderReflection.h" />
     <ClInclude Include="Source\Utility\Direct3D11\Direct3D11SwapChain.h" />
     <ClInclude Include="Source\Utility\Direct3D11\Direct3D11SRV_Texture2D.h" />
+    <ClInclude Include="Source\Utility\Direct3D11\Direct3D11Texture2D.h" />
     <ClInclude Include="Source\Utility\Direct3D11\Direct3D11VertexBuffer.h" />
     <ClInclude Include="Source\Utility\Direct3D11\Direct3D11VertexShader.h" />
     <ClInclude Include="Source\Utility\Direct3D11\IDirect3D11Resource.h" />
@@ -208,6 +210,7 @@
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11Renderer.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11ShaderReflection.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11SwapChain.cpp" />
+    <ClCompile Include="Source\Utility\Direct3D11\Direct3D11Texture2D.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11VertexShader.cpp" />
     <ClCompile Include="Source\Utility\Direct3D11\IDirect3D11ShaderResourceView.cpp" />
     <ClCompile Include="Source\Utility\ImageDecoder\STBImageDecoder.cpp" />

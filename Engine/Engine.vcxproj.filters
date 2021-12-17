@@ -76,6 +76,9 @@
     <Filter Include="Source\Utility\Direct3D11">
       <UniqueIdentifier>{964678ff-fc07-4858-bd6f-c622c720867e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Type\Media">
+      <UniqueIdentifier>{33ad2402-aabd-430c-b23a-465a4443a672}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Windows\WindowsPlatform.h">
@@ -319,6 +322,12 @@
     <ClInclude Include="Source\Utility\Direct3D11\Direct3D11IndexBuffer.h">
       <Filter>Source\Utility\Direct3D11</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Utility\Direct3D11\Direct3D11Texture2D.h">
+      <Filter>Source\Utility\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Type\Media\ImageFrame.h">
+      <Filter>Source\Type\Media</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Windows\WindowsPlatformEntry.cpp">
@@ -445,6 +454,9 @@
       <Filter>Source\Utility\Direct3D11</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\Direct3D11\Direct3D11VertexShader.cpp">
+      <Filter>Source\Utility\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\Direct3D11\Direct3D11Texture2D.cpp">
       <Filter>Source\Utility\Direct3D11</Filter>
     </ClCompile>
   </ItemGroup>

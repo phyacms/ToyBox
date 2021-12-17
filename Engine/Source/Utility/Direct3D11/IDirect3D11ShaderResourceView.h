@@ -27,7 +27,6 @@ public:
 	inline bool IsValid() const noexcept { return Slot != nullptr; }
 
 	inline ID3D11ShaderResourceView* GetPtr() const noexcept { return SRV.Get(); }
-	inline ID3D11ShaderResourceView** GetAddressOf() noexcept { return SRV.GetAddressOf(); }
 	inline ID3D11ShaderResourceView* const* GetAddressOf() const noexcept { return SRV.GetAddressOf(); }
 
 protected:
