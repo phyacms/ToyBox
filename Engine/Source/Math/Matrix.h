@@ -59,34 +59,15 @@ public:
 	TMatrix& operator=(TMatrix&&) & noexcept = default;
 	~TMatrix() noexcept { static_assert(sizeof(TMatrix) == sizeof(ValueType) * RowDimension * ColumnDimension); }
 
-	friend inline bool operator==(const TMatrix& Lhs, const TMatrix& Rhs) noexcept
-	{
-		return std::equal(
-			std::execution::par_unseq,
-			std::cbegin(Lhs.Elements),
-			std::cend(Lhs.Elements),
-			std::cbegin(Rhs.Elements),
-			Math::TIsEqualTo<ValueType>{});
-	}
-	friend inline bool operator!=(const TMatrix& Lhs, const TMatrix& Rhs) noexcept
-	{
-		return std::equal(
-			std::execution::par_unseq,
-			std::cbegin(Lhs.Elements),
-			std::cend(Lhs.Elements),
-			std::cbegin(Rhs.Elements),
-			Math::TIsNotEqualTo<ValueType>{});
-	}
-
 	inline TMatrix operator+() const noexcept { return *this; }
 	inline TMatrix operator-() const noexcept
 	{
 		TMatrix M{};
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Elements),
-			std::cend(Elements),
-			std::begin(M.Elements),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::begin(M),
 			std::negate<ValueType>{});
 		return M;
 	}
@@ -97,10 +78,10 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Elements),
-			std::cend(Elements),
-			std::cbegin(Elements),
-			std::begin(Elements),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::cbegin(*this),
+			std::begin(*this),
 			std::plus<ValueType>{});
 		return *this;
 	}
@@ -108,10 +89,10 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Elements),
-			std::cend(Elements),
-			std::cbegin(Elements),
-			std::begin(Elements),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::cbegin(*this),
+			std::begin(*this),
 			std::minus<ValueType>{});
 		return *this;
 	}
@@ -122,14 +103,13 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Elements),
-			std::cend(Elements),
-			std::begin(Elements),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::begin(*this),
 			std::bind_front(std::multiplies<ValueType>{}, Factor));
 		return *this;
 	}
 	inline TMatrix& operator/=(const ValueType& Divisor) & noexcept { return operator*=(std::divides<ValueType>{}(1, Divisor)); }
-	friend inline TMatrix operator*(const ValueType& Factor, const TMatrix M) noexcept { return M * Factor; }
 
 	template<std::size_t Dimension>
 	inline TMatrix<ValueType, RowDimension, Dimension> operator*(const TMatrix<ValueType, ColumnDimension, Dimension>& M) const noexcept
@@ -163,7 +143,6 @@ public:
 		}
 		return U;
 	}
-	friend inline RowVectorType operator*(const ColumnVectorType& V, const TMatrix& M) noexcept { return Transposed() * V; }
 
 public:
 	inline ValueType& operator[](std::size_t Index) & { return Elements[Index]; }
@@ -360,3 +339,31 @@ private:
 private:
 	std::array<ValueType, ElementCount> Elements;
 };
+
+template<typename T, std::size_t N>
+inline bool operator==(const TMatrix<T, N>& Lhs, const TMatrix<T, N>& Rhs) noexcept
+{
+	return std::equal(
+		std::execution::par_unseq,
+		std::cbegin(Lhs),
+		std::cend(Lhs),
+		std::cbegin(Rhs),
+		Math::TIsEqualTo<T>{});
+}
+
+template<typename T, std::size_t N>
+inline bool operator!=(const TMatrix<T, N>& Lhs, const TMatrix<T, N>& Rhs) noexcept
+{
+	return std::equal(
+		std::execution::par_unseq,
+		std::cbegin(Lhs),
+		std::cend(Lhs),
+		std::cbegin(Rhs),
+		Math::TIsNotEqualTo<T>{});
+}
+
+template<typename T, std::size_t N>
+inline TMatrix<T, N> operator*(const T& Factor, const TMatrix<T, N> M) noexcept { return M * Factor; }
+
+template<typename T, std::size_t N>
+inline TMatrix<T, N>::RowVectorType operator*(const typename TMatrix<T, N>::ColumnVectorType& V, const TMatrix<T, N>& M) noexcept { return M.Transposed() * V; }

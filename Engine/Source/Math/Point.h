@@ -10,11 +10,9 @@ template<typename T, std::size_t N>
 class TPoint final
 {
 public:
-	using DiffType = TVector<T, N>;
-
-	inline static constexpr auto Dimension{ DiffType::Dimension };
-
-	using ValueType = DiffType::ValueType;
+	inline static constexpr auto Dimension{ N };
+	using ValueType = T;
+	using DiffType = TVector<ValueType, Dimension>;
 
 public:
 	TPoint() : Coord{} {}
@@ -46,8 +44,6 @@ public:
 	inline TPoint operator*(const DiffType& Factors) const { TPoint P{ *this }; P *= Factors; return P; }
 	inline TPoint operator/(const ValueType& Divisor) const { TPoint P{ *this }; P /= Divisor; return P; }
 	inline TPoint operator/(const DiffType& Divisors) const { TPoint P{ *this }; P /= Divisors; return P; }
-	friend inline TPoint operator+(const DiffType& V, const TPoint& P) { return P + V; }
-	friend inline TPoint operator*(const ValueType& Factor, const TPoint& P) { return Factor * P; }
 
 	inline TPoint& operator+=(const DiffType& V) & { Coord += V; return *this; }
 	inline TPoint& operator-=(const DiffType& V) & { Coord -= V; return *this; }
@@ -84,7 +80,7 @@ public:
 	inline const DiffType& FromOrigin() const noexcept { return Coord; }
 
 public:
-	inline ValueType* GetPtr() noexcept { return Coord.data(); }
+	inline ValueType* GetPtr() noexcept { return Coord.GetPtr(); }
 	inline const ValueType* GetPtr() const noexcept { return Coord.GetPtr(); }
 
 private:

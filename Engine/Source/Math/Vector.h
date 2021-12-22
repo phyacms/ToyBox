@@ -12,14 +12,12 @@ class TVector final
 {
 public:
 	inline static constexpr auto Dimension{ N };
-
 	using ValueType = T;
 	using LengthType = std::conditional_t<
 		std::is_floating_point_v<ValueType>,
 		ValueType,
 		double>;
-
-	static_assert(std::is_arithmetic_v<ValueType> && Dimension > 0);
+	static_assert(std::is_arithmetic_v<ValueType> && Dimension != 0);
 
 public:
 	TVector() : Components{} {}
@@ -33,44 +31,15 @@ public:
 	TVector& operator=(TVector&&) & noexcept = default;
 	~TVector() noexcept { static_assert(sizeof(TVector) == sizeof(ValueType) * Dimension); }
 
-	friend inline bool operator==(const TVector& Lhs, const TVector& Rhs) noexcept
-	{
-		using IsEqualTo = std::conditional_t<
-			std::is_floating_point_v<T>,
-			Math::TIsEqualTo<ValueType>,
-			std::equal_to<ValueType>>;
-
-		return std::equal(
-			std::execution::par_unseq,
-			std::cbegin(Lhs.Components),
-			std::cend(Lhs.Components),
-			std::cbegin(Rhs.Components),
-			IsEqualTo{});
-	}
-	friend inline bool operator!=(const TVector& Lhs, const TVector& Rhs) noexcept
-	{
-		using IsNotEqualTo = std::conditional_t<
-			std::is_floating_point_v<T>,
-			Math::TIsNotEqualTo<ValueType>,
-			std::not_equal_to<ValueType>>;
-
-		return std::equal(
-			std::execution::par_unseq,
-			std::cbegin(Lhs.Components),
-			std::cend(Lhs.Components),
-			std::cbegin(Rhs.Components),
-			IsNotEqualTo{});
-	}
-
 	inline TVector operator+() const { return *this; }
 	inline TVector operator-() const
 	{
 		TVector U{};
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
-			std::begin(U.Components),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::begin(U),
 			std::negate<ValueType>{});
 		return U;
 	}
@@ -87,10 +56,10 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
-			std::cbegin(V.Components),
-			std::begin(Components),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::cbegin(V),
+			std::begin(*this),
 			std::plus<ValueType>{});
 		return *this;
 	}
@@ -98,10 +67,10 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
-			std::cbegin(V.Components),
-			std::begin(Components),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::cbegin(V),
+			std::begin(*this),
 			std::minus<ValueType>{});
 		return *this;
 	}
@@ -110,8 +79,8 @@ public:
 		TVector U{};
 		std::fill(
 			std::execution::par_unseq,
-			std::begin(U.Components),
-			std::end(U.Components),
+			std::begin(U),
+			std::end(U),
 			Factor);
 		return operator*=(std::move(U));
 	}
@@ -119,10 +88,10 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
-			std::cbegin(Factors.Components),
-			std::begin(Components),
+			std::cbegin(*this),
+			std::cend(*this),
+			std::cbegin(Factors),
+			std::begin(*this),
 			std::multiplies<ValueType>{});
 		return *this;
 	}
@@ -131,9 +100,9 @@ public:
 	{
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Divisors.Components),
-			std::cend(Divisors.Components),
-			std::begin(Divisors.Components),
+			std::cbegin(Divisors),
+			std::cend(Divisors),
+			std::begin(Divisors),
 			std::bind_front(std::divides<ValueType>{}, ValueType{ 1 }));
 		return operator*=(std::move(Divisors));
 	}
@@ -161,9 +130,11 @@ public:
 public:
 	inline bool IsZero() const noexcept { return *this == TVector{}; }
 	inline bool IsUnit() const noexcept { return LengthSq() == ValueType{ 1 }; }
+	inline bool IsParallelTo(const TVector& V) const noexcept { return Math::IsEqualTo<ValueType>(std::abs(DotProduct(V)), Length() * V.Length()); }
+	inline bool IsPerpendicularTo(const TVector& V) const noexcept { return Math::IsEqualTo<ValueType>(DotProduct(V), 0); }
 	inline ValueType LengthSq() const noexcept { return DotProduct(*this); }
-	template<typename T = LengthType>
-	inline T Length() const noexcept { return static_cast<T>(std::sqrt(static_cast<LengthType>(LengthSq()))); }
+	template<typename Type = LengthType>
+	inline Type Length() const noexcept { return static_cast<Type>(std::sqrt(static_cast<LengthType>(LengthSq()))); }
 	inline TVector Normalized() const { TVector U{ *this }; U.Normalize(); return U; }
 	inline ValueType DotProduct(const TVector& V) const { return operator*(V).Summation(); }
 	template<typename RetType = std::enable_if_t<Dimension == 3, TVector>>
@@ -185,16 +156,16 @@ public:
 	{
 		return std::reduce(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
+			std::cbegin(*this),
+			std::cend(*this),
 			ValueType{});
 	}
 	inline ValueType Multiplication() const
 	{
 		return std::reduce(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
+			std::cbegin(*this),
+			std::cend(*this),
 			ValueType{ 1 },
 			std::multiplies<ValueType>{});
 	}
@@ -202,16 +173,16 @@ public:
 	inline TVector& Normalize() noexcept { return operator/=(Length()); }
 
 public:
-	template<typename T>
-	inline TVector<T, Dimension> CastAs() const noexcept
+	template<typename Type>
+	inline TVector<Type, Dimension> CastAs() const noexcept
 	{
-		TVector<T, Dimension> V{};
+		TVector<Type, Dimension> V{};
 		std::transform(
 			std::execution::par_unseq,
-			std::cbegin(Components),
-			std::cend(Components),
+			std::cbegin(*this),
+			std::cend(*this),
 			std::begin(V),
-			[](const ValueType& Value)->T { return static_cast<T>(Value); });
+			[](const ValueType& Value)->Type { return static_cast<Type>(Value); });
 		return V;
 	}
 
@@ -221,3 +192,35 @@ public:
 private:
 	std::array<ValueType, Dimension> Components;
 };
+
+template<typename T, std::size_t N>
+inline bool operator==(const TVector<T, N>& Lhs, const TVector<T, N>& Rhs) noexcept
+{
+	using IsEqualTo = std::conditional_t<
+		std::is_floating_point_v<T>,
+		Math::TIsEqualTo<T>,
+		std::equal_to<T>>;
+
+	return std::equal(
+		std::execution::par_unseq,
+		std::cbegin(Lhs),
+		std::cend(Lhs),
+		std::cbegin(Rhs),
+		IsEqualTo{});
+}
+
+template<typename T, std::size_t N>
+inline bool operator!=(const TVector<T, N>& Lhs, const TVector<T, N>& Rhs) noexcept
+{
+	using IsNotEqualTo = std::conditional_t<
+		std::is_floating_point_v<T>,
+		Math::TIsNotEqualTo<T>,
+		std::not_equal_to<T>>;
+
+	return std::equal(
+		std::execution::par_unseq,
+		std::cbegin(Lhs),
+		std::cend(Lhs),
+		std::cbegin(Rhs),
+		IsNotEqualTo{});
+}

@@ -13,10 +13,14 @@ enum class EAngleUnit : std::size_t
 
 namespace Math
 {
-	struct PI final
+	namespace Angle
 	{
 		using ValueType = long double;
-		inline static constexpr ValueType Value{ 3.14159265358979323846 };
+	}
+
+	struct PI final
+	{
+		inline static constexpr Angle::ValueType Value{ 3.14159265358979323846 };
 
 		template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
 		inline constexpr operator T() const noexcept { return static_cast<T>(Value); }
@@ -52,14 +56,13 @@ template<typename ValueType>
 class TAngle final
 {
 public:
-	using ImplType = Math::PI::ValueType;
 	inline static constexpr auto DefaultUnit{ EAngleUnit::Radian };
 
 private:
 	inline static constexpr auto Pi2{ 2 * Math::PI{}.Value };
 
 public:
-	TAngle(ImplType Angle = {}, EAngleUnit Unit = DefaultUnit)
+	TAngle(Math::Angle::ValueType Angle = {}, EAngleUnit Unit = DefaultUnit)
 		: Radian{
 			Unit == EAngleUnit::Radian
 			? Angle
@@ -78,9 +81,9 @@ public:
 	inline TAngle operator+(const TAngle& Angle) const noexcept { return Radian + Angle.Radian; }
 	inline TAngle operator-(const TAngle& Angle) const noexcept { return Radian - Angle.Radian; }
 	template<typename T>
-	inline TAngle operator*(T Factor) const noexcept { return Radian * static_cast<ImplType>(Factor); }
+	inline TAngle operator*(T Factor) const noexcept { return Radian * static_cast<Math::Angle::ValueType>(Factor); }
 	template<typename T>
-	inline TAngle operator/(T Divisor) const noexcept { return Radian / static_cast<ImplType>(Divisor); }
+	inline TAngle operator/(T Divisor) const noexcept { return Radian / static_cast<Math::Angle::ValueType>(Divisor); }
 
 	inline TAngle& operator+=(const TAngle& Angle) noexcept { return *this = operator+(Angle); }
 	inline TAngle& operator-=(const TAngle& Angle) noexcept { return *this = operator-(Angle); }
@@ -95,7 +98,7 @@ public:
 	inline operator T() const noexcept { return static_cast<T>(Radian); }
 
 public:
-	inline bool IsZero() const noexcept { return Math::IsEqualTo<ImplType>(Normalized().Radian, 0); }
+	inline bool IsZero() const noexcept { return Math::IsEqualTo<Math::Angle::ValueType>(Normalized().Radian, 0); }
 
 	inline bool IsNormalized() const noexcept { return Math::IsEqualTo(Radian, Normalized().Radian); }
 	inline TAngle Normalized() const noexcept { return TAngle{ *this }.Normalize(); }
@@ -111,7 +114,7 @@ public:
 	inline T ToDegree() const noexcept { return static_cast<T>(Math::ToDegree(Radian)); }
 
 private:
-	ImplType Radian;
+	Math::Angle::ValueType Radian;
 };
 
 template<typename V, typename T>
@@ -121,14 +124,14 @@ inline TAngle<T> operator*(V Factor, const TAngle<T>& Angle) noexcept { return A
 template<typename T>
 inline decltype(auto) operator*(Math::PI Pi, T Factor) noexcept
 {
-	using S = std::conditional_t<std::is_floating_point_v<T>, T, Math::PI::ValueType>;
+	using S = std::conditional_t<std::is_floating_point_v<T>, T, Math::Angle::ValueType>;
 	return TAngle<S>{ Pi.Value * Factor };
 }
 
 template<typename T>
 inline decltype(auto) operator/(Math::PI Pi, T Divisor) noexcept
 {
-	using S = std::conditional_t<std::is_floating_point_v<T>, T, Math::PI::ValueType>;
+	using S = std::conditional_t<std::is_floating_point_v<T>, T, Math::Angle::ValueType>;
 	return Pi * std::divides<S>{}(1, Divisor);
 }
 

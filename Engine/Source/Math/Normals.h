@@ -10,11 +10,9 @@ template<typename T, std::size_t N>
 class TNormals final
 {
 public:
-	using VectorType = TVector<T, N>;
-
-	inline static constexpr auto Dimension{ VectorType::Dimension };
-
-	using ValueType = VectorType::ValueType;
+	inline static constexpr auto Dimension{ N };
+	using ValueType = T;
+	using VectorType = TVector<ValueType, Dimension>;
 
 public:
 	TNormals() : Norms{} {}

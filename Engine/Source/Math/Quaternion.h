@@ -10,18 +10,18 @@
 template<typename T>
 class TQuaternion final
 {
+public:
+	inline static constexpr auto Dimension{ 4 };
+	using ValueType = T;
+	using ScalarPartType = ValueType;
+	using VectorPartType = TVector<ValueType, Dimension - 1>;
+
 private:
-	using VectorType = TVector<T, 4>;
+	using VectorType = TVector<ValueType, Dimension>;
 
 public:
-	inline static constexpr auto Dimension{ VectorType::Dimension };
-
-	using ValueType = VectorType::ValueType;
 	using LengthType = VectorType::LengthType;
 	static_assert(std::is_floating_point_v<ValueType>);
-
-	using ScalarPartType = ValueType;
-	using VectorPartType = TVector<ValueType, 3>;
 
 public:
 	TQuaternion() : TQuaternion(1, {}) {}
@@ -50,7 +50,6 @@ public:
 	}
 	inline TQuaternion operator*(const ValueType& Factor) const noexcept { TQuaternion Q{ *this }; Q *= Factor; return Q; }
 	inline TQuaternion operator/(const ValueType& Divisor) const noexcept { TQuaternion Q{ *this }; Q /= Divisor; return Q; }
-	friend inline TQuaternion operator*(const ValueType& Factor, const TQuaternion& Q) noexcept { return Q * Factor; }
 
 	inline TQuaternion& operator*=(const TQuaternion& Q) noexcept { return *this = operator*(Q); }
 	inline TQuaternion& operator*=(const ValueType& Factor) noexcept { Components *= Factor; return *this; }
@@ -92,6 +91,9 @@ private:
 };
 
 template<typename T>
+inline TQuaternion<T> operator*(const T& Factor, const TQuaternion<T>& Q) noexcept { return Q * Factor; }
+
+template<typename T>
 class TUnitQuaternion final
 {
 private:
@@ -122,8 +124,8 @@ public:
 		if (!Axis.IsZero())
 		{
 			Q = QuaternionType{
-				static_cast<ValueType>(std::cos(static_cast<FAngle::ImplType>(Angle) / 2)),
-				static_cast<ValueType>(std::sin(static_cast<FAngle::ImplType>(Angle) / 2)) * Axis.Normalized() };
+				static_cast<ValueType>(std::cos(static_cast<Math::Angle::ValueType>(Angle) / 2)),
+				static_cast<ValueType>(std::sin(static_cast<Math::Angle::ValueType>(Angle) / 2)) * Axis.Normalized() };
 		}
 	}
 	TUnitQuaternion(const TUnitQuaternion&) = default;
@@ -138,8 +140,8 @@ private:
 	TUnitQuaternion(ScalarPartType W, VectorPartType V) : Q{ W, std::move(V) } {}
 
 public:
-	friend inline bool operator==(const TUnitQuaternion& Lhs, const TUnitQuaternion& Rhs) noexcept { return Lhs.Components == Rhs.Components; }
-	friend inline bool operator!=(const TUnitQuaternion& Lhs, const TUnitQuaternion& Rhs) noexcept { return Lhs.Components != Rhs.Components; }
+	friend inline bool operator==(const TUnitQuaternion& Lhs, const TUnitQuaternion& Rhs) noexcept = default;
+	friend inline bool operator!=(const TUnitQuaternion& Lhs, const TUnitQuaternion& Rhs) noexcept = default;
 
 	inline TUnitQuaternion operator+() const noexcept { return Q.operator+(); }
 	inline TUnitQuaternion operator-() const noexcept { return Q.operator-(); }
@@ -156,7 +158,7 @@ public:
 
 public:
 	inline bool IsIdentity() const noexcept { return Q.IsIdentity(); }
-	inline FAngle GetRotationAngle() const noexcept { return static_cast<ValueType>(2 * std::acos(static_cast<FAngle::ImplType>(Q.W))); }
+	inline FAngle GetRotationAngle() const noexcept { return static_cast<ValueType>(2 * std::acos(static_cast<Math::Angle::ValueType>(Q.W))); }
 	inline VectorPartType GetRotationAxis() const noexcept
 	{
 		const auto DivSq{ 1 - Q.W * Q.W };
